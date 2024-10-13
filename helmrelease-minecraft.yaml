@@ -29,3 +29,11 @@ spec:
     memory: 1024M
     serviceType: loadBalancer
     externalTrafficPolicy: local
+    persistence:
+      annotations: {}
+      storageClass: "longhorn-perpetual"
+      backupDir:
+        enabled: true
+        Size: 4Gi
+        accessModes:
+          - ReadWriteOnce
