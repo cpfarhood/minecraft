@@ -27,3 +27,5 @@ spec:
     gameMode: survival
     motd: "Welcome to Minecraft on Kubernetes!"
     memory: 1024M
+    serviceType: LoadBalancer
+    externalTrafficPolicy: Local
