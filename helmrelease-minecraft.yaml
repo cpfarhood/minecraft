@@ -1,18 +1,22 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: minecraft-server
+  name: minecraft
   namespace: farhood-org
 spec:
   chart:
     spec:
-      chart: minecraft-server
+      chart: minecraft
       version: 4.23.x
       sourceRef:
         kind: HelmRepository
-        name: minecraft-server
+        name: minecraft
         namespace: flux-system
   interval: 5m
   timeout: 4m
-  releaseName: minecraft-server
+  releaseName: minecraft
   values: # Values Below
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1000m
