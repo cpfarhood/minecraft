@@ -23,11 +23,7 @@ spec:
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
-      # This can be one of "VANILLA", "FORGE", "SPIGOT", "BUKKIT", "PAPER", "FTBA", "SPONGEVANILLA", "AUTO_CURSEFORGE"
-      # https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms
       type: "VANILLA"
     gameMode: survival
-    # Message of the Day
     motd: "Welcome to Minecraft on Kubernetes!"
-    # If true, enable player-vs-player damage.
     memory: 1024M
