@@ -20,3 +20,9 @@ spec:
       requests:
         memory: 1Gi
         cpu: 1000m
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      # This can be one of "VANILLA", "FORGE", "SPIGOT", "BUKKIT", "PAPER", "FTBA", "SPONGEVANILLA", "AUTO_CURSEFORGE"
+      # https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms
+      type: "VANILLA"
