@@ -18,8 +18,11 @@ spec:
   values: # Values Below
     resources:
       requests:
-        memory: 1Gi
-        cpu: 1000m
+        memory: "2Gi"
+        cpu: "1000m"
+      limits:
+        memory: "4Gi"
+        cpu: "4000m"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
