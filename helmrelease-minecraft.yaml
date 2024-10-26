@@ -27,11 +27,12 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: "VANILLA"
-    gameMode: survival
-    motd: "Welcome to Minecraft on Kubernetes!"
-    memory: 1024M
-    serviceType: loadBalancer
-    externalTrafficPolicy: local
+      whitelist: "cpfarhoodd"
+      gameMode: survival
+      motd: "Welcome to the hood"
+      memory: 2048M
+      serviceType: loadBalancer
+      externalTrafficPolicy: local
     persistence:
       annotations: {}
       storageClass: "longhorn-perpetual"
