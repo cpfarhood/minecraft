@@ -34,7 +34,7 @@ spec:
       maxPlayers: 100
       maxWorldSize: 50000
       gameMode: survival
-      motd: "Welcome to the hood"
+      motd: "Welcome to the far side of the hood"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
