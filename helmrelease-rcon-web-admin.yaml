@@ -36,7 +36,7 @@ spec:
       passwordKey: rcon-pass
       game: minecraft
       serverName: farhood
-      rconHost: 127.0.0.1
+      rconHost: minecraft-rcon
       rconPort: 25575
       rconPasswordExistingSecret: credentials
       rconPasswordKey: rcon-pass
