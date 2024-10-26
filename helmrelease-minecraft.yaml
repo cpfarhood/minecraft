@@ -18,11 +18,11 @@ spec:
   values: # Values Below
     resources:
       requests:
-        memory: "2Gi"
-        cpu: "1000m"
-      limits:
         memory: "4Gi"
-        cpu: "4000m"
+        cpu: "2000m"
+      limits:
+        memory: "8Gi"
+        cpu: "6000m"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
@@ -30,7 +30,7 @@ spec:
       whitelist: "cpfarhoodd"
       gameMode: survival
       motd: "Welcome to the hood"
-      memory: 2048M
+      memory: 3072M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
     serviceAnnotations:
