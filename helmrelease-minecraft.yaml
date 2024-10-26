@@ -33,6 +33,12 @@ spec:
       memory: 3072M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
+    rcon:
+      enabled: true
+      existingSecret: credentials
+      secretKey: rcon-pass
+      serviceType: LoadBalancer
+      externalTrafficPolicy: Local
     serviceAnnotations:
       metallb.universe.tf/address-pool: reserved-pool
       metallb.universe.tf/loadBalancerIPs: 65.43.40.105
