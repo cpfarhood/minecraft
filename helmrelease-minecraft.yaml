@@ -30,7 +30,8 @@ spec:
       version: "LATEST"
       type: "VANILLA"
       difficulty: easy
-      whitelist: "cpfarhoodd"
+      whitelist: ""
+      ops: "cpfarhoodd,freakychris"
       maxPlayers: 100
       maxWorldSize: 50000
       gameMode: survival
