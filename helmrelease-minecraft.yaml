@@ -31,7 +31,9 @@ spec:
       gameMode: survival
       motd: "Welcome to the hood"
       memory: 2048M
-      serviceAnnotations: "metallb.universe.tf/loadBalancerIPs: 65.43.40.105"
+      serviceAnnotations:
+        metallb.universe.tf/loadBalancerIPs: 65.43.40.105
+        external-dns.alpha.kubernetes.io/hostname: minecraft.farhood.org
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
     persistence:
