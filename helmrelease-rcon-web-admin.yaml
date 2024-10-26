@@ -10,7 +10,7 @@ spec:
       version: 1.1.x
       sourceRef:
         kind: HelmRepository
-        name: farhoodliquor-minecraft
+        name: itzg
         namespace: flux-system
   interval: 5m
   timeout: 4m
