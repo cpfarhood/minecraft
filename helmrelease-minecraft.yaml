@@ -59,6 +59,6 @@ spec:
       storageClass: "longhorn-perpetual"
       dataDir:
         enabled: true
-        Size: 4Gi
+        Size: 8Gi
         accessModes:
           - ReadWriteOnce
