@@ -24,11 +24,21 @@ spec:
         memory: "256Mi"
         cpu: "200m"
     service:
-      type: LoadBalancer
+      type: ClusterIP
+#      annotations:
+#        metallb.universe.tf/address-pool: reserved-pool
+#        metallb.universe.tf/loadBalancerIPs: 65.43.40.105
+#        metallb.universe.tf/allow-shared-ip: "minecraft-65.43.40.105"
+    ingress:
+      enabled: true
+      className: "traefik-external"
       annotations:
-        metallb.universe.tf/address-pool: reserved-pool
-        metallb.universe.tf/loadBalancerIPs: 65.43.40.105
-        metallb.universe.tf/allow-shared-ip: "minecraft-65.43.40.105"
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-redirect@kubernetescrd
+      host: rcon-web.farhood.org
+      tls:
+      - secretName: farhood-org-cert-letsencrypt-prod
+        hosts:
+        - rcon-web.farhood.org
     rconWeb:
       isAdmin: true
       username: admin
