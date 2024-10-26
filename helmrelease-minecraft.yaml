@@ -31,7 +31,7 @@ spec:
       gameMode: survival
       motd: "Welcome to the hood"
       memory: 2048M
-      serviceType: loadBalancer
+      serviceType: LoadBalancer
       externalTrafficPolicy: local
     persistence:
       annotations: {}
