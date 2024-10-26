@@ -31,17 +31,17 @@ spec:
       gameMode: survival
       motd: "Welcome to the hood"
       memory: 2048M
-      serviceAnnotations:
-        metallb.universe.tf/address-pool: reserved-pool
-        metallb.universe.tf/loadBalancerIPs: 65.43.40.105
-        external-dns.alpha.kubernetes.io/hostname: minecraft.farhood.org
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
+    serviceAnnotations:
+      metallb.universe.tf/address-pool: reserved-pool
+      metallb.universe.tf/loadBalancerIPs: 65.43.40.105
+      external-dns.alpha.kubernetes.io/hostname: minecraft.farhood.org
     persistence:
       annotations:
         kustomize.toolkit.fluxcd.io/prune: disabled
       storageClass: "longhorn-perpetual"
-      backupDir:
+      dataDir:
         enabled: true
         Size: 4Gi
         accessModes:
