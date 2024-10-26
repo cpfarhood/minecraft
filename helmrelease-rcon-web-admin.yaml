@@ -1,0 +1,46 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: rcon-web-admin
+  namespace: minecraft-farhood-org
+spec:
+  chart:
+    spec:
+      chart: rcon-web-admin
+      version: 4.23.x
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: flux-system
+  interval: 5m
+  timeout: 4m
+  releaseName: rcon-web-admin
+  values: # Values Below
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "256Mi"
+        cpu: "200m"
+    service:
+      type: LoadBalancer
+    rconWeb:
+      isAdmin: true
+      username: admin
+      passwordExistingSecret: credentials
+      passwordKey: rcon-pass
+      game: minecraft
+      serverName: farhood
+      rconHost: minecraft.farhood.org
+      rconPort: 25575
+      rconPasswordExistingSecret: credentials
+      rconPasswordKey: rcon-pass
+      # Prevent the initial user user executing these commands
+      restrictCommands: []
+      # Hide this list of widgets from the initial user
+      restrictWidgets: []
+      # Prevent the initial user changing options in the widget options tab
+      immutableWidgetOptions: false
+      # Enables 'web rcon' if supported by the game server
+      websocketRcon: false
