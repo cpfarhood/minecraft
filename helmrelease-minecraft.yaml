@@ -32,7 +32,7 @@ spec:
       motd: "Welcome to the hood"
       memory: 2048M
       serviceType: LoadBalancer
-      externalTrafficPolicy: local
+      externalTrafficPolicy: Local
     persistence:
       annotations: {}
       storageClass: "longhorn-perpetual"
