@@ -31,6 +31,7 @@ spec:
       gameMode: survival
       motd: "Welcome to the hood"
       memory: 2048M
+      serviceAnnotations: "metallb.universe.tf/loadBalancerIPs: 65.43.40.105"
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
     persistence:
