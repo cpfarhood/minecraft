@@ -28,7 +28,7 @@ spec:
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
-      type: "AUTO_CURSEFORGE"
+      type: "PAPER"
       difficulty: easy
       whitelist: ""
       ops: "cpfarhoodd,freakychris"
