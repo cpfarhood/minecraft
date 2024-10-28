@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: minecraft
-  namespace: minecraft-farhood-org
+  namespace: minecraft-xeros-org
 spec:
   chart:
     spec:
@@ -35,7 +35,7 @@ spec:
       maxPlayers: 100
       maxWorldSize: 50000
       gameMode: survival
-      motd: "Welcome to the far side of the hood"
+      motd: "sigmaland"
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
@@ -59,7 +59,7 @@ spec:
       metallb.universe.tf/allow-shared-ip: "minecraft-65.43.40.105"
     persistence:
       labels:
-        name: minecraft-farhood-org
+        name: minecraft-xeros-org
       annotations:
         kustomize.toolkit.fluxcd.io/prune: disabled
       storageClass: "longhorn-perpetual"
