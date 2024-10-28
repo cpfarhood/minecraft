@@ -31,7 +31,7 @@ spec:
       type: "PAPER"
       difficulty: easy
       whitelist: ""
-      ops: "freakychris"
+      ops: "cpfarhoodd,freakychris"
       maxPlayers: 100
       maxWorldSize: 50000
       gameMode: survival
