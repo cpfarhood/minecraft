@@ -39,8 +39,6 @@ spec:
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
-      - "https://hangarcdn.papermc.io/plugins/PQguanfang/UltimateShop/versions/2.7.3/PAPER/UltimateShop-2.7.3.jar"
-      - "https://hangarcdn.papermc.io/plugins/Elliot/LimitlessEnchants/versions/1.0/PAPER/LimitlessEnchants-1.0.jar"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
