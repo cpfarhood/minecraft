@@ -29,7 +29,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: "PAPER"
-      difficulty: easy
+      difficulty: hard
       whitelist: ""
       ops: "cpfarhoodd,freakychris"
       maxPlayers: 100
