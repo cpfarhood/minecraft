@@ -41,7 +41,7 @@ spec:
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
       - "https://hangarcdn.papermc.io/plugins/Elliot/LimitlessEnchants/versions/RELEASE-1.0/PAPER/LimitlessEnchants-1.0.jar"
       - "https://hangarcdn.papermc.io/plugins/Aznos/Superenchants/versions/2.6.3/PAPER/SuperEnchants-2.6.3.jar"
-      - "https://dl2.9minecraft.net/index.php?act=download&id=1718724724&hash=6722ba77047ad"
+      - "https://cdn.modrinth.com/data/OhduvhIc/versions/9hKYZJp8/veinminer-paper-2.2.0.jar"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
