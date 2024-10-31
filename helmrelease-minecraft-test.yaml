@@ -41,6 +41,8 @@ spec:
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
       - "https://hangarcdn.papermc.io/plugins/Elliot/LimitlessEnchants/versions/RELEASE-1.0/PAPER/LimitlessEnchants-1.0.jar"
       - "https://hangarcdn.papermc.io/plugins/Aznos/Superenchants/versions/2.6.3/PAPER/SuperEnchants-2.6.3.jar"
+      - "https://www.spigotmc.org/resources/combatlogx.31689/download?version=546288"
+      - "https://www.spigotmc.org/resources/blueslimecore.83189/download?version=546284"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
