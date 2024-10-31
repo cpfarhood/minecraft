@@ -39,9 +39,8 @@ spec:
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
-      - "https://hangarcdn.papermc.io/plugins/Elliot/LimitlessEnchants/versions/RELEASE-1.0/PAPER/LimitlessEnchants-1.0.jar"
-      - "https://hangarcdn.papermc.io/plugins/Aznos/Superenchants/versions/2.6.3/PAPER/SuperEnchants-2.6.3.jar"
       - "https://cdn.modrinth.com/data/OhduvhIc/versions/9hKYZJp8/veinminer-paper-2.2.0.jar"
+      - "https://hangarcdn.papermc.io/plugins/CrazyCrew/CrazyEnchantments/versions/2.5.1/PAPER/CrazyEnchantments-2.5.1.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Clear.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Give.jar"
