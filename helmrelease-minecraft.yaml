@@ -35,7 +35,7 @@ spec:
       maxPlayers: 100
       maxWorldSize: 50000
       gameMode: survival
-      motd: "Modded Minecraft Server 2"
+      motd: "Modded Minecraft Server 3"
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
       - "https://hangarcdn.papermc.io/plugins/Archy/AuraSkills/versions/2.2.4/PAPER/AuraSkills-2.2.4.jar"
