@@ -43,8 +43,6 @@ spec:
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Clear.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Give.jar"
-      - "https://www.spigotmc.org/resources/combatlogx.31689/download?version=546288"
-      - "https://www.spigotmc.org/resources/blueslimecore.83189/download?version=546284"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
