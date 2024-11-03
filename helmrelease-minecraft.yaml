@@ -34,7 +34,7 @@ spec:
       ops: "cpfarhoodd,freakychris"
       maxPlayers: 100
       maxWorldSize: 50000
-      gameMode: adventure
+      gameMode: survival
       motd: "Modded Minecraft Server 5"
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
@@ -43,6 +43,7 @@ spec:
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Clear.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Give.jar"
+      - "sigma ohio guatt "
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
