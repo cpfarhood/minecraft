@@ -34,7 +34,7 @@ spec:
       ops: "cpfarhoodd,freakychris"
       maxPlayers: 100
       maxWorldSize: 50000
-      gameMode: survival
+      gameMode: adventure
       motd: "Modded Minecraft Server 5"
       modUrls:
       - "https://hangarcdn.papermc.io/plugins/William278/HuskHomes/versions/4.7/PAPER/HuskHomes-Paper-4.7.jar"
