@@ -43,6 +43,7 @@ spec:
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Clear.jar"
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Give.jar"
+      - "https://cdn.modrinth.com/data/C0XNE0Q2/versions/n4eDmZgc/SimpleCombatLog.jar"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
