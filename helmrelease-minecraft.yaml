@@ -45,6 +45,7 @@ spec:
       - "https://github.com/Jannyboy11/InvSee-plus-plus/releases/download/v0.29.5/InvSee++_Give.jar"
       - "https://cdn.modrinth.com/data/C0XNE0Q2/versions/n4eDmZgc/SimpleCombatLog.jar"
       - "https://cdn.modrinth.com/data/1u6JkXh5/versions/ecqqLKUO/worldedit-bukkit-7.3.8.jar"
+      - "https://hangarcdn.papermc.io/plugins/TheNextLvl/Protect/versions/2.1.2/PAPER/protect-2.1.2-all.jar"
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
