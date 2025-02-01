@@ -1,0 +1,23 @@
+---
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: minecraft-firewall
+spec:
+  approvePlan: auto
+  destroyResourcesOnDeletion: true
+  interval: 1h
+  path: ./minecraft-firewall/
+  sourceRef:
+    kind: GitRepository
+    name: cpfarhood-minecraft
+  vars:
+    - name: RULE_NAME
+      value: "minecraft"
+    - name: RULE_IP
+      value: "65.43.40.103"
+    - name: RULE_PORT
+      value: "25565"
+#  varsFrom:
+#    - kind: Secret
+#      name: unifi-credentials

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minecraft-config
+data:
+  RULE_NAME: "minecraft"
+  RULE_IP: "65.43.40.103" 
+  RULE_PORT: "25565"

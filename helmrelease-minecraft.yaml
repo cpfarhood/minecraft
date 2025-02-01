@@ -46,22 +46,24 @@ spec:
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
-#      rcon:
-#        enabled: true
-#        existingSecret: credentials
-#        secretKey: rcon-pass
-#        serviceType: LoadBalancer
-#        externalTrafficPolicy: Local
+      rcon:
+        enabled: true
+        existingSecret: credentials
+        secretKey: rcon-pass
+        serviceType: LoadBalancer
+        externalTrafficPolicy: Local
     serviceAnnotations:
       lbipam.cilium.io/ips: "65.43.40.103"
       lbipam.cilium.io/sharing-key: "minecraft.farh.net"
       external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
     serviceLabels:
       zone: public
-#    rconServiceAnnotations:
-#      lbipam.cilium.io/ips: "65.43.40.103"
-#      lbipam.cilium.io/sharing-key: "minecraft.farh.net"
-#      external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
+    rconServiceAnnotations:
+      lbipam.cilium.io/ips: "65.43.40.103"
+      lbipam.cilium.io/sharing-key: "minecraft.farh.net"
+      external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
+    rconServiceLabels:
+      zone: public
     persistence:
       labels:
         name: minecraft
