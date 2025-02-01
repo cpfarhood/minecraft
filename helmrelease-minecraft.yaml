@@ -12,7 +12,6 @@ spec:
         name: itzg
   interval: 15m
   timeout: 5m
-  fullnameOverride: cpfarhood-minecraft
   values: # Values Below
     resources:
       requests:
