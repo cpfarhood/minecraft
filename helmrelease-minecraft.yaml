@@ -10,9 +10,9 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: itzg
-  interval: 5m
-  timeout: 4m
-  releaseName: minecraft
+  interval: 15m
+  timeout: 5m
+  fullnameOverride: cpfarhood-minecraft
   values: # Values Below
     resources:
       requests:
@@ -63,10 +63,10 @@ spec:
 #      external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
     persistence:
       labels:
-        name: minecraft-farhood-org
+        name: minecraft
       annotations:
         kustomize.toolkit.fluxcd.io/prune: disabled
-      storageClass: "longhorn-perpetual"
+      storageClass: "ceph-block"
       dataDir:
         enabled: true
         Size: 8Gi
