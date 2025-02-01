@@ -49,21 +49,20 @@ spec:
       memory: 8192M
       serviceType: LoadBalancer
       externalTrafficPolicy: Local
-      rcon:
-        enabled: true
-        existingSecret: credentials
-        secretKey: rcon-pass
-        serviceType: LoadBalancer
-        externalTrafficPolicy: Local
+#      rcon:
+#        enabled: true
+#        existingSecret: credentials
+#        secretKey: rcon-pass
+#        serviceType: LoadBalancer
+#        externalTrafficPolicy: Local
     serviceAnnotations:
-      metallb.universe.tf/address-pool: reserved-pool
-      metallb.universe.tf/loadBalancerIPs: 65.43.40.105
-      metallb.universe.tf/allow-shared-ip: "minecraft-65.43.40.105"
-      external-dns.alpha.kubernetes.io/hostname: minecraft.farhood.org
-    rconServiceAnnotations:
-      metallb.universe.tf/address-pool: reserved-pool
-      metallb.universe.tf/loadBalancerIPs: 65.43.40.105
-      metallb.universe.tf/allow-shared-ip: "minecraft-65.43.40.105"
+      lbipam.cilium.io/ips: "65.43.40.103"
+      lbipam.cilium.io/sharing-key: "minecraft.farh.net"
+      external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
+#    rconServiceAnnotations:
+#      lbipam.cilium.io/ips: "65.43.40.103"
+#      lbipam.cilium.io/sharing-key: "minecraft.farh.net"
+#      external-dns.alpha.kubernetes.io/hostname: minecraft.farh.net
     persistence:
       labels:
         name: minecraft-farhood-org
