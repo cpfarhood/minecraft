@@ -2,7 +2,6 @@ apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServerFleet
 metadata:
   name: ${SERVERFLEETNAME}
-  namespace: minecraft
 spec:
   clusterRef:
     name: ${CLUSTERNAME}
@@ -11,15 +10,9 @@ spec:
     spec:
       clusterRef:
         name: ${CLUSTERNAME}
-
       tags:
         - lobby
-
       version:
-        # Channel is still required by Shulker for agent compatibility
-        channel: Vanilla
-        name: "1.21.1"
-        customJar:
-          url: https://maven.fabricmc.net/net/fabricmc/fabric-server-launcher/1.21.1/fabric-server-launcher-1.21.1.jar
-
+        channel: Paper
+        name: '1.21.11'
       config: {}
