@@ -6,8 +6,8 @@ spec:
   mariaDbRef:
     name: pterodactyl
   privileges:
-    - "ALL PRIVILEGES"
-  database: "pterodactyl"
+    - ALL
+  database: pterodactyl
   table: "*"
-  user: "pterodactyl"
+  username: pterodactyl
   host: "%"
