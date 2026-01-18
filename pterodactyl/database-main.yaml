@@ -4,6 +4,6 @@ metadata:
   name: main
 spec:
   mariaDbRef:
-    name: pterodactyl
+    name: pterodactyl-db
   characterSet: utf8mb4
   collate: utf8mb4_unicode_ci
