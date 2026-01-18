@@ -7,7 +7,7 @@ spec:
     name: pterodactyl
   privileges:
     - ALL
-  database: pterodactyl
+  database: main
   table: "*"
   username: pterodactyl
   host: "%"

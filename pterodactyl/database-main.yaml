@@ -1,7 +1,7 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Database
 metadata:
-  name: pterodactyl
+  name: main
 spec:
   mariaDbRef:
     name: pterodactyl
