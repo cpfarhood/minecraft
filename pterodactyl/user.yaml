@@ -1,0 +1,11 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: pterodactyl
+spec:
+  mariaDbRef:
+    name: pterodactyl
+  passwordSecretKeyRef:
+    name: pterodactyl-db-pw
+    key: password
+  maxConnections: 100

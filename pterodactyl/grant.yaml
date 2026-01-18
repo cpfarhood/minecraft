@@ -1,0 +1,13 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: pterodactyl
+spec:
+  mariaDbRef:
+    name: pterodactyl
+  privileges:
+    - "ALL PRIVILEGES"
+  database: "pterodactyl"
+  table: "*"
+  user: "pterodactyl"
+  host: "%"

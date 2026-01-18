@@ -1,0 +1,23 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: pterodactyl
+spec:
+  rootPasswordSecretKeyRef:
+    name: pterodactyl-db-pw
+    key: password
+
+  replicas: 3
+
+  replication:
+    enabled: true
+    primary:
+      autoFailover: true
+
+  storage:
+    size: 16Gi
+
+  maxScale:
+    enabled: true
+    kubernetesService:
+      type: LoadBalancer
