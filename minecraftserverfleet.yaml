@@ -1,0 +1,18 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: ${SERVERFLEETNAME}
+spec:
+  clusterRef:
+    name: ${CLUSTERNAME}
+  replicas: 1
+  template:
+    spec:
+      clusterRef:
+        name: ${CLUSTERNAME}
+      tags:
+        - lobby
+      version:
+        channel: Paper
+        name: '1.21.11'
+      config: {}
