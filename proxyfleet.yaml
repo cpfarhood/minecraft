@@ -9,13 +9,9 @@ spec:
   service:
     type: LoadBalancer
     externalTrafficPolicy: Local
-#    annotations:
-#      ipam.cilium.io/ip-pool: public
-#      lbipam.cilium.io/ips: "71.150.236.214"
   template:
     spec:
       version:
         channel: Velocity
         name: latest
       config: {}
-#        proxyProtocol: true
