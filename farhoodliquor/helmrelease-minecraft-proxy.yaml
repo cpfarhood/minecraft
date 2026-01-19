@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: minecraft-proxy
-      version: 3.10.1
+      version: 3.10.2
       sourceRef:
         kind: HelmRepository
         name: farhoodliquor-minecraft-server-charts
@@ -17,19 +17,7 @@ spec:
   values:
     minecraftProxy:
       type: VELOCITY
-      
-      config: |
-        config-version = "2.7"
-        bind = "0.0.0.0:25577"
-        motd = "<#09add3>A Velocity Server"
-        show-max-players = 500
-        online-mode = true
-        player-info-forwarding-mode = "modern"
-        forwarding-secret-file = "forwarding.secret"
 
-        [servers]
-        lobby = "127.0.0.1:25565"
-        try = [ "lobby" ]
 
 
 
