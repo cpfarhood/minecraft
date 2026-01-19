@@ -8,7 +8,7 @@ spec:
   timeout: 15m
   chart:
     spec:
-      chart: mc-proxy
+      chart: minecraft-server-proxy
       #version: 60.x
       sourceRef:
         kind: HelmRepository
