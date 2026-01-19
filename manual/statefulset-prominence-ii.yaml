@@ -58,8 +58,8 @@ spec:
               rm -rf /data/mods /data/config /data/defaultconfigs /data/kubejs /data/libraries || true
               mkdir -p /data/mods
 
-              echo "Downloading server pack..."
-              curl -fSL -L "${SERVER_PACK_URL}" -o pack.zip
+              echo "Downloading server pack from: '${SERVER_PACK_URL}'"
+              curl -L -o pack.zip "${SERVER_PACK_URL}"
 
               echo "Unpacking..."
               rm -rf unpack
@@ -118,6 +118,10 @@ spec:
               value: "16G"
             - name: DEBUG
               value: "FALSE"
+            - name: MOTD
+              value: "Get a fucking job"
+            - name: OPS
+              value: "cpfarhoodd,freakychris"
           volumeMounts:
             - name: data
               mountPath: /data
