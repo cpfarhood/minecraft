@@ -18,31 +18,22 @@ spec:
     minecraftProxy:
       type: VELOCITY
 
-      # Velocity selection (these map to the itzg image env vars)
-      velocityVersion: latest
-      velocityBuildId: latest
+      # ensure you're actually providing the Velocity config file
+      configFilePath: /server/velocity.toml
+      config: |-
+        config-version = "2.7"
+        bind = "0.0.0.0:25577"
+        motd = "<#09add3>A Velocity Server"
+        show-max-players = 500
+        online-mode = true
 
-      onlineMode: true
-      memory: 512M
-      jvmOpts: ""
-      jvmXXOpts: ""
+        # THIS is what removes the warning
+        player-info-forwarding-mode = "modern"
+        forwarding-secret-file = "forwarding.secret"
 
-      serviceType: LoadBalancer
-      externalTrafficPolicy: Local
-      configFilePath: /server/config.yml
-      plugins: []
+        [servers]
+        lobby = "127.0.0.1:25565"
+        try = [ "lobby" ]
 
-      rcon:
-        enabled: false
-
-    persistence:
-      dataDir:
-        enabled: false
-        size: 1Gi
-
-    config: |-
-      config-version = "2.7"
-      bind = "0.0.0.0:25577"
-      motd = "Velocity Proxy"
-      show-max-players = 50
-      player-info-forwarding-mode = "modern"
+      # keep the generated file path; the image is already creating it
+      velocityForwardingSecretFilePath: /server/forwarding.secret
