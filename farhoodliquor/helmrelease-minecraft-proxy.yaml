@@ -25,31 +25,35 @@ spec:
       extraEnv:
         SKIP_CONFIG: "true"
 
-      config: |
-        config-version = "2.7"
-        bind = "0.0.0.0:25577"
-        motd = "Test"
-        show-max-players = 500
-        online-mode = true
-        player-info-forwarding-mode = "modern"
-        forwarding-secret-file = "forwarding.secret"
-
-        [servers]
-        lobby = "127.0.0.1:25565"
-        try = [ "lobby" ]
+      
+      # Temporarily disabled to test default config generation
+      # config: |
+      #   config-version = "2.7"
+      #   bind = "0.0.0.0:25577"
+      #   motd = "Test"
+      #   show-max-players = 500
+      #   online-mode = true
+      #   player-info-forwarding-mode = "modern"
+      #   forwarding-secret-file = "forwarding.secret"
+      #
+      #   [servers]
+      #   lobby = "127.0.0.1:25565"
+      #   try = [ "lobby" ]
 
 
       # keep the generated file path; the image is already creating it
       velocityForwardingSecretFilePath: /server/forwarding.secret
-      configFilePath: /tmp/velocity-orig.toml
+      # configFilePath: /tmp/velocity-orig.toml
 
-    initContainers:
-      - name: copy-config
-        image: busybox:latest
-        command: ["sh", "-c", "rm -f /server/velocity.toml && cp /tmp/velocity-init.toml /server/velocity.toml && chmod 644 /server/velocity.toml && echo '=== DEBUG CONFIG ===' && cat /server/velocity.toml && echo '=== END DEBUG ==='"]
-        volumeMounts:
-          - name: datadir
-            mountPath: /server
-          - name: config
-            mountPath: /tmp/velocity-init.toml
-            subPath: config.yml
+    # Temporarily disabled to test default config generation  
+    # initContainers:
+    #   - name: copy-config
+    #     image: busybox:latest
+    #     command: ["sh", "-c", "rm -f /server/velocity.toml && cp /tmp/velocity-init.toml /server/velocity.toml && chmod 644 /server/velocity.toml && echo '=== DEBUG CONFIG ===' && cat /server/velocity.toml && echo '=== END DEBUG ==='"]
+    #     volumeMounts:
+    #       - name: datadir
+    #         mountPath: /server
+    #       - name: config
+    #         mountPath: /tmp/velocity-init.toml
+    #         subPath: config.yml
+
