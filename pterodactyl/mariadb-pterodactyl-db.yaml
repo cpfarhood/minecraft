@@ -17,7 +17,7 @@ spec:
   storage:
     size: 16Gi
 
-  service:
+  primaryService:
     type: LoadBalancer
     metadata:
       annotations:
