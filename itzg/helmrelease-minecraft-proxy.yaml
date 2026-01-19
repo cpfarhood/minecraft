@@ -39,3 +39,10 @@ spec:
       dataDir:
         enabled: false
         size: 1Gi
+
+    config: |-
+      config-version = "2.7"
+      bind = "0.0.0.0:25577"
+      motd = "Velocity Proxy"
+      show-max-players = 500
+      player-info-forwarding-mode = "modern"
