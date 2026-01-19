@@ -21,6 +21,11 @@ spec:
       velocityVersion: latest
       velocityBuildId: latest
       
+      # Tell the image to NOT generate/modify config files
+      extraEnv:
+        SKIP_CONFIG: "true"
+        CFG_VELOCITY_SKIP: "true"
+      
       
       # Set a different path for the chart's mount to avoid conflict
       configFilePath: /tmp/velocity-from-configmap.toml
