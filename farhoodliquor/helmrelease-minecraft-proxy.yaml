@@ -20,6 +20,10 @@ spec:
       # Velocity selection (these map to the itzg image env vars)
       velocityVersion: latest
       velocityBuildId: latest
+      
+      # Prevent mc-image-helper from modifying our custom config
+      extraEnv:
+        SKIP_CONFIG: "true"
 
       config: |
         bind = "0.0.0.0:25577"
