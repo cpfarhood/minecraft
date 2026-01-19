@@ -17,6 +17,8 @@ spec:
   values:
     minecraftProxy:
       type: VELOCITY
+      velocityVersion: latest
+
 
 
 
