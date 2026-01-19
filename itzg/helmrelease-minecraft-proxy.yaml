@@ -1,14 +1,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-proxy
+  name: minecraft-proxy
   namespace: minecraft
 spec:
   interval: 1h
   timeout: 15m
   chart:
     spec:
-      chart: minecraft-server-proxy
+      chart: minecraft-proxy
       #version: 60.x
       sourceRef:
         kind: HelmRepository
