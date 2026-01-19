@@ -92,6 +92,7 @@ spec:
               fi
 
               echo "Server pack installed and verified."
+
           volumeMounts:
             - name: data
               mountPath: /data
