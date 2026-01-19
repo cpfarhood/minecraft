@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - secret-pterodactyl-db-pw.yaml
   - mariadb-pterodactyl-db.yaml
+  - secret-pterodactyl-userdata-pw.yaml
+  - mariadb-pterodactyl-userdata.yaml
   - database-panel.yaml
   - user-pterodactyl.yaml
   - grant-pterodactyl-panel.yaml
