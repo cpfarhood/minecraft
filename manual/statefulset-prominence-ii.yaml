@@ -115,7 +115,7 @@ spec:
             # - name: FABRIC_LOADER_VERSION
             #   value: "0.17.3"
             - name: MEMORY
-              value: "16G"
+              value: "24G"
             - name: DEBUG
               value: "FALSE"
             - name: MOTD
@@ -150,9 +150,9 @@ spec:
           resources:
             requests:
               cpu: "500m"
-              memory: "16Gi"
+              memory: "24Gi"
             limits:
-              memory: "18Gi"
+              memory: "26Gi"
 
   volumeClaimTemplates:
     - metadata:
