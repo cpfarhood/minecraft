@@ -17,6 +17,9 @@ spec:
   values:
     minecraftProxy:
       type: VELOCITY
+      # Velocity selection (these map to the itzg image env vars)
+      velocityVersion: latest
+      velocityBuildId: latest
 
       # ensure you're actually providing the Velocity config file
       configFilePath: /server/velocity.toml
