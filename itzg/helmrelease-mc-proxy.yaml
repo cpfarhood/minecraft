@@ -1,0 +1,193 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-proxy
+  namespace: minecraft
+spec:
+  interval: 1h
+  timeout: 15m
+  chart:
+    spec:
+      chart: mc-proxy
+      #version: 60.x
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: flux-system
+  values:
+    minecraftProxy:
+      # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
+      type: VELOCITY
+      # If type is set to BUNGEECORD or WATERFALL, this value overrides the base Jenkins URL
+      jenkinsBaseUrl:
+      # The Jenkins job ID of the artifact to download and run
+      jenkinsJobId: lastStableBuild
+      # If set, the job ID is arbitrarily incremented to force upgrade the proxy jar
+      jarRevision:
+      # This value can be set to a fully qualified URL to download a custom proxy jar
+      jarUrl:
+      # If set, this value specifies a custom proxy jar located inside the container
+      jarFile:
+      # If type is set to WATERFALL, use a specific Waterfall release stream
+      waterfallVersion: latest
+      # If type is set to WATERFALL, use a specific build of Waterfall within the specified version
+      waterfallBuildId: latest
+      # If type is set to VELOCITY, download and run this version of Velocity
+      velocityVersion: 3.4.0
+      # Check accounts against Minecraft account service.
+      onlineMode: true
+      # A list of .jar URLs to download into the plugins folder.
+      plugins: []
+      # If you adjust this, you may need to adjust resources.requests above to match.
+      memory: 512M
+      # General JVM options to be passed to the Minecraft server invocation
+      jvmOpts: ""
+      # Options like -X that need to proceed general JVM options
+      jvmXXOpts: ""
+      # DEPRECATED: use top-level rconServiceAnnotations instead
+      serviceAnnotations: {}
+      serviceType: LoadBalancer
+      ## Set the port used if the serviceType is NodePort
+      # nodePort:
+      # loadBalancerIP:
+      # loadBalancerSourceRanges: []
+      ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+      externalTrafficPolicy: Local
+      ## Set the ipFamilyPolicy in the service to SingleStack, PreferDualStack, RequireDualStack
+      # ipFamilyPolicy: SingleStack
+      # externalIPs:
+      # If set, this overrides the default config file path
+      configFilePath: /server/config.yml
+      # This can be set to the contents of your config file (only works with yaml currently)
+      # config: |
+      #  player_limit: -1
+      #  ip_forward: false
+      #  permissions:
+      #    default:
+      #    - bungeecord.command.server
+      #    - bungeecord.command.list
+      #    admin:
+      #    - bungeecord.command.alert
+      #    - bungeecord.command.end
+      #    - bungeecord.command.ip
+      #    - bungeecord.command.reload
+      #  timeout: 30000
+      #  log_pings: true
+      #  log_commands: false
+      #  online_mode: true
+      #  servers:
+      #    lobby:
+      #      motd: '&1Just another BungeeCord - Forced Host'
+      #      address: localhost:25565
+      #      restricted: false
+      #  listeners:
+      #  - query_port: 25577
+      #    motd: '&1Another Bungee server'
+      #    priorities:
+      #    - lobby
+      #    bind_local_address: true
+      #    tab_list: GLOBAL_PING
+      #    query_enabled: false
+      #    host: 0.0.0.0:25577
+      #    forced_hosts:
+      #      pvp.md-5.net: pvp
+      #    max_players: 1
+      #    tab_size: 60
+      #    ping_passthrough: false
+      #    force_default_server: false
+      #    proxy_protocol: false
+      #  disabled_commands:
+      #  - disabledcommandhere
+      #  network_compression_threshold: 256
+      #  groups:
+      #    md_5:
+      #    - admin
+      #  connection_throttle: 4000
+      #  connection_throttle_limit: 3
+      #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
+      #  forge_support: false
+      #  inject_commands: false
+
+      # If running Velocity, you can provide a velocity.toml file like so:
+      # configFilePath: /server/velocity.toml
+      # config: |-
+      #   config-version = "2.7"
+      #   bind = "0.0.0.0:25577"
+      #   motd = "Hello from Helmified Velocity!"
+      #   show-max-players = 500
+      #   player-info-forwarding-mode = "modern"
+
+      # Needed when you wish to pass a forwarding secret to Velocity
+      # velocityForwardingSecret: "CHANGEME!"
+      # velocityForwardingSecretFilePath: /server/forwarding.secret
+
+      rcon:
+        # If you enable this, make SURE to change your password below.
+        enabled: false
+        port: 25575
+        password: "CHANGEME!"
+        existingSecret:
+        secretKey: rcon-password
+        serviceType: LoadBalancer
+        loadBalancerIP:
+        # loadBalancerSourceRanges: []
+        ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+        # externalTrafficPolicy: Cluster
+        ## Set the ipFamilyPolicy in the service to SingleStack, PreferDualStack, RequireDualStack
+        # ipFamilyPolicy: SingleStack
+
+      extraPorts: []
+      # These options allow you to expose another port from the Minecraft proxy, plugins such
+      # as NuVotifier (8192) will require this for incoming webhooks
+      #
+      # - name: vote
+      #   containerPort: 8192
+      #   protocol: TCP
+      #   service:
+      #     enabled: false
+      #     embedded: false
+      #     annotations: {}
+      #     type: ClusterIP
+      #     ## Set the external port if the rcon serviceType is NodePort
+      ##     nodePort:
+      #     loadBalancerIP: ""
+      #     loadBalancerSourceRanges: []
+      #     externalTrafficPolicy: Cluster
+      #     port: 8192
+      #   ingress:
+      #     ingressClassName: nginx
+      #     enabled: false
+      #     annotations:
+      ## Deprecated way for specifying the ingressClass. Kube.version < 1.18
+      ##       kubernetes.io/ingress.class: nginx
+      #       kubernetes.io/tls-acme: "true"
+      #     hosts:
+      #       - name: vote.local
+      #         path: /
+      #     tls:
+      #       - secretName: vote-tls
+      #         hosts:
+      #           - vote.local
+
+    persistence:
+      ## minecraft data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+      dataDir:
+        # Set this to false if you don't care to persist state between restarts.
+        enabled: false
+        # existingClaim: nil
+        Size: 1Gi
+
+    podAnnotations: {}
+
+    deploymentAnnotations: {}
+
+    serviceAnnotations: {}
+
+    rconServiceAnnotations: {}

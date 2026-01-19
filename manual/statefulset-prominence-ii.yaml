@@ -1,0 +1,159 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mc-prominence-2
+  namespace: minecraft
+  labels:
+    app.kubernetes.io/name: mc-prominence-2
+spec:
+  serviceName: mc-prominence-2-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mc-prominence-2
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mc-prominence-2
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 120
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+      - name: install-server-pack
+        image: alpine:3.20
+        env:
+          - name: SERVER_PACK_URL
+            value: "https://www.curseforge.com/api/v1/mods/466901/files/7441271/download"
+        command:
+          - sh
+          - -lc
+          - |
+            set -euo pipefail
+            apk add --no-cache ca-certificates curl unzip findutils coreutils
+
+            mkdir -p /data /work
+            cd /work
+
+            have_required_mods() {
+              [ -d /data/mods ] || return 1
+              ls -1 /data/mods/*.jar >/dev/null 2>&1 || return 1
+
+              # Case-insensitive match on required mod jar names (substring match)
+              for r in prominent fabric-api archon minecells tierify puffish; do
+                if ! ls -1 /data/mods/*.jar 2>/dev/null | grep -qi "${r}"; then
+                  return 1
+                fi
+              done
+              return 0
+            }
+
+            if have_required_mods; then
+              echo "Modset looks complete; skipping install."
+              exit 0
+            fi
+
+            echo "Incomplete modset detected; wiping and reinstalling server pack."
+            rm -rf /data/mods /data/config /data/defaultconfigs /data/kubejs /data/libraries || true
+            mkdir -p /data/mods
+
+            echo "Downloading server pack..."
+            curl -fSL -L "${SERVER_PACK_URL}" -o pack.zip
+
+            echo "Unpacking..."
+            rm -rf unpack
+            mkdir -p unpack
+            unzip -q pack.zip -d unpack
+
+            MODS_DIR="$(find unpack -maxdepth 6 -type d -name mods -print -quit || true)"
+            if [ -z "${MODS_DIR}" ]; then
+              echo "ERROR: no mods/ directory found in server pack"
+              find unpack -maxdepth 3 -mindepth 1 -print
+              exit 1
+            fi
+            ROOT_DIR="$(dirname "${MODS_DIR}")"
+            echo "Using extracted root: ${ROOT_DIR}"
+
+            for d in mods config defaultconfigs kubejs libraries; do
+              if [ -d "${ROOT_DIR}/${d}" ]; then
+                mkdir -p "/data/${d}"
+                cp -a "${ROOT_DIR}/${d}/." "/data/${d}/"
+              fi
+            done
+
+            echo "Installed mods (first 200):"
+            ls -1 /data/mods | sort | sed -n '1,200p'
+
+            echo "Verifying required mods exist..."
+            if ! have_required_mods; then
+              echo "ERROR: server pack install still missing required mods"
+              exit 1
+            fi
+
+            echo "Server pack installed and verified."
+        volumeMounts:
+          - name: data
+            mountPath: /data
+      containers:
+        - name: minecraft
+          image: itzg/minecraft-server:java17
+          ports:
+            - name: minecraft
+              containerPort: 25565
+              protocol: TCP
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: TYPE
+              value: "FABRIC"
+            - name: VERSION
+              value: "1.20.1"
+            # Let the installed pack dictate the effective loader; do not try to “outsmart” it here.
+            # If you hard-pin, pin to what the pack includes.
+            # - name: FABRIC_LOADER_VERSION
+            #   value: "0.17.3"
+            - name: MEMORY
+              value: "8G"
+            - name: DEBUG
+              value: "FALSE"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+
+          startupProbe:
+            tcpSocket:
+              port: 25565
+            periodSeconds: 10
+            failureThreshold: 60
+
+          readinessProbe:
+            tcpSocket:
+              port: 25565
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "8Gi"
+            limits:
+              memory: "10Gi"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 60Gi
