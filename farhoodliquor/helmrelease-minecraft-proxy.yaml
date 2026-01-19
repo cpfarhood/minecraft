@@ -22,7 +22,7 @@ spec:
       velocityBuildId: latest
 
       # ensure you're actually providing the Velocity config file
-      configFilePath: /server/velocity.toml
+      configFilePath: /tmp/velocity-init.toml
       config: |-
         config-version = "2.7"
         bind = "0.0.0.0:25577"
@@ -40,3 +40,14 @@ spec:
 
       # keep the generated file path; the image is already creating it
       velocityForwardingSecretFilePath: /server/forwarding.secret
+
+      initContainers:
+        - name: copy-config
+          image: busybox:latest
+          command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml"]
+          volumeMounts:
+            - name: datadir
+              mountPath: /server
+            - name: config
+              mountPath: /tmp/velocity-init.toml
+              subPath: config.yml
