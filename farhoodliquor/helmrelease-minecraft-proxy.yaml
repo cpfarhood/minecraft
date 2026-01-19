@@ -16,12 +16,6 @@ spec:
         namespace: flux-system
   values:
     minecraftProxy:
+      serviceType: LoadBalancer
       type: VELOCITY
       velocityVersion: latest
-
-
-
-
-
-
-
