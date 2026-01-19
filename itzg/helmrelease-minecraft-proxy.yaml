@@ -9,10 +9,10 @@ spec:
   chart:
     spec:
       chart: minecraft-proxy
-      #version: 60.x
+      version: 3.9.1-local
       sourceRef:
         kind: HelmRepository
-        name: itzg
+        name: farhoodliquor-minecraft-server-charts
         namespace: flux-system
   values:
     minecraftProxy:
