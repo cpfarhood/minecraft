@@ -41,13 +41,13 @@ spec:
       # keep the generated file path; the image is already creating it
       velocityForwardingSecretFilePath: /server/forwarding.secret
 
-    initContainers:
-      - name: copy-config
-        image: busybox:latest
-        command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml && chown 1000:1000 /server/velocity.toml && echo '=== CONFIG START ===' && cat /server/velocity.toml && echo '=== CONFIG END ==='"]
-        volumeMounts:
-          - name: datadir
-            mountPath: /server
-          - name: config
-            mountPath: /tmp/velocity-init.toml
-            subPath: config.yml
+      initContainers:
+        - name: copy-config
+          image: busybox:latest
+          command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml && echo '=== CONFIG START ===' && cat /server/velocity.toml && echo '=== CONFIG END ==='"]
+          volumeMounts:
+            - name: datadir
+              mountPath: /server
+            - name: config
+              mountPath: /tmp/velocity-init.toml
+              subPath: config.yml
