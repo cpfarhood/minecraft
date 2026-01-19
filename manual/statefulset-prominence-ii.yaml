@@ -18,6 +18,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 120
+      priorityClassName: high-priority
       securityContext:
         fsGroup: 1000
       initContainers:
@@ -28,9 +29,10 @@ spec:
               value: "https://www.curseforge.com/api/v1/mods/466901/files/7441271/download"
           command:
             - sh
-            - -lc
+            - -c
             - |
               set -euo pipefail
+              env | grep SERVER_PACK || echo "SERVER_PACK_URL not found in env"
               apk add --no-cache ca-certificates curl unzip findutils coreutils
 
               mkdir -p /data /work
