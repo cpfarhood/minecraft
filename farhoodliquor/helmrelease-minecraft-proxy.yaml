@@ -36,15 +36,13 @@ spec:
         lobby = "127.0.0.1:25565"
         try = [ "lobby" ]
 
-        [forced-hosts]
-
       # keep the generated file path; the image is already creating it
       velocityForwardingSecretFilePath: /server/forwarding.secret
 
     initContainers:
       - name: copy-config
         image: busybox:latest
-        command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml && echo '=== CONFIG START ===' && cat /server/velocity.toml && echo '=== CONFIG END ==='"]
+        command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml"]
         volumeMounts:
           - name: datadir
             mountPath: /server
