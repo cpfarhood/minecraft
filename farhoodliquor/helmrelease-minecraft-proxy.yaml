@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: minecraft-proxy
-      version: 3.9.2
+      version: 3.10.0
       sourceRef:
         kind: HelmRepository
         name: farhoodliquor-minecraft-server-charts
@@ -17,18 +17,6 @@ spec:
   values:
     minecraftProxy:
       type: VELOCITY
-      # Velocity selection (these map to the itzg image env vars)
-      velocityVersion: latest
-      velocityBuildId: latest
-      
-      # Tell the image to NOT generate/modify config files
-      extraEnv:
-        SKIP_CONFIG: "true"
-        CFG_VELOCITY_SKIP: "true"
-      
-      
-      # Set a different path for the chart's mount to avoid conflict
-      configFilePath: /tmp/velocity-from-configmap.toml
       
       config: |
         config-version = "2.7"
@@ -44,20 +32,6 @@ spec:
         try = [ "lobby" ]
 
 
-      # keep the generated file path; the image is already creating it
-      velocityForwardingSecretFilePath: /server/forwarding.secret
-
-    # Copy config from read-only ConfigMap to writable location
-    initContainers:
-      - name: copy-config
-        image: busybox:latest
-        command: ["sh", "-c", "cp /tmp/velocity-from-configmap.toml /server/velocity.toml && chmod 644 /server/velocity.toml"]
-        volumeMounts:
-          - name: datadir
-            mountPath: /server
-          - name: config
-            mountPath: /tmp/velocity-from-configmap.toml
-            subPath: config.yml
 
 
 
