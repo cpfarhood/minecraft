@@ -19,7 +19,7 @@ spec:
       type: VELOCITY
 
       # Velocity selection (these map to the itzg image env vars)
-      velocityVersion: 3.3.0
+      velocityVersion: latest
       velocityBuildId: latest
 
       onlineMode: true
