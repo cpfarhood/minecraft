@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: minecraft-proxy
-      version: 3.9.1
+      version: 3.9.2
       sourceRef:
         kind: HelmRepository
         name: farhoodliquor-minecraft-server-charts
