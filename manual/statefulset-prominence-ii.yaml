@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: mc-prominence-2
 spec:
-  serviceName: mc-prominence-2-headless
+  serviceName: mc-prominence-2
   replicas: 1
   selector:
     matchLabels:
@@ -21,80 +21,80 @@ spec:
       securityContext:
         fsGroup: 1000
       initContainers:
-      - name: install-server-pack
-        image: alpine:3.20
-        env:
-          - name: SERVER_PACK_URL
-            value: "https://www.curseforge.com/api/v1/mods/466901/files/7441271/download"
-        command:
-          - sh
-          - -lc
-          - |
-            set -euo pipefail
-            apk add --no-cache ca-certificates curl unzip findutils coreutils
+        - name: install-server-pack
+          image: alpine:3.20
+          env:
+            - name: SERVER_PACK_URL
+              value: "https://www.curseforge.com/api/v1/mods/466901/files/7441271/download"
+          command:
+            - sh
+            - -lc
+            - |
+              set -euo pipefail
+              apk add --no-cache ca-certificates curl unzip findutils coreutils
 
-            mkdir -p /data /work
-            cd /work
+              mkdir -p /data /work
+              cd /work
 
-            have_required_mods() {
-              [ -d /data/mods ] || return 1
-              ls -1 /data/mods/*.jar >/dev/null 2>&1 || return 1
+              have_required_mods() {
+                [ -d /data/mods ] || return 1
+                ls -1 /data/mods/*.jar >/dev/null 2>&1 || return 1
 
-              # Case-insensitive match on required mod jar names (substring match)
-              for r in prominent fabric-api archon minecells tierify puffish; do
-                if ! ls -1 /data/mods/*.jar 2>/dev/null | grep -qi "${r}"; then
-                  return 1
+                # Case-insensitive match on required mod jar names (substring match)
+                for r in prominent fabric-api archon minecells tierify puffish; do
+                  if ! ls -1 /data/mods/*.jar 2>/dev/null | grep -qi "${r}"; then
+                    return 1
+                  fi
+                done
+                return 0
+              }
+
+              if have_required_mods; then
+                echo "Modset looks complete; skipping install."
+                exit 0
+              fi
+
+              echo "Incomplete modset detected; wiping and reinstalling server pack."
+              rm -rf /data/mods /data/config /data/defaultconfigs /data/kubejs /data/libraries || true
+              mkdir -p /data/mods
+
+              echo "Downloading server pack..."
+              curl -fSL -L "${SERVER_PACK_URL}" -o pack.zip
+
+              echo "Unpacking..."
+              rm -rf unpack
+              mkdir -p unpack
+              unzip -q pack.zip -d unpack
+
+              MODS_DIR="$(find unpack -maxdepth 6 -type d -name mods -print -quit || true)"
+              if [ -z "${MODS_DIR}" ]; then
+                echo "ERROR: no mods/ directory found in server pack"
+                find unpack -maxdepth 3 -mindepth 1 -print
+                exit 1
+              fi
+              ROOT_DIR="$(dirname "${MODS_DIR}")"
+              echo "Using extracted root: ${ROOT_DIR}"
+
+              for d in mods config defaultconfigs kubejs libraries; do
+                if [ -d "${ROOT_DIR}/${d}" ]; then
+                  mkdir -p "/data/${d}"
+                  cp -a "${ROOT_DIR}/${d}/." "/data/${d}/"
                 fi
               done
-              return 0
-            }
 
-            if have_required_mods; then
-              echo "Modset looks complete; skipping install."
-              exit 0
-            fi
+              echo "Installed mods (first 200):"
+              ls -1 /data/mods | sort | sed -n '1,200p'
 
-            echo "Incomplete modset detected; wiping and reinstalling server pack."
-            rm -rf /data/mods /data/config /data/defaultconfigs /data/kubejs /data/libraries || true
-            mkdir -p /data/mods
-
-            echo "Downloading server pack..."
-            curl -fSL -L "${SERVER_PACK_URL}" -o pack.zip
-
-            echo "Unpacking..."
-            rm -rf unpack
-            mkdir -p unpack
-            unzip -q pack.zip -d unpack
-
-            MODS_DIR="$(find unpack -maxdepth 6 -type d -name mods -print -quit || true)"
-            if [ -z "${MODS_DIR}" ]; then
-              echo "ERROR: no mods/ directory found in server pack"
-              find unpack -maxdepth 3 -mindepth 1 -print
-              exit 1
-            fi
-            ROOT_DIR="$(dirname "${MODS_DIR}")"
-            echo "Using extracted root: ${ROOT_DIR}"
-
-            for d in mods config defaultconfigs kubejs libraries; do
-              if [ -d "${ROOT_DIR}/${d}" ]; then
-                mkdir -p "/data/${d}"
-                cp -a "${ROOT_DIR}/${d}/." "/data/${d}/"
+              echo "Verifying required mods exist..."
+              if ! have_required_mods; then
+                echo "ERROR: server pack install still missing required mods"
+                exit 1
               fi
-            done
 
-            echo "Installed mods (first 200):"
-            ls -1 /data/mods | sort | sed -n '1,200p'
-
-            echo "Verifying required mods exist..."
-            if ! have_required_mods; then
-              echo "ERROR: server pack install still missing required mods"
-              exit 1
-            fi
-
-            echo "Server pack installed and verified."
-        volumeMounts:
-          - name: data
-            mountPath: /data
+              echo "Server pack installed and verified."
+          volumeMounts:
+            - name: data
+              mountPath: /data
       containers:
         - name: minecraft
           image: itzg/minecraft-server:java17
@@ -114,7 +114,7 @@ spec:
             # - name: FABRIC_LOADER_VERSION
             #   value: "0.17.3"
             - name: MEMORY
-              value: "8G"
+              value: "16G"
             - name: DEBUG
               value: "FALSE"
           volumeMounts:
@@ -145,9 +145,9 @@ spec:
           resources:
             requests:
               cpu: "500m"
-              memory: "8Gi"
+              memory: "16Gi"
             limits:
-              memory: "10Gi"
+              memory: "18Gi"
 
   volumeClaimTemplates:
     - metadata:
