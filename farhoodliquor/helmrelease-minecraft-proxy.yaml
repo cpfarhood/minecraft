@@ -42,7 +42,7 @@ spec:
     initContainers:
       - name: copy-config
         image: busybox:latest
-        command: ["sh", "-c", "cp /tmp/velocity-init.toml /server/velocity.toml"]
+        command: ["sh", "-c", "rm -f /server/velocity.toml && cp /tmp/velocity-init.toml /server/velocity.toml && echo '=== DEBUG CONFIG ===' && cat /server/velocity.toml && echo '=== END DEBUG ==='"]
         volumeMounts:
           - name: datadir
             mountPath: /server
