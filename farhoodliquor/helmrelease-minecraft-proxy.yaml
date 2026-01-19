@@ -36,7 +36,9 @@ spec:
         lobby = "127.0.0.1:25565"
         try = [ "lobby" ]
 
-        # End of config
+        [advanced]
+        compression-threshold = 256
+
 
       # keep the generated file path; the image is already creating it
       velocityForwardingSecretFilePath: /server/forwarding.secret
