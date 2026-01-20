@@ -1,10 +1,10 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Database
 metadata:
-  name: jexactyl-panel
+  name: jexpanel-panel
   namespace: minecraft
 spec:
   mariaDbRef:
-    name: jexactyl-db
+    name: jexpanel-db
   characterSet: utf8mb4
   collate: utf8mb4_unicode_ci

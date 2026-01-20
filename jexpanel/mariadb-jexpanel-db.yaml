@@ -1,11 +1,11 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: jexactyl-userdatadb
+  name: jexpanel-db
   namespace: minecraft
 spec:
   rootPasswordSecretKeyRef:
-    name: jexactyl-userdatadb-pw
+    name: jexpanel-db-pw
     key: password
 
   replicas: 3
@@ -22,4 +22,4 @@ spec:
     type: LoadBalancer
     metadata:
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: ${JEXACTYL_USERDATADB_FQDN}
+        external-dns.alpha.kubernetes.io/hostname: ${JEXPANEL_DB_FQDN}
