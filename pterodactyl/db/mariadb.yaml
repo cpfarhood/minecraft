@@ -4,7 +4,7 @@ metadata:
   name: pterodactyl-db
 spec:
   rootPasswordSecretKeyRef:
-    name: pterodactyl-db-pw
+    name: pterodactyl-db-rootpw
     key: password
 
   replicas: 3

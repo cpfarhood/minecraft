@@ -1,10 +1,10 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: pterodactyl-userdata
+  name: pterodactyl-userdata-db
 spec:
   rootPasswordSecretKeyRef:
-    name: pterodactyl-userdata-pw
+    name: pterodactyl-userdata-db-rootpw
     key: password
 
   replicas: 3
@@ -21,4 +21,4 @@ spec:
     type: LoadBalancer
     metadata:
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: ${PTERODACTYL_USERDATA_FQDN}
+        external-dns.alpha.kubernetes.io/hostname: ${PTERODACTYL_USERDATA_DB_FQDN}

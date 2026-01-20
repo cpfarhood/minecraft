@@ -6,5 +6,5 @@ spec:
   mariaDbRef:
     name: pterodactyl-db
   passwordSecretKeyRef:
-    name: pterodactyl-db-pw
+    name: pterodactyl-db-userpw
     key: password
