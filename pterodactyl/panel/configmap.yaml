@@ -21,3 +21,5 @@ data:
   QUEUE_DRIVER: "file"
   DB_HOST: "pterodactyl-db-primary"
   DB_PORT: "3306"
+  DB_DATABASE: "panel"
+  DB_USERNAME: "pterodactyl"
