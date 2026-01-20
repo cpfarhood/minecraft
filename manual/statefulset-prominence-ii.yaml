@@ -44,7 +44,7 @@ spec:
 
                 # Case-insensitive match on required mod jar names (substring match)
                 for r in prominent fabric-api archon minecells tierify puffish; do
-                  if ! ls -1 /data/mods/*.jar 2>/dev/null | grep -qi "${r}"; then
+                  if ! ls -1 /data/mods/*.jar 2>/dev/null | grep -qi "$r"; then
                     return 1
                   fi
                 done
@@ -53,6 +53,8 @@ spec:
 
               if have_required_mods; then
                 echo "Modset looks complete; skipping install."
+                echo "Fixing permissions..."
+                chown -R 1000:1000 /data
                 exit 0
               fi
 
@@ -60,8 +62,8 @@ spec:
               rm -rf /data/mods /data/config /data/defaultconfigs /data/kubejs /data/libraries || true
               mkdir -p /data/mods
 
-              echo "Downloading server pack from: '${SERVER_PACK_URL}'"
-              curl -L -o pack.zip "${SERVER_PACK_URL}"
+              echo "Downloading server pack from: '$SERVER_PACK_URL'"
+              curl -L -o pack.zip "$SERVER_PACK_URL"
 
               echo "Unpacking..."
               rm -rf unpack
@@ -69,18 +71,18 @@ spec:
               unzip -q pack.zip -d unpack
 
               MODS_DIR="$(find unpack -maxdepth 6 -type d -name mods -print -quit || true)"
-              if [ -z "${MODS_DIR}" ]; then
+              if [ -z "$MODS_DIR" ]; then
                 echo "ERROR: no mods/ directory found in server pack"
                 find unpack -maxdepth 3 -mindepth 1 -print
                 exit 1
               fi
-              ROOT_DIR="$(dirname "${MODS_DIR}")"
-              echo "Using extracted root: ${ROOT_DIR}"
+              ROOT_DIR="$(dirname "$MODS_DIR")"
+              echo "Using extracted root: $ROOT_DIR"
 
               for d in mods config defaultconfigs kubejs libraries; do
-                if [ -d "${ROOT_DIR}/${d}" ]; then
-                  mkdir -p "/data/${d}"
-                  cp -a "${ROOT_DIR}/${d}/." "/data/${d}/"
+                if [ -d "$ROOT_DIR/$d" ]; then
+                  mkdir -p "/data/$d"
+                  cp -a "$ROOT_DIR/$d/." "/data/$d/"
                 fi
               done
 
@@ -94,6 +96,9 @@ spec:
               fi
 
               echo "Server pack installed and verified."
+
+              echo "Fixing permissions..."
+              chown -R 1000:1000 /data
 
           volumeMounts:
             - name: data
@@ -117,7 +122,7 @@ spec:
             # - name: FABRIC_LOADER_VERSION
             #   value: "0.17.3"
             - name: MEMORY
-              value: "24G"
+              value: "16G"
             - name: DEBUG
               value: "FALSE"
             - name: MOTD
@@ -151,10 +156,10 @@ spec:
 
           resources:
             requests:
-              cpu: "500m"
+              cpu: "1000m"
               memory: "24Gi"
             limits:
-              memory: "26Gi"
+              memory: "24Gi"
 
   volumeClaimTemplates:
     - metadata:
