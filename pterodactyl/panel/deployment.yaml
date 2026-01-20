@@ -13,34 +13,29 @@ spec:
         app: panel
     spec:
       containers:
-      - name: panel
-        image: ghcr.io/pterodactyl/panel:latest
-        ports:
-        - containerPort: 80
-        envFrom:
-        - configMapRef:
-            name: panel
-        - secretRef:
-            name: panel
-        volumeMounts:
-        - name: var
-          mountPath: /app/var/
-        - name: nginx
-          mountPath: /etc/nginx/http.d/
-        - name: certs
-          mountPath: /etc/letsencrypt/
-        - name: logs
-          mountPath: /app/storage/logs
+        - name: panel
+          image: ghcr.io/pterodactyl/panel:latest
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          volumeMounts:
+            - name: var
+              mountPath: /app/var/
+            - name: nginx
+              mountPath: /etc/nginx/http.d/
+            - name: logs
+              mountPath: /app/storage/logs
       volumes:
-      - name: var
-        persistentVolumeClaim:
-          claimName: panel-var
-      - name: nginx
-        persistentVolumeClaim:
-          claimName: panel-nginx
-      - name: certs
-        persistentVolumeClaim:
-          claimName: panel-certs
-      - name: logs
-        persistentVolumeClaim:
-          claimName: panel-logs
+        - name: var
+          persistentVolumeClaim:
+            claimName: panel-var
+        - name: nginx
+          persistentVolumeClaim:
+            claimName: panel-nginx
+        - name: logs
+          persistentVolumeClaim:
+            claimName: panel-logs
