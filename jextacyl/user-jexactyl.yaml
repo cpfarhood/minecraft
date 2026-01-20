@@ -1,0 +1,11 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: jexactyl
+  namespace: minecraft
+spec:
+  mariaDbRef:
+    name: jexactyl-db
+  passwordSecretKeyRef:
+    name: jexactyl-db-pw
+    key: password

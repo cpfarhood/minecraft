@@ -1,0 +1,14 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: jexactyl-panel
+  namespace: minecraft
+spec:
+  mariaDbRef:
+    name: jexactyl-db
+  privileges:
+    - ALL
+  database: jexactyl-panel
+  table: "*"
+  username: jexactyl
+  host: "%"

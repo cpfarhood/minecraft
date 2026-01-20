@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - secret-jexactyl-db-pw.yaml
+  - secret-jexactyl-userdatadb-pw.yaml
+  - mariadb-jexactyl-db.yaml
+  - mariadb-jexactyl-userdatadb.yaml
+  - database-jexactyl-panel.yaml
+  - user-jexactyl.yaml
+  - grant-jexactyl-db.yaml

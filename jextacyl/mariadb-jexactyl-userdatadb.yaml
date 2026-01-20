@@ -1,0 +1,25 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: jexactyl-userdatadb
+  namespace: minecraft
+spec:
+  rootPasswordSecretKeyRef:
+    name: jexactyl-userdatadb-pw
+    key: password
+
+  replicas: 3
+
+  replication:
+    enabled: true
+    primary:
+      autoFailover: true
+
+  storage:
+    size: 16Gi
+
+  primaryService:
+    type: LoadBalancer
+    metadata:
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: ${JEXACTYL_USERDATA_FQDN}
