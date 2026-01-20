@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
   - ./manual
   - ./shulker
-  - ./farhoodliquor
+#  - ./farhoodliquor
 #  - ./pterodactyl
 #  - ./itzg

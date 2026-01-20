@@ -8,6 +8,7 @@ metadata:
     zone: public
   annotations:
     lbipam.cilium.io/ips: 71.150.236.211
+    external-dns.alpha.kubernetes.io/hostname: mc-prom-2.farh.net
 spec:
   type: LoadBalancer
   selector:
