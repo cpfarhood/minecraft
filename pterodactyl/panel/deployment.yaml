@@ -61,6 +61,13 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
+              # Wait for database to be ready
+              echo "Waiting for database connection..."
+              until mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE -e "SELECT 1"; do
+                echo "Database not ready, sleeping 5s..."
+                sleep 5
+              done
+
               # Check if migrations table exists to avoid re-seeding
               mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE -e "SELECT 1 FROM migrations LIMIT 1;" && exit 0
               echo "Seeding database..."
