@@ -17,6 +17,9 @@ spec:
           image: ghcr.io/pterodactyl/panel:latest
           ports:
             - containerPort: 80
+          command: ["/bin/sh", "-c"]
+          args:
+            - apk add --no-cache mariadb-client && cd /app && php artisan migrate --seed --force && mkdir -p /var/log/supervisord && exec /usr/bin/supervisord -n -c /etc/supervisord.conf
           envFrom:
             - configMapRef:
                 name: panel
