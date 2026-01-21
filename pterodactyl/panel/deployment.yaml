@@ -33,33 +33,6 @@ spec:
               done
               echo "Database is ready!"
 
-        # Init 2: Load database schema (migrations and seeding)
-        - name: schema-loader
-          image: ghcr.io/pterodactyl/panel:latest
-          envFrom:
-            - configMapRef:
-                name: panel
-            - secretRef:
-                name: panel
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "Installing mariadb-client..."
-              apk add --no-cache mariadb-client
-
-              echo "Creating mysql wrapper script for mariadb..."
-              cat > /usr/local/bin/mysql << 'EOF'
-              #!/bin/sh
-              exec /usr/bin/mariadb "$@"
-              EOF
-              chmod +x /usr/local/bin/mysql
-              export PATH=/usr/local/bin:$PATH
-
-              echo "Running database migrations and seeding..."
-              php artisan migrate --seed --force
-
-              echo "Schema loading complete!"
-
       containers:
         - name: panel
           image: ghcr.io/pterodactyl/panel:latest
@@ -77,8 +50,22 @@ spec:
                   - /bin/sh
                   - -c
                   - |
-                    echo "Waiting for application to be ready..."
+                    echo "Waiting for APP_KEY to be generated..."
                     sleep 5
+
+                    echo "Installing mariadb-client..."
+                    apk add --no-cache mariadb-client
+
+                    echo "Creating mysql wrapper for mariadb..."
+                    cat > /usr/local/bin/mysql << 'EOF'
+                    #!/bin/sh
+                    exec /usr/bin/mariadb "$@"
+                    EOF
+                    chmod +x /usr/local/bin/mysql
+                    export PATH=/usr/local/bin:$PATH
+
+                    echo "Running database migrations and seeding..."
+                    php artisan migrate --seed --force
 
                     echo "Creating admin user..."
                     php artisan p:user:make \
