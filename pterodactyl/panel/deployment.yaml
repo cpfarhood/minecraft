@@ -46,9 +46,9 @@ spec:
             - |
               echo "Creating mysql wrapper script for mariadb..."
               cat > /usr/local/bin/mysql << 'EOF'
-#!/bin/sh
-exec /usr/bin/mariadb "$@"
-EOF
+              #!/bin/sh
+              exec /usr/bin/mariadb "$@"
+              EOF
               chmod +x /usr/local/bin/mysql
               export PATH=/usr/local/bin:$PATH
 
@@ -56,7 +56,6 @@ EOF
               php artisan migrate --seed --force
 
               echo "Schema loading complete!"
-
 
       containers:
         - name: panel
