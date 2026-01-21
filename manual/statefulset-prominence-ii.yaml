@@ -129,6 +129,8 @@ spec:
               value: "Get a fucking job"
             - name: OPS
               value: "cpfarhoodd,freakychris"
+            - name: USE_AIKAR_FLAGS
+              value: "true"
           volumeMounts:
             - name: data
               mountPath: /data
@@ -156,10 +158,10 @@ spec:
 
           resources:
             requests:
-              cpu: "1000m"
-              memory: "24Gi"
+              cpu: "2000m"
+              memory: "18Gi"
             limits:
-              memory: "24Gi"
+              memory: "20Gi"
 
   volumeClaimTemplates:
     - metadata:
