@@ -4,6 +4,8 @@ metadata:
   name: panel
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: panel
@@ -39,3 +41,50 @@ spec:
         - name: logs
           persistentVolumeClaim:
             claimName: panel-logs
+        - name: shared-schema
+          emptyDir: {}
+      initContainers:
+        - name: extract-schema
+          image: ghcr.io/pterodactyl/panel:latest
+          command: ["/bin/sh", "-c"]
+          args: ["cp /app/database/schema/mysql-schema.sql /shared/schema.sql"]
+          volumeMounts:
+            - name: shared-schema
+              mountPath: /shared
+        - name: seed-schema
+          image: mariadb:10.11
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              # Check if migrations table exists to avoid re-seeding
+              mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE -e "SELECT 1 FROM migrations LIMIT 1;" && exit 0
+              echo "Seeding database..."
+              mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < /shared/schema.sql
+          volumeMounts:
+            - name: shared-schema
+              mountPath: /shared
+        - name: create-admin
+          image: ghcr.io/pterodactyl/panel:latest
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Creating admin user..."
+              # Attempt creation, succeed even if it fails (likely due to existing user)
+              php artisan p:user:make --email="$ADMIN_EMAIL" --username="$ADMIN_USER" --name-first="$ADMIN_FIRST" --name-last="$ADMIN_LAST" --password="$ADMIN_PASSWORD" --admin=1 || echo "User creation failed, possibly already exists."
+          volumeMounts:
+            - name: var
+              mountPath: /app/var/
+            - name: nginx
+              mountPath: /etc/nginx/http.d/
+            - name: logs
+              mountPath: /app/storage/logs
