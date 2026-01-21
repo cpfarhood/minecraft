@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ./db
   - ./userdata-db
-  #- ./panel
+  - ./panel
