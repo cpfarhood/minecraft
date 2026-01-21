@@ -32,6 +32,7 @@ spec:
             - -c
             - |
               set -euo pipefail
+              rm -f /data/mods/Chunky-1.3.138.jar || true
               env | grep SERVER_PACK || echo "SERVER_PACK_URL not found in env"
               apk add --no-cache ca-certificates curl unzip findutils coreutils
 
@@ -159,9 +160,9 @@ spec:
           resources:
             requests:
               cpu: "2000m"
-              memory: "18Gi"
-            limits:
               memory: "20Gi"
+            limits:
+              memory: "24Gi"
 
   volumeClaimTemplates:
     - metadata:
