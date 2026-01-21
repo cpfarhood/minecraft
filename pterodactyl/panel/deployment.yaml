@@ -44,6 +44,9 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
+              echo "Installing mariadb-client..."
+              apk add --no-cache mariadb-client
+
               echo "Creating mysql wrapper script for mariadb..."
               cat > /usr/local/bin/mysql << 'EOF'
               #!/bin/sh
