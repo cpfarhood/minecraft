@@ -14,6 +14,75 @@ spec:
       labels:
         app: panel
     spec:
+      initContainers:
+        # Init 1: Wait for database to be ready
+        - name: wait-for-db
+          image: mariadb:10.11
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for database to be ready..."
+              until mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE -e "SELECT 1" > /dev/null 2>&1; do
+                echo "Database not ready, sleeping 5s..."
+                sleep 5
+              done
+              echo "Database is ready!"
+
+        # Init 2: Run migrations and seed
+        - name: migrate-and-seed
+          image: ghcr.io/pterodactyl/panel:latest
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Running migrations and seeding database..."
+              php artisan migrate --seed --force
+              echo "Migrations complete!"
+          volumeMounts:
+            - name: var
+              mountPath: /app/var/
+            - name: nginx
+              mountPath: /etc/nginx/http.d/
+            - name: logs
+              mountPath: /app/storage/logs
+
+        # Init 3: Create admin user (if needed)
+        - name: create-admin
+          image: ghcr.io/pterodactyl/panel:latest
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Creating admin user..."
+              php artisan p:user:make \
+                --email="$ADMIN_EMAIL" \
+                --username="$ADMIN_USER" \
+                --name-first="$ADMIN_FIRST" \
+                --name-last="$ADMIN_LAST" \
+                --password="$ADMIN_PASSWORD" \
+                --admin=1 || echo "User creation failed (may already exist)"
+              echo "User creation step complete!"
+          volumeMounts:
+            - name: var
+              mountPath: /app/var/
+            - name: nginx
+              mountPath: /etc/nginx/http.d/
+            - name: logs
+              mountPath: /app/storage/logs
+
       containers:
         - name: panel
           image: ghcr.io/pterodactyl/panel:latest
