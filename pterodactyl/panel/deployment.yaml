@@ -44,8 +44,13 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "Creating mysql symlink for mariadb..."
-              ln -sf /usr/bin/mariadb /usr/bin/mysql || true
+              echo "Creating mysql wrapper script for mariadb..."
+              cat > /usr/local/bin/mysql << 'EOF'
+#!/bin/sh
+exec /usr/bin/mariadb "$@"
+EOF
+              chmod +x /usr/local/bin/mysql
+              export PATH=/usr/local/bin:$PATH
 
               echo "Running database migrations and seeding..."
               php artisan migrate --seed --force
