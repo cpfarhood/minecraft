@@ -27,4 +27,4 @@ data:
   ADMIN_USER: "${PTERODACTYL_ADMIN_USER}"
   ADMIN_FIRST: "${PTERODACTYL_ADMIN_FIRST}"
   ADMIN_LAST: "${PTERODACTYL_ADMIN_LAST}"
-  RECAPTCHA_ENABLED: "false"
+  #RECAPTCHA_ENABLED: "false". # Sometimes useful to disable for testing in an automated way
