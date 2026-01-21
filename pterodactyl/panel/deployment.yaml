@@ -33,6 +33,26 @@ spec:
               done
               echo "Database is ready!"
 
+        # Init 2: Load database schema (migrations and seeding)
+        - name: schema-loader
+          image: ghcr.io/pterodactyl/panel:latest
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Creating mysql symlink for mariadb..."
+              ln -sf /usr/bin/mariadb /usr/bin/mysql || true
+
+              echo "Running database migrations and seeding..."
+              php artisan migrate --seed --force
+
+              echo "Schema loading complete!"
+
+
       containers:
         - name: panel
           image: ghcr.io/pterodactyl/panel:latest
@@ -50,14 +70,8 @@ spec:
                   - /bin/sh
                   - -c
                   - |
-                    echo "Creating mysql symlink for mariadb..."
-                    ln -sf /usr/bin/mariadb /usr/bin/mysql || true
-
-                    echo "Waiting for APP_KEY to be generated..."
+                    echo "Waiting for application to be ready..."
                     sleep 5
-
-                    echo "Running migrations and seeding database..."
-                    php artisan migrate --seed --force || echo "Migration failed or already completed"
 
                     echo "Creating admin user..."
                     php artisan p:user:make \
