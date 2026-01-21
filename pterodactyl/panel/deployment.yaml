@@ -50,6 +50,9 @@ spec:
                   - /bin/sh
                   - -c
                   - |
+                    echo "Creating mysql symlink for mariadb..."
+                    ln -sf /usr/bin/mariadb /usr/bin/mysql || true
+
                     echo "Waiting for APP_KEY to be generated..."
                     sleep 5
 
