@@ -12,3 +12,11 @@ spec:
       memory: 640Mi
     limits:
       memory: 640Mi
+  authentication:
+    passwordFromSecret:
+      name: pterodactyl-dragonflydb-pw
+      key: password
+  serviceSpec:
+    type: LoadBalancer
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: ${PTERODACTYL_DRAGONFLYDB_FQDN}
