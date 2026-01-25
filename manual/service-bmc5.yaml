@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: prominence-ii
+  name: bmc5
   labels:
     app.kubernetes.io/name: minecraft
-    app.kubernetes.io/instance: prominence-ii
+    app.kubernetes.io/instance: bmc5
     zone: public
   annotations:
     service.cilium.io/forwarding-mode: dsr
@@ -15,8 +15,8 @@ spec:
   type: LoadBalancer
   selector:
     app.kubernetes.io/name: minecraft
-    app.kubernetes.io/instance: prominence-ii
+    app.kubernetes.io/instance: bmc5
   ports:
     - name: minecraft
-      port: 25565
+      port: 25568
       targetPort: 25565
