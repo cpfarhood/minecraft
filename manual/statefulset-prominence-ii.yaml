@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mc-prominence-ii
-  namespace: minecraft
+  name: prominence-ii
   labels:
-    app.kubernetes.io/name: mc-prominence-ii
+    app.kubernetes.io/name: minecraft
+    app.kubernetes.io/instance: prominence-ii
 spec:
   serviceName: mc-prominence-ii
   replicas: 1

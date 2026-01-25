@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: bmc5
-  namespace: minecraft
   labels:
-    app.kubernetes.io/name: bmc5
+    app.kubernetes.io/name: minecraft
+    app.kubernetes.io/instance: bmc5
 spec:
   serviceName: bmc5
   replicas: 1
@@ -87,9 +87,9 @@ spec:
           resources:
             requests:
               cpu: "1"
-              memory: "8Gi"
+              memory: "12Gi"
             limits:
-              memory: "10Gi"
+              memory: "15Gi"
 
   volumeClaimTemplates:
     - metadata:
