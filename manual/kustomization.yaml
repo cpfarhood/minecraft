@@ -5,3 +5,4 @@ resources:
   - statefulset-bmc4.yaml
   - statefulset-bmc5.yaml
   - statefulset-prominence-ii.yaml
+  - statefulset-atm10.yaml
