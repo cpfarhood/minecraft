@@ -58,7 +58,7 @@ spec:
             - name: CF_API_KEY
               value: ${CURSEFORGE_API_KEY}
             - name: CF_PAGE_URL
-              value: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc4"
+              value: "https://www.curseforge.com/minecraft/modpacks/better-mc-forge-bmc4"
           volumeMounts:
             - name: data
               mountPath: /data
