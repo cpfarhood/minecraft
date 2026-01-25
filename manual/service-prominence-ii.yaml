@@ -2,19 +2,21 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mc-prominence-ii
-  namespace: minecraft
   labels:
-    app.kubernetes.io/name: mc-prominence-ii
+    app.kubernetes.io/name: minecraft
+    app.kubernetes.io/instance: prominence-ii
     zone: public
   annotations:
     service.cilium.io/forwarding-mode: dsr
     lbipam.cilium.io/ips: 71.150.236.211
-    external-dns.alpha.kubernetes.io/hostname: mc-prom-2.farh.net
+    lbipam.cilium.io/sharing-key: "minecraft"
+    external-dns.alpha.kubernetes.io/hostname: mc.farh.net
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/name: mc-prominence-ii
+    app.kubernetes.io/name: minecraft
+    app.kubernetes.io/instance: prominence-ii
   ports:
     - name: minecraft
       port: 25565
-      targetPort: minecraft
+      targetPort: 25565
