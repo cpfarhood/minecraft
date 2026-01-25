@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ctrlpanelgg
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: panel
+  template:
+    metadata:
+      labels:
+        app: panel
+    spec:
+      initContainers:
+        # Init 1: Wait for database to be ready
+        - name: wait-for-db
+          image: mariadb:10.11
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for database to be ready..."
+              until mariadb -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE -e "SELECT 1" > /dev/null 2>&1; do
+                echo "Database not ready, sleeping 5s..."
+                sleep 5
+              done
+              echo "Database is ready!"
+
+      containers:
+        - name: panel
+          image: ghcr.io/ctrlpanel-gg/panel:1.1.1
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: panel
+            - secretRef:
+                name: panel
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Waiting for APP_KEY to be generated..."
+                    sleep 5
+
+                    echo "Installing mariadb-client..."
+                    apk add --no-cache mariadb-client
+
+                    echo "Creating mysql wrapper for mariadb..."
+                    cat > /usr/local/bin/mysql << 'EOF'
+                    #!/bin/sh
+                    exec /usr/bin/mariadb "$@"
+                    EOF
+                    chmod +x /usr/local/bin/mysql
+                    export PATH=/usr/local/bin:$PATH
+
+                    echo "Running database migrations and seeding..."
+                    php artisan migrate --seed --force
+
+                    echo "Creating admin user..."
+                    php artisan p:user:make \
+                      --email="$ADMIN_EMAIL" \
+                      --username="$ADMIN_USER" \
+                      --name-first="$ADMIN_FIRST" \
+                      --name-last="$ADMIN_LAST" \
+                      --password="$ADMIN_PASSWORD" \
+                      --admin=1 || echo "User creation failed (may already exist)"
+
+                    echo "PostStart hook complete!"
+          volumeMounts:
+            - name: var
+              mountPath: /app/var/
+            - name: nginx
+              mountPath: /etc/nginx/http.d/
+            - name: logs
+              mountPath: /app/storage/logs
+      volumes:
+        - name: var
+          persistentVolumeClaim:
+            claimName: panel-var
+        - name: nginx
+          persistentVolumeClaim:
+            claimName: panel-nginx
+        - name: logs
+          persistentVolumeClaim:
+            claimName: panel-logs

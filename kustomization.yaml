@@ -4,5 +4,5 @@ resources:
   - ./manual
   - ./shulker
   #  - ./farhoodliquor
-#  - ./pterodactyl
+  - ./pterodactyl
 #  - ./itzg

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ctrlpanelgg
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik-external
+  tls:
+    - hosts:
+        - ${CTRLPANELGG_PANEL_FQDN}
+      secretName: ctrlpanelgg-tls
+  rules:
+    - host: ${CTRLPANELGG_PANEL_FQDN}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ctrlpanelgg
+                port:
+                  number: 80
