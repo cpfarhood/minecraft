@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: bmc5
+  name: bmc4
   namespace: minecraft
   labels:
-    app.kubernetes.io/name: bmc5
+    app.kubernetes.io/name: bmc4
 spec:
-  serviceName: bmc5
+  serviceName: bmc4
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: bmc5
+      app.kubernetes.io/name: bmc4
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: bmc5
+        app.kubernetes.io/name: bmc4
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 120
@@ -58,7 +58,7 @@ spec:
             - name: CF_API_KEY
               value: ${CURSEFORGE_API_KEY}
             - name: CF_PAGE_URL
-              value: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc5"
+              value: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc4"
           volumeMounts:
             - name: data
               mountPath: /data
