@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
   - ./db
   - ./userdata-db
-  - ./redis
+  - ./dragonflydb
 #  - ./panel
 #  - ./ctrlpanelgg
