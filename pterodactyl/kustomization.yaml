@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - ./db
   - ./userdata-db
-  #  - ./panel
-  - ./ctrlpanelgg
+#  - ./panel
+#  - ./ctrlpanelgg
