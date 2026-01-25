@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mc-prominence-ii
+  name: bmc5
   namespace: minecraft
   labels:
-    app.kubernetes.io/name: mc-prominence-ii
+    app.kubernetes.io/name: bmc5
 spec:
-  serviceName: mc-prominence-ii
+  serviceName: bmc5
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: mc-prominence-ii
+      app.kubernetes.io/name: bmc5
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: mc-prominence-ii
+        app.kubernetes.io/name: bmc5
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 120
@@ -31,11 +31,11 @@ spec:
           env:
             - name: EULA
               value: "TRUE"
-            # Use type or MODPACK_PLATFORM not both
+            # Use TYPE/VERSION or MODPACK_PLATFORM not both
             #- name: TYPE
             #  value: "FABRIC"
-            - name: VERSION
-              value: "1.20.1"
+            #- name: VERSION
+            #  value: "1.20.1"
             - name: MEMORY
               value: "16G"
             - name: DEBUG
@@ -51,7 +51,7 @@ spec:
             - name: CF_API_KEY
               value: ${CURSEFORGE_API_KEY}
             - name: CF_PAGE_URL
-              value: "https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era"
+              value: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc5"
           volumeMounts:
             - name: data
               mountPath: /data

@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - service-prominence-ii.yaml
   - statefulset-prominence-ii.yaml
+  - statefulset-bmc5.yaml
