@@ -1,0 +1,126 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-prom-ii
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      # Pin the chart so upgrades don't randomly change behavior/startup paths
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+
+  values:
+    image:
+      repository: itzg/minecraft-server
+      # Prominence II is Fabric 1.20.1 and requires Java 17
+      tag: java17
+
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+
+    # Prevent CPU throttling jitter during startup and tick spikes
+    resources:
+      requests:
+        cpu: "4000m"
+        memory: "16Gi"
+      limits:
+        memory: "16Gi"
+
+    # Keep the container from being killed mid-long-startup while mods load
+    startupProbe:
+      enabled: true
+      command: ["mc-health"]
+      failureThreshold: 120
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    # Liveness should be forgiving on modded servers
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 180
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 6
+
+    # Readiness indicates "players can join"
+    readinessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+
+    minecraftServer:
+      type: AUTO_CURSEFORGE
+      eula: "TRUE"
+
+      # Keep startup + tick cost sane (biggest server-side wins)
+      # Prominence II is Fabric 1.20.1: these properties work normally.
+      viewDistance: 6
+      simulationDistance: 4
+      syncChunkWrites: false
+      maxTickTime: -1
+
+      difficulty: easy
+      gameMode: survival
+      motd: "Welcome to Prominence II!"
+      ops: ${SERVER_OPS}
+
+      # Memory: reserve headroom for native + mods + filesystem cache
+      # Don't run heap = pod limit.
+      memory: 12G
+
+      # JVM opts tuned for faster startup + stable GC for modded
+      jvmOpts: >-
+        -Xms12G -Xmx12G
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=100
+        -XX:+AlwaysPreTouch
+        -XX:+DisableExplicitGC
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+
+      # Leave blank unless you have a reason; "XX opts" here often becomes cargo-cult
+      jvmXXOpts: ""
+
+      # Don’t silently change server.properties elsewhere
+      overrideServerProperties: true
+
+      # Keep these explicit for predictability
+      allowNether: true
+      pvp: true
+      onlineMode: true
+
+      worldSaveName: world
+      forceReDownload: false
+      removeOldMods: false
+
+      autoCurseForge:
+        apiKey:
+          existingSecret: "minecraft"
+          secretKey: CURSEFORGE_API_KEY
+        pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era"
+
+    serviceAnnotations:
+      # This is used by the mc-router service to route traffic to this server
+      mc-router.itzg.me/externalServerName: "prom-ii.${FQDN}"
+
+    persistence:
+      dataDir:
+        enabled: true
+        size: 64Gi
+
+    # Avoid accidental node moves that force long cold-starts
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1

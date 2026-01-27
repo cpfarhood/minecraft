@@ -1,0 +1,84 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-router
+  namespace: minecraft
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: mc-router
+      #version: "0.14.7"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+  values:
+    args: ["--in-kube-cluster"]
+    minecraftRouter:
+      autoScale:
+        up:
+          # "Wake up" any stopped Minecraft servers.
+          # This requires Minecraft servers to be kind: StatefulSet
+          enabled: true
+        down:
+          # Shut down any running Minecraft servers after there are no more connections.
+          # This requires Minecraft servers to be kind: StatefulSet
+          enabled: true
+          # Shut down waiting period after there are no more connections.
+          # It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown
+          after: "15m"
+        # Type of Kubernetes object to store autoscale allow/deny list config in.
+        # Valid options: Secret,ConfigMap
+        configObject: ConfigMap
+      # Specify a server allow/deny list to restrict which players may trigger the scalers.
+      # For more info on the schema, check out the file in `mc-router`
+      # https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json
+      # allowDeny: {}
+      # global:
+      #   denylist:
+      #   - uuid: some-player-uuid
+      #     name: somePlayerName
+      # servers:
+      #   my.server.domain:
+      #     allowlist:
+      #     - uuid: some-player-uuid
+      #   my.other-server.domain:
+      #     denylist:
+      #     - uuid: some-player-uuid
+    services:
+      minecraft:
+        annotations:
+          service.cilium.io/forwarding-mode: dsr
+          lbipam.cilium.io/ips: "71.150.236.210"
+          external-dns.alpha.kubernetes.io/hostname: "*.mc.farh.net"
+        type: LoadBalancer
+        port: 25565
+      extraServiceSpec:
+        externalTrafficPolicy: Local
+  postRenderers:
+    - kustomize:
+        patches:
+          # Pass the in-cluster argument to pickup on annotation
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args
+                value:
+                  - --in-kube-cluster
+          # Label all Services emitted by this chart
+          - target:
+              group: ""
+              version: v1
+              kind: Service
+            patch: |
+              - op: add
+                path: /metadata/labels
+                value: {}
+              - op: add
+                path: /metadata/labels/zone
+                value: public

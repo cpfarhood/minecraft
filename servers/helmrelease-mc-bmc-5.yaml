@@ -1,0 +1,84 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-bmc-5
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+  values:
+    image:
+      repository: itzg/minecraft-server
+      tag: java21
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+    startupProbe:
+      command:
+        - mc-health
+      enabled: true
+      failureThreshold: 30
+      periodSeconds: 10
+    minecraftServer:
+      type: AUTO_CURSEFORGE
+      eula: "TRUE"
+      difficulty: easy
+      whitelist:
+      ops: ${SERVER_OPS}
+      icon:
+      maxPlayers: default
+      maxWorldSize: default
+      allowNether: default
+      announcePlayerAchievements: default
+      enableCommandBlock: default
+      forcegameMode: default
+      generateStructures: default
+      hardcore: default
+      maxBuildHeight: default
+      maxTickTime: default
+      spawnAnimals: default
+      spawnMonsters: default
+      spawnNPCs: default
+      spawnProtection: default
+      viewDistance: default
+      levelSeed:
+      gameMode: survival
+      motd: "Welcome to Better Minecraft 5!"
+      pvp: default
+      levelType: DEFAULT
+      generatorSettings:
+      worldSaveName: world
+      downloadWorldUrl:
+      forceReDownload: false
+      downloadModpackUrl:
+      removeOldMods: false
+      vanillaTweaksShareCodes: []
+      resourcePackUrl:
+      resourcePackSha:
+      resourcePackEnforce: false
+      onlineMode: default
+      enforceSecureProfile: default
+      memory: 10240M
+      jvmOpts: ""
+      jvmXXOpts: ""
+      overrideServerProperties: default
+      autoCurseForge:
+        apiKey:
+          existingSecret: "minecraft"
+          secretKey: CURSEFORGE_API_KEY
+        pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc5"
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "bmc-5.${FQDN}"
+    persistence:
+      labels: {}
+      annotations: {}
+      dataDir:
+        enabled: true
+        Size: 64Gi

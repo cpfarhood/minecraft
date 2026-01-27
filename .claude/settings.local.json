@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Add CLAUDE.md for Claude Code guidance\n\nProvides repository overview, common commands, and architecture\ndocumentation for Kubernetes-based Minecraft infrastructure.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor: Rename redis directory to dragonflydb\n\nRenames pterodactyl/redis/ to pterodactyl/dragonflydb/ for clarity\nsince the directory contains DragonflyDB configuration.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl describe:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(kubectl explain:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Limit DragonflyDB to 2 threads to reduce memory requirement\n\nDragonflyDB requires ~256MB per thread. The pod was crash-looping\nbecause it detected 8 threads but only had 512Mi available \\(needs 2Gi\\).\nLimiting to 2 threads allows it to run within 512Mi.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(kubectl delete:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Increase DragonflyDB memory to 640Mi for overhead\n\n512Mi was exactly the requirement for 2 threads but left no room\nfor container overhead, causing startup failure.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-atm-10
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+
+  values:
+    image:
+      repository: itzg/minecraft-server
+      tag: java21
+
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+
+    resources:
+      requests:
+        cpu: "4000m"
+        memory: "18Gi"
+      limits:
+        memory: "18Gi"
+
+    startupProbe:
+      enabled: true
+      command: ["mc-health"]
+      failureThreshold: 180
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 240
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 6
+
+    readinessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 90
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+
+    minecraftServer:
+      # Pattern A: use the official server pack zip, not AUTO_CURSEFORGE
+      type: MODPACK
+      eula: "TRUE"
+
+      # ATM10 ServerFiles-5.4.zip (CurseForge server pack)
+      # This avoids client-only junk like colorwheel/iris breaking dedicated server startup.
+      downloadModpackUrl: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/download/7361524"
+
+      # Keep startup deterministic and avoid partial leftovers on upgrades
+      forceReDownload: false
+
+      ops: ${SERVER_OPS}
+      difficulty: easy
+      gameMode: survival
+      motd: "Welcome to All the Mods 10!"
+      worldSaveName: world
+
+      viewDistance: 6
+      simulationDistance: 4
+      syncChunkWrites: false
+      maxTickTime: -1
+      overrideServerProperties: true
+      onlineMode: true
+      pvp: true
+      allowNether: true
+
+      # Heap < pod limit (headroom for native + filesystem cache)
+      memory: 14G
+      jvmOpts: >-
+        -Xms14G -Xmx14G
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=100
+        -XX:+AlwaysPreTouch
+        -XX:+DisableExplicitGC
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+      jvmXXOpts: ""
+
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "atm-10.${FQDN}"
+
+    persistence:
+      dataDir:
+        enabled: true
+        size: 64Gi
+
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
