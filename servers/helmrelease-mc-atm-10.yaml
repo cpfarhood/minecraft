@@ -30,7 +30,7 @@ spec:
         cpu: "4"
         memory: "14Gi"
       limits:
-\        memory: "18Gi"
+        memory: "18Gi"
 
     startupProbe:
       enabled: true
