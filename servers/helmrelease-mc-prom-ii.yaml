@@ -7,7 +7,6 @@ spec:
   chart:
     spec:
       chart: minecraft
-      # Pin the chart so upgrades don't randomly change behavior/startup paths
       version: "5.0.0"
       sourceRef:
         kind: HelmRepository
@@ -18,39 +17,28 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      # Prominence II is Fabric 1.20.1 and requires Java 17
       tag: java17
 
     replicaCount: 1
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
-    # Prevent CPU throttling jitter during startup and tick spikes
+    # 12-player sizing: avoid CPU throttling + keep memory headroom for native/metaspace/fs-cache
     resources:
       requests:
-        cpu: "4000m"
-        memory: "16Gi"
+        cpu: "4"
+        memory: "14Gi"
       limits:
-        memory: "16Gi"
+        memory: "18Gi"
 
-    # Keep the container from being killed mid-long-startup while mods load
+    # Long modded startups + occasional stalls during world gen
     startupProbe:
       enabled: true
       command: ["mc-health"]
-      failureThreshold: 120
+      failureThreshold: 180
       periodSeconds: 10
       timeoutSeconds: 5
 
-    # Liveness should be forgiving on modded servers
-    livenessProbe:
-      enabled: true
-      command: ["mc-health"]
-      initialDelaySeconds: 180
-      periodSeconds: 30
-      timeoutSeconds: 5
-      failureThreshold: 6
-
-    # Readiness indicates "players can join"
     readinessProbe:
       enabled: true
       command: ["mc-health"]
@@ -59,12 +47,20 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 180
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 6
+
     minecraftServer:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
-      # Keep startup + tick cost sane (biggest server-side wins)
-      # Prominence II is Fabric 1.20.1: these properties work normally.
+      # Prominence II is Fabric 1.20.1
+      # Keep server chunk + entity cost down for 12 players
       viewDistance: 6
       simulationDistance: 4
       syncChunkWrites: false
@@ -72,31 +68,39 @@ spec:
 
       difficulty: easy
       gameMode: survival
-      motd: "Welcome to Prominence II!"
+      motd: "Welcome to farh.net Prominence II!"
       ops: ${SERVER_OPS}
 
-      # Memory: reserve headroom for native + mods + filesystem cache
-      # Don't run heap = pod limit.
-      memory: 12G
+      maxPlayers: 12
 
-      # JVM opts tuned for faster startup + stable GC for modded
-      jvmOpts: >-
-        -Xms12G -Xmx12G
+      # Heap sizing: do not set heap == pod memory; leave ~1–1.5Gi headroom
+      memory: 14G
+
+      # GC: baseline G1 tuning widely used for MC; keep flags conservative
+      jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
-        -XX:MaxGCPauseMillis=100
-        -XX:+AlwaysPreTouch
+        -XX:MaxGCPauseMillis=150
         -XX:+DisableExplicitGC
+        -XX:+AlwaysPreTouch
+        -XX:G1NewSizePercent=20
+        -XX:G1MaxNewSizePercent=40
+        -XX:G1HeapRegionSize=16M
+        -XX:G1ReservePercent=20
+        -XX:G1HeapWastePercent=5
+        -XX:G1MixedGCCountTarget=4
+        -XX:InitiatingHeapOccupancyPercent=15
+        -XX:G1MixedGCLiveThresholdPercent=90
+        -XX:G1RSetUpdatingPauseTimePercent=5
+        -XX:SurvivorRatio=32
+        -XX:MaxTenuringThreshold=1
+        -XX:+PerfDisableSharedMem
+
+      jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
-      # Leave blank unless you have a reason; "XX opts" here often becomes cargo-cult
-      jvmXXOpts: ""
-
-      # Don’t silently change server.properties elsewhere
       overrideServerProperties: true
-
-      # Keep these explicit for predictability
       allowNether: true
       pvp: true
       onlineMode: true
@@ -112,7 +116,6 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era"
 
     serviceAnnotations:
-      # This is used by the mc-router service to route traffic to this server
       mc-router.itzg.me/externalServerName: "prom-ii.${FQDN}"
 
     persistence:
@@ -120,7 +123,6 @@ spec:
         enabled: true
         size: 64Gi
 
-    # Avoid accidental node moves that force long cold-starts
     podDisruptionBudget:
       enabled: true
       minAvailable: 1
