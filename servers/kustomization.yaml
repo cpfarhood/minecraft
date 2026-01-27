@@ -5,4 +5,4 @@ resources:
   - helmrelease-mc-bmc-4.yaml
   - helmrelease-mc-bmc-5.yaml
   - helmrelease-mc-atm-10.yaml
-  - helmrelease-mc-prominence-ii.yaml
+  - helmrelease-mc-prom-ii.yaml
