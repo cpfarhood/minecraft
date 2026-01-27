@@ -13,117 +13,72 @@ spec:
         name: itzg
         namespace: minecraft
       interval: 1h
-
   values:
     image:
       repository: itzg/minecraft-server
-      # BMC5 NeoForge is MC 1.21.x, so Java 21
       tag: java21
-
     replicaCount: 1
     workloadAsStatefulSet: true
     strategyType: OnDelete
-
-    # 12-player sizing for a heavy 1.21 NeoForge pack: avoid CPU throttling and leave native headroom
-    resources:
-      requests:
-        cpu: "4"
-        memory: "14Gi"
-      limits:
-        cpu: "6"
-        memory: "18Gi"
-
     startupProbe:
+      command:
+        - mc-health
       enabled: true
-      command: ["mc-health"]
-      failureThreshold: 180
+      failureThreshold: 30
       periodSeconds: 10
-      timeoutSeconds: 5
-
-    readinessProbe:
-      enabled: true
-      command: ["mc-health"]
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 12
-
-    livenessProbe:
-      enabled: true
-      command: ["mc-health"]
-      initialDelaySeconds: 180
-      periodSeconds: 30
-      timeoutSeconds: 5
-      failureThreshold: 6
-
     minecraftServer:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
-
-      motd: "Welcome to farh.net Better Minecraft 5!"
-      gameMode: survival
       difficulty: easy
+      whitelist:
       ops: ${SERVER_OPS}
-      maxPlayers: 12
-
-      # Biggest practical server win: keep these down for TPS stability
-      viewDistance: 6
-      simulationDistance: 4
-
-      # Reduce IO stalls during spikes/worldgen
-      syncChunkWrites: false
-
-      # Stop the watchdog from killing the server during modded stalls
-      maxTickTime: -1
-
-      # Heap sizing: do not set heap == pod memory; leave room for metaspace/native/fs-cache
-      memory: 14G
-
-      # Keep -X out of jvmOpts; the chart/image derives it from "memory"
-      jvmOpts: >-
-        -Djava.awt.headless=true
-        -Dfile.encoding=UTF-8
-
-      # Conservative G1 tuning (works fine on Java 21; don’t go exotic)
-      jvmXXOpts: >-
-        -XX:+UseG1GC
-        -XX:+ParallelRefProcEnabled
-        -XX:MaxGCPauseMillis=150
-        -XX:+DisableExplicitGC
-        -XX:+AlwaysPreTouch
-        -XX:G1NewSizePercent=20
-        -XX:G1MaxNewSizePercent=40
-        -XX:G1HeapRegionSize=16M
-        -XX:G1ReservePercent=20
-        -XX:G1HeapWastePercent=5
-        -XX:G1MixedGCCountTarget=4
-        -XX:InitiatingHeapOccupancyPercent=15
-        -XX:G1MixedGCLiveThresholdPercent=90
-        -XX:G1RSetUpdatingPauseTimePercent=5
-        -XX:SurvivorRatio=32
-        -XX:MaxTenuringThreshold=1
-        -XX:+PerfDisableSharedMem
-
-      overrideServerProperties: true
-
-      # Explicit for predictable auth behavior
-      onlineMode: true
-      enforceSecureProfile: true
-
+      icon:
+      maxPlayers: default
+      maxWorldSize: default
+      allowNether: default
+      announcePlayerAchievements: default
+      enableCommandBlock: default
+      forcegameMode: default
+      generateStructures: default
+      hardcore: default
+      maxBuildHeight: default
+      maxTickTime: default
+      spawnAnimals: default
+      spawnMonsters: default
+      spawnNPCs: default
+      spawnProtection: default
+      viewDistance: default
+      levelSeed:
+      gameMode: survival
+      motd: "Welcome to Better Minecraft 5!"
+      pvp: default
+      levelType: DEFAULT
+      generatorSettings:
+      worldSaveName: world
+      downloadWorldUrl:
+      forceReDownload: false
+      downloadModpackUrl:
+      removeOldMods: false
+      vanillaTweaksShareCodes: []
+      resourcePackUrl:
+      resourcePackSha:
+      resourcePackEnforce: false
+      onlineMode: default
+      enforceSecureProfile: default
+      memory: 10240M
+      jvmOpts: ""
+      jvmXXOpts: ""
+      overrideServerProperties: default
       autoCurseForge:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc5"
-
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "bmc-5.${FQDN}"
-
     persistence:
+      labels: {}
+      annotations: {}
       dataDir:
         enabled: true
-        size: 64Gi
-
-    podDisruptionBudget:
-      enabled: true
-      minAvailable: 1
+        Size: 64Gi
