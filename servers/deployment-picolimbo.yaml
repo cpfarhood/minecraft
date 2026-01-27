@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: picolimbo
-        image: ghcr.io/lemon73-computing/picolimbo:latest
+        image: ghcr.io/quozul/picolimbo:latest
         ports:
         - name: minecraft
           containerPort: 25565
