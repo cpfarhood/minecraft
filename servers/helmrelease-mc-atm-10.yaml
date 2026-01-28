@@ -81,6 +81,7 @@ spec:
 
       # Conservative G1 tuning (Java 21)
       jvmXXOpts: >-
+        -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
         -XX:MaxGCPauseMillis=150

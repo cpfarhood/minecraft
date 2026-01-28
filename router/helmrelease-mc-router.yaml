@@ -28,10 +28,7 @@ spec:
             enabled: true
     services:
       minecraft:
-        annotations:
-          service.cilium.io/forwarding-mode: dsr
-          lbipam.cilium.io/ips: "71.150.236.210"
-          external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
+
         type: LoadBalancer
         port: 25565
       extraServiceSpec:
@@ -49,7 +46,6 @@ spec:
                 path: /spec/template/spec/containers/0/args
                 value:
                   - --in-kube-cluster
-          # Label all Services emitted by this chart
           - target:
               group: ""
               version: v1
