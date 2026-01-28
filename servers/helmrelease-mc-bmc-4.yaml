@@ -1,3 +1,7 @@
+# Better Minecraft 4 Mod Pack
+# Tuned for 12 players
+# Forge on Minecraft 1.20.1 -> Java 17
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -17,14 +21,12 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      # BMC4 is Forge 1.20.1 -> run Java 17 (not 21)
       tag: java17
 
     replicaCount: 1
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
-    # 12-player sizing for BMC4: keep CPU from throttling, keep memory headroom
     resources:
       requests:
         cpu: "4"
@@ -65,20 +67,17 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
-      # Biggest practical server-side wins for modded TPS stability
       viewDistance: 6
       simulationDistance: 4
       syncChunkWrites: false
       maxTickTime: -1
 
-      # Heap: leave headroom for metaspace/native/fs-cache inside 14Gi pod
       memory: 12G
 
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
-      # Conservative G1 tuning for modded MC; stable on Java 17
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
@@ -113,6 +112,7 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-forge-bmc4"
 
     serviceAnnotations:
+      # For startup of the statefulset via mc-router
       mc-router.itzg.me/externalServerName: "bmc-4.${FQDN}"
 
     persistence:
