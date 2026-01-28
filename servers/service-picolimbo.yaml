@@ -15,4 +15,5 @@ spec:
     protocol: TCP
     name: minecraft
   selector:
-    app: picolimbo
+    app.kubernetes.io/name: minecraft
+    app.kubernetes.io/instance: picolimbo
