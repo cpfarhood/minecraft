@@ -79,6 +79,7 @@ spec:
         -Dfile.encoding=UTF-8
 
       jvmXXOpts: >-
+        -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
         -XX:MaxGCPauseMillis=150
