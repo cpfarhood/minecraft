@@ -114,6 +114,12 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10"
 
+    extraEnv:
+      - name: CF_EXCLUDE_MODS
+        value: "colorwheel"
+      - name: CF_FORCE_SYNCHRONIZE
+        value: "true"
+
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "atm-10.${FQDN}"
 
