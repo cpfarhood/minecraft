@@ -87,10 +87,11 @@ spec:
         -XX:+AlwaysPreTouch
         -XX:+PerfDisableSharedMem
 
-    # Pin the server pack file id (example: 1.19.2 Version 6.5 Server Files.zip)
-    extraEnv:
-      CF_SLUG: "cursed-walking-a-modern-zombie-apocalypse"
-      CF_FILE_ID: "6220150"
+      autoCurseForge:
+        apiKey:
+          existingSecret: "minecraft"
+          secretKey: CURSEFORGE_API_KEY
+        pageUrl: "https://www.curseforge.com/minecraft/modpacks/cursed-walking-a-modern-zombie-apocalypse"
 
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "cursed-walking.${FQDN}"
