@@ -114,7 +114,7 @@ spec:
 
     extraEnv:
       - name: CF_EXCLUDE_MODS
-        value: "colorwheel"
+        value: "iris,oculus,colorwheel,rubidium,embeddium"
       - name: CF_FORCE_SYNCHRONIZE
         value: "true"
 
