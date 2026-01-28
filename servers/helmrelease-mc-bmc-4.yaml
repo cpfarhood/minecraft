@@ -1,11 +1,8 @@
-# Better Minecraft 4 Mod Pack
-# Tuned for 12 players
-# Forge on Minecraft 1.20.1 -> Java 17
-
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: mc-bmc-4
+  namespace: minecraft
 spec:
   interval: 1h
   chart:
@@ -21,6 +18,7 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
+      # BMC4 = Forge 1.20.1 -> Java 17
       tag: java17
 
     replicaCount: 1
@@ -112,8 +110,17 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-forge-bmc4"
 
+    # Add Wakes + its required deps (+ VS + KotlinForForge required by VS)
+    # MODS supports direct JAR URLs.  [oai_citation:4‡Minecraft Server on Docker](https://docker-minecraft-server.readthedocs.io/en/latest/mods-and-plugins/?utm_source=chatgpt.com)
+    extraEnv:
+      MODS: |-
+        https://cdn.modrinth.com/data/E0SdeAoH/versions/zP45vj8T/wakes-1.20.1-Forge-1.0.8.jar
+        https://cdn.modrinth.com/data/vuNeeDyl/versions/VX4fjmf1/alekiNiftyShips-FORGE-1.20.1-1.0.14.jar
+        https://cdn.modrinth.com/data/EO8aSHxh/versions/gkwkGpv4/eureka-1201-1.6.1.jar
+        https://cdn.modrinth.com/data/V5ujR2yw/versions/leF4D8yr/valkyrienskies-120-2.4.9.jar
+        https://cdn.modrinth.com/data/ordsPcFz/versions/hmeyC41q/kotlinforforge-4.11.0-all.jar
+
     serviceAnnotations:
-      # For startup of the statefulset via mc-router
       mc-router.itzg.me/externalServerName: "bmc-4.${FQDN}"
 
     persistence:
