@@ -1,0 +1,105 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-cursed-walking
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+  values:
+    # If you use 1.18+ / 1.19+ / 1.20+: do NOT use java8
+    image:
+      repository: itzg/minecraft-server
+      tag: java17
+
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+
+    resources:
+      requests:
+        cpu: "4"
+        memory: "12Gi"
+      limits:
+        cpu: "6"
+        memory: "12Gi"
+
+    startupProbe:
+      enabled: true
+      command: ["mc-health"]
+      failureThreshold: 180
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    readinessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 180
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 6
+
+    minecraftServer:
+      # Use the dedicated server pack, not AUTO_CURSEFORGE manifest install
+      type: CURSEFORGE
+      eula: "TRUE"
+
+      maxPlayers: 12
+      motd: "Welcome to farh.net Cursed Walking!"
+      difficulty: easy
+      gameMode: survival
+      worldSaveName: world
+      ops: ${SERVER_OPS}
+
+      # Biggest server-side TPS levers
+      viewDistance: 8
+      simulationDistance: 5
+      syncChunkWrites: false
+      maxTickTime: -1
+
+      # Heap headroom inside 12Gi pod
+      memory: 10G
+
+      jvmOpts: >-
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+
+      jvmXXOpts: >-
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=200
+        -XX:+DisableExplicitGC
+        -XX:+AlwaysPreTouch
+        -XX:+PerfDisableSharedMem
+
+    # Pin the server pack file id (example: 1.19.2 Version 6.5 Server Files.zip)
+    extraEnv:
+      CF_SLUG: "cursed-walking-a-modern-zombie-apocalypse"
+      CF_FILE_ID: "6220150"
+
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "cursed-walking.${FQDN}"
+
+    persistence:
+      dataDir:
+        enabled: true
+        size: 64Gi
+
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1

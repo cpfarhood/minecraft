@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - deployment-picolimbo.yaml
   - service-picolimbo.yaml
+  - helmrelease-mc-cursed-walking.yaml
   - helmrelease-mc-rlcraft.yaml
   - helmrelease-mc-bmc-4.yaml
   - helmrelease-mc-bmc-5.yaml
