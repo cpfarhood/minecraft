@@ -1,3 +1,7 @@
+# ATM10 Mod Pack Server
+# Tuned for 12 players
+# NeoForge on Minecraft 1.21/1.21.1 -> Java 21
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -17,14 +21,12 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      # ATM10 is NeoForge on Minecraft 1.21/1.21.1 -> Java 21
       tag: java21
 
     replicaCount: 1
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
-    # 12-player sizing for ATM10: CPU headroom + stable memory (don’t throttle ticks)
     resources:
       requests:
         cpu: "4"
@@ -65,21 +67,17 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
-      # Biggest server-side wins (TPS stability)
       viewDistance: 6
       simulationDistance: 4
       syncChunkWrites: false
       maxTickTime: -1
 
-      # Heap: leave headroom for native/metaspace/fs-cache in a 16Gi pod
       memory: 14G
 
-      # Keep -Xms/-Xmx out of here; the chart/image sets heap from "memory"
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
-      # Conservative G1 tuning (Java 21)
       jvmXXOpts: >-
         -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
