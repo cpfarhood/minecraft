@@ -78,7 +78,6 @@ spec:
 
       # GC: baseline G1 tuning widely used for MC; keep flags conservative
       jvmXXOpts: >-
-        -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
         -XX:MaxGCPauseMillis=150
