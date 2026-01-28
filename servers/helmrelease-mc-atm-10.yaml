@@ -121,6 +121,7 @@ spec:
         value: "true"
 
     serviceAnnotations:
+      # For startup of the statefulset via mc-router
       mc-router.itzg.me/externalServerName: "atm-10.${FQDN}"
 
     persistence:
