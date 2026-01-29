@@ -38,6 +38,7 @@ spec:
       serviceType: ClusterIP
       # This can be set to the contents of your config file (only works with yaml currently)
       velocityForwardingSecret: "${VELOCITY_FWD_SECRET}"
+      velocityForwardingSecretFilePath: /server/forwarding.secret
       config: |
         config-version = "2.7"
 
