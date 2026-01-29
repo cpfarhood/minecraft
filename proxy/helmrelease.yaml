@@ -37,6 +37,7 @@ spec:
       jvmXXOpts: ""
       serviceType: ClusterIP
       # This can be set to the contents of your config file (only works with yaml currently)
+      velocityForwardingSecret: "${VELOCITY_FWD_SECRET}"
       config: |
         config-version = "2.7"
 
@@ -50,7 +51,6 @@ spec:
 
         # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
         player-info-forwarding-mode = "modern"
-        forwarding-secret-file = "forwarding.secret"
 
         # --------------------------------------------------
         # BACKEND SERVERS
