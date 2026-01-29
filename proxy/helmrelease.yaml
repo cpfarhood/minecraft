@@ -66,7 +66,7 @@ spec:
         prom-ii = "mc-router:25565"
         cursed-walking = "mc-router:25565"
         # Always-on fallback servers (direct)
-        lobby = "lobby:25565"
+        lobby = "mc-lobby:25565"
         limbo = "picolimbo:25565"
         #
         # --------------------------------------------------
