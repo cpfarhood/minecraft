@@ -22,6 +22,8 @@ spec:
     spec:
       containers:
         - name: picolimbo
+          image: ghcr.io/quozul/picolimbo:latest
+          imagePullPolicy: Always
           ports:
             - name: minecraft
               containerPort: 25565
