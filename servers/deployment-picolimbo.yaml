@@ -22,21 +22,14 @@ spec:
     spec:
       containers:
         - name: picolimbo
-          image: ghcr.io/quozul/picolimbo:latest
-          args:
-            - "--velocity-forwarding-secret"
-            - "${VELOCITY_FWD_SECRET}"
-            - "--forwarding-mode"
-            - "velocity"
           ports:
             - name: minecraft
               containerPort: 25565
               protocol: TCP
-          env:
-            - name: EULA
-              value: "true"
-            - name: VELOCITY_SECRET
-              value: ${VELOCITY_FWD_SECRET}
+          volumeMounts:
+            - name: config
+              mountPath: /picolimbo.toml
+              subPath: picolimbo.toml
           resources:
             requests:
               cpu: "500m"
@@ -54,3 +47,7 @@ spec:
               port: 25565
             initialDelaySeconds: 30
             periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: picolimbo
