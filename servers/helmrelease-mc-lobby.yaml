@@ -1,0 +1,119 @@
+# Vanilla Lobby (fast start, stable ticks, predictable GC)
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-lobby
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+
+  values:
+    image:
+      repository: itzg/minecraft-server
+      tag: java21
+
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+
+    # Vanilla lobby: prioritize consistent latency over absolute minimum reservation.
+    resources:
+      requests:
+        cpu: "1"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "6Gi"
+
+    # Probes: keep startup generous, keep liveness less trigger-happy.
+    startupProbe:
+      enabled: true
+      command: ["mc-health"]
+      failureThreshold: 180
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    readinessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 240
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 10
+
+    minecraftServer:
+      type: VANILLA
+      eula: "TRUE"
+
+      motd: "Welcome to farh.net Minecraft Lobby!"
+      gameMode: survival
+      difficulty: easy
+      ops: ${SERVER_OPS}
+      maxPlayers: 12
+
+      # Lobby: keep chunk work low.
+      viewDistance: 6
+      simulationDistance: 4
+
+      # Reduce I/O spikes.
+      syncChunkWrites: false
+
+      # Avoid watchdog killing under brief stalls; keep at -1 if you want zero kills.
+      maxTickTime: -1
+
+      # Memory inside container (itzg) -> set below limit with headroom.
+      memory: 4500M
+
+      # Vanilla: keep opts minimal and deterministic.
+      jvmOpts: >-
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+
+      # G1 tuned for small-ish heaps (4–6Gi). Keep it conservative.
+      jvmXXOpts: >-
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=100
+        -XX:+DisableExplicitGC
+        -XX:+AlwaysPreTouch
+        -XX:G1HeapRegionSize=8M
+        -XX:InitiatingHeapOccupancyPercent=20
+        -XX:G1ReservePercent=15
+        -XX:+PerfDisableSharedMem
+
+      overrideServerProperties: true
+      onlineMode: true
+      enforceSecureProfile: true
+
+      worldSaveName: world
+      forceReDownload: false
+      removeOldMods: false
+
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
+
+    persistence:
+      dataDir:
+        enabled: true
+        Size: 64Gi
+
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
