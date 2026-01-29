@@ -15,12 +15,12 @@ spec:
       interval: 1h
 
   values:
-    serviceType: LoadBalancer
-    serviceAnnotations:
-      service.cilium.io/forwarding-mode: dsr
-      lbipam.cilium.io/ips: "71.150.236.210"
-      external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
     minecraftProxy:
+      serviceType: LoadBalancer
+      serviceAnnotations:
+        service.cilium.io/forwarding-mode: dsr
+        lbipam.cilium.io/ips: "71.150.236.210"
+        external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
       # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
       type: VELOCITY
       # If type is set to VELOCITY, download and run this version of Velocity
@@ -35,29 +35,26 @@ spec:
       jvmOpts: ""
       # Options like -X that need to proceed general JVM options
       jvmXXOpts: ""
-      serviceType: ClusterIP
       # This can be set to the contents of your config file (only works with yaml currently)
       velocityForwardingSecret: "${VELOCITY_FWD_SECRET}"
       velocityForwardingSecretFilePath: /server/forwarding.secret
       config: |
         config-version = "2.7"
-
         bind = "0.0.0.0:25565"
         motd = "farh.net Minecraft"
         show-max-players = 12
-
         online-mode = true
         force-key-authentication = true
         prevent-client-proxy-connections = false
-
         # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
         player-info-forwarding-mode = "modern"
-
+        #
         # --------------------------------------------------
         # BACKEND SERVERS
         # All gameplay entries point at mc-router.
         # mc-router routes based on the ORIGINAL hostname.
         # --------------------------------------------------
+        #
         [servers]
         # Gameplay (routed by mc-router)
         rlcraft = "mc-router:25565"
@@ -66,11 +63,10 @@ spec:
         atm-10 = "mc-router:25565"
         prom-ii = "mc-router:25565"
         cursed-walking = "mc-router:25565"
-
         # Always-on fallback servers (direct)
         lobby = "lobby:25565"
         limbo = "picolimbo:25565"
-
+        #
         # --------------------------------------------------
         # DEFAULT / FALLBACK CONNECT ORDER
         # Used when NO forced-host matches (e.g. mc.farh.net or raw IP)
@@ -79,7 +75,7 @@ spec:
           "lobby",
           "limbo"
         ]
-
+        #
         # --------------------------------------------------
         # HOSTNAME-BASED ROUTING (Minecraft handshake hostname)
         # Client hostnames map to the server entries above (which all go to mc-router).
@@ -91,12 +87,12 @@ spec:
         "atm-10.mc.farh.net" = ["atm-10"]
         "prom-ii.mc.farh.net" = ["prom-ii"]
         "cursed-walking.mc.farh.net" = ["cursed-walking"]
-
+        #
         # Intentionally NOT listed:
         # - "mc.farh.net"
         # - direct IP connects
         # Those follow `try` -> lobby -> limbo
-
+        #
         # --------------------------------------------------
         # ADVANCED
         # --------------------------------------------------
