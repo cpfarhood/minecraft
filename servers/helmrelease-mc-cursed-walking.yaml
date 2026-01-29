@@ -23,6 +23,12 @@ spec:
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
+    tolerations:
+      - key: "farh.net/performance"
+        operator: "Equal"
+        value: "high"
+        effect: "NoSchedule"
+
     resources:
       requests:
         cpu: "4"

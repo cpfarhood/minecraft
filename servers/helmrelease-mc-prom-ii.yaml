@@ -23,6 +23,12 @@ spec:
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
+    tolerations:
+      - key: "farh.net/performance"
+        operator: "Equal"
+        value: "high"
+        effect: "NoSchedule"
+
     # 12-player sizing: avoid CPU throttling + keep memory headroom for native/metaspace/fs-cache
     resources:
       requests:
