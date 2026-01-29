@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
         - name: copy-busybox
-          image: busybox:latest
+          image: busybox:musl
           command:
             [
               "sh",
