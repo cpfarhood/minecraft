@@ -23,8 +23,6 @@ spec:
       tag: java21
 
     replicaCount: 1
-    workloadAsStatefulSet: true
-    strategyType: OnDelete
 
     # Lobby wants consistent single-thread time. Give it CPU headroom and avoid memory pressure.
     resources:
@@ -78,8 +76,8 @@ spec:
         secret: ${VELOCITY_FWD_SECRET}
 
       motd: "Welcome to farh.net Minecraft Lobby!"
-      gameMode: survival
-      difficulty: easy
+      gameMode: adventure
+      difficulty: peaceful
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
@@ -121,11 +119,6 @@ spec:
     # For automatic statefulset startup/shutdown
     #serviceAnnotations:
     #  mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
-
-    persistence:
-      dataDir:
-        enabled: true
-        Size: 64Gi
 
     podDisruptionBudget:
       enabled: true

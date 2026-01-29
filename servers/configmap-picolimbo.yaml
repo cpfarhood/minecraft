@@ -11,3 +11,8 @@ data:
     [forwarding]
     method = "MODERN"
     secret = "${VELOCITY_FWD_SECRET}"
+    [world]
+    spawn_position = [0.0, 320.0, 0.0]
+    spawn_rotation = [0.0, 0.0]
+    dimension = "end"
+    time = "day"
