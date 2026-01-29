@@ -30,8 +30,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: config
-              mountPath: /picolimbo.toml
-              subPath: picolimbo.toml
+              mountPath: /usr/src/app/server.toml
+              subPath: server.toml
           resources:
             requests:
               cpu: "500m"
