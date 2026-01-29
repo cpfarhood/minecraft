@@ -6,43 +6,65 @@ data:
   velocity.toml: |
     config-version = "2.7"
 
-    bind = "0.0.0.0:25577"
-    motd = "Velocity Proxy"
+    bind = "0.0.0.0:25565"
+    motd = "farh.net Minecraft"
     show-max-players = 12
+
     online-mode = true
     force-key-authentication = true
     prevent-client-proxy-connections = false
 
+    # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
     player-info-forwarding-mode = "modern"
     forwarding-secret-file = "forwarding.secret"
 
-    # ----------------------------
-    # BACKEND SERVERS (menu-visible)
-    # ----------------------------
+    # --------------------------------------------------
+    # BACKEND SERVERS
+    # All gameplay entries point at mc-router.
+    # mc-router routes based on the ORIGINAL hostname.
+    # --------------------------------------------------
     [servers]
-    rlcraft = "rlcraft.mc.farh.net:25565"
-    bmc-4 = "bmc-4.mc.farh.net:25565"
-    bmc-5 = "bmc-5.mc.farh.net:25565"
-    atm-10 = "atm-10.mc.farh.net:25565"
-    prom-ii = "prom-ii.mc.farh.net:25565"
-    cursed-walking = "cursed-walking.mc.farh.net:25565"
+    # Gameplay (routed by mc-router)
+    rlcraft = "mc-router:25565"
+    bmc-4 = "mc-router:25565"
+    bmc-5 = "mc-router:25565"
+    atm-10 = "mc-router:25565"
+    prom-ii = "mc-router:25565"
+    cursed-walking = "mc-router:25565"
 
-    # Always-on fallback servers
+    # Always-on fallback servers (direct)
     lobby = "lobby:25565"
     limbo = "picolimbo:25565"
 
-    # ----------------------------
-    # AUTOMATIC CONNECT / FALLBACK
-    # Only servers you want auto-attempted
-    # ----------------------------
+    # --------------------------------------------------
+    # DEFAULT / FALLBACK CONNECT ORDER
+    # Used when NO forced-host matches (e.g. mc.farh.net or raw IP)
+    # --------------------------------------------------
     try = [
       "lobby",
       "limbo"
     ]
 
-    # ----------------------------
+    # --------------------------------------------------
+    # HOSTNAME-BASED ROUTING (Minecraft handshake hostname)
+    # Client hostnames map to the server entries above (which all go to mc-router).
+    # --------------------------------------------------
+    [forced-hosts]
+    "rlcraft.mc.farh.net" = ["rlcraft"]
+    "bmc-4.mc.farh.net" = ["bmc-4"]
+    "bmc-5.mc.farh.net" = ["bmc-5"]
+    "atm-10.mc.farh.net" = ["atm-10"]
+    "prom-ii.mc.farh.net" = ["prom-ii"]
+    "cursed-walking.mc.farh.net" = ["cursed-walking"]
+
+    # Intentionally NOT listed:
+    # - "mc.farh.net"
+    # - direct IP connects
+    # Those follow `try` -> lobby -> limbo
+
+    # --------------------------------------------------
     # ADVANCED
-    # ----------------------------
+    # --------------------------------------------------
     [advanced]
     login-ratelimit = 3000
     compression-threshold = 256
