@@ -1,9 +1,10 @@
-# Vanilla Lobby (fast start, stable ticks, predictable GC)
+# Paper Lobby behind Velocity (fast start, stable ticks, low IO jitter)
 
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: mc-lobby
+  namespace: minecraft
 spec:
   interval: 1h
   chart:
@@ -25,16 +26,16 @@ spec:
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
-    # Vanilla lobby: prioritize consistent latency over absolute minimum reservation.
+    # Lobby wants consistent single-thread time. Give it CPU headroom and avoid memory pressure.
     resources:
       requests:
         cpu: "1"
         memory: "4Gi"
       limits:
-        cpu: "2"
+        cpu: "3"
         memory: "6Gi"
 
-    # Probes: keep startup generous, keep liveness less trigger-happy.
+    # Probes: startup generous; liveness slow to avoid restart loops during brief stalls.
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -45,7 +46,7 @@ spec:
     readinessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 30
+      initialDelaySeconds: 20
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 6
@@ -60,40 +61,47 @@ spec:
 
     minecraftServer:
       type: PAPER
+      eula: "TRUE"
+
+      # Behind Velocity: backend must be offline-mode; proxy handles auth.
       onlineMode: false
+      enforceSecureProfile: false
+
+      # Paper/Spigot config blocks still fine as empty maps
       spigot: {}
       paper: {}
+
+      # Velocity modern forwarding
       velocity:
         enabled: true
         onlineMode: true
         secret: ${VELOCITY_FWD_SECRET}
 
-      eula: "TRUE"
       motd: "Welcome to farh.net Minecraft Lobby!"
       gameMode: survival
       difficulty: easy
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
-      # Lobby: keep chunk work low.
+      # Lobby: reduce chunk work + entity sim
       viewDistance: 6
       simulationDistance: 4
 
-      # Reduce I/O spikes.
+      # Lower IO jitter; keep on SSD-backed PV
       syncChunkWrites: false
 
-      # Avoid watchdog killing under brief stalls; keep at -1 if you want zero kills.
+      # Keep watchdog disabled (proxy/lobby should not self-kill)
       maxTickTime: -1
 
-      # Memory inside container (itzg) -> set below limit with headroom.
+      # Keep heap below cgroup limit with native headroom.
+      # 6Gi limit -> 4.5Gi heap is sane.
       memory: 4500M
 
-      # Vanilla: keep opts minimal and deterministic.
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
-      # G1 tuned for small-ish heaps (4–6Gi). Keep it conservative.
+      # Small-heap G1; keep minimal, avoid “aikar soup”.
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
@@ -106,9 +114,6 @@ spec:
         -XX:+PerfDisableSharedMem
 
       overrideServerProperties: true
-      onlineMode: true
-      enforceSecureProfile: true
-
       worldSaveName: world
       forceReDownload: false
       removeOldMods: false
