@@ -58,6 +58,8 @@ spec:
             - containerPort: 2022
               name: sftp
           volumeMounts:
+            - name: wings-tls
+              mountPath: /tmp/cert
             - name: config
               mountPath: /etc/pterodactyl
             - name: data
@@ -68,6 +70,9 @@ spec:
       volumes:
         - name: docker-socket
           emptyDir: {}
+        - name: wings-tls
+          secret:
+            secretName: wings-tls
 
   volumeClaimTemplates:
     - metadata:
