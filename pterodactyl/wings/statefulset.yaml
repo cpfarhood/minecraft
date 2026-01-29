@@ -15,6 +15,18 @@ spec:
       labels:
         app.kubernetes.io/name: wings
     spec:
+      initContainers:
+        - name: copy-busybox
+          image: busybox:musl
+          command:
+            [
+              "sh",
+              "-c",
+              "cp /bin/busybox /var/lib/pterodactyl/busybox && chmod +x /var/lib/pterodactyl/busybox",
+            ]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pterodactyl
       containers:
         # Docker-in-Docker Sidecar
         - name: dind
@@ -26,6 +38,9 @@ spec:
               value: "" # Use plain HTTP socket
           args:
             - "--storage-driver=overlay2"
+            - "--dns=1.1.1.1"
+            - "--dns=8.8.8.8"
+            - "--mtu=1450"
           volumeMounts:
             - name: config
               mountPath: /etc/pterodactyl
@@ -51,11 +66,42 @@ spec:
               value: "988"
             - name: WINGS_USERNAME
               value: "pterodactyl"
+          command: ["/var/lib/pterodactyl/busybox", "sh", "-c"]
+          args:
+            - |
+              echo "Waiting for Docker socket..."
+              while [ ! -e /var/run/docker.sock ]; do
+                /var/lib/pterodactyl/busybox sleep 1
+              done
+              echo "Docker socket found, starting Wings..."
+              exec /usr/bin/wings --debug --config /etc/pterodactyl/config.yml
           ports:
             - containerPort: 8080
               name: http
             - containerPort: 2022
               name: sftp
+            - containerPort: 25565
+              name: p25565
+            - containerPort: 25566
+              name: p25566
+            - containerPort: 25567
+              name: p25567
+            - containerPort: 25568
+              name: p25568
+            - containerPort: 25569
+              name: p25569
+            - containerPort: 25570
+              name: p25570
+            - containerPort: 25571
+              name: p25571
+            - containerPort: 25572
+              name: p25572
+            - containerPort: 25573
+              name: p25573
+            - containerPort: 25574
+              name: p25574
+            - containerPort: 25575
+              name: p25575
           volumeMounts:
             - name: wings-tls
               mountPath: /tmp/cert
@@ -65,6 +111,8 @@ spec:
               mountPath: /var/lib/pterodactyl
             - name: docker-socket
               mountPath: /var/run
+            - name: docker-socket
+              mountPath: /run
 
       volumes:
         - name: docker-socket
