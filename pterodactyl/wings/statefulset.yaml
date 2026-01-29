@@ -15,6 +15,18 @@ spec:
       labels:
         app.kubernetes.io/name: wings
     spec:
+      initContainers:
+        - name: copy-busybox
+          image: busybox:latest
+          command:
+            [
+              "sh",
+              "-c",
+              "cp /bin/busybox /var/lib/pterodactyl/busybox && chmod +x /var/lib/pterodactyl/busybox",
+            ]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pterodactyl
       containers:
         # Docker-in-Docker Sidecar
         - name: dind
@@ -52,12 +64,12 @@ spec:
               value: "988"
             - name: WINGS_USERNAME
               value: "pterodactyl"
-          command: ["/bin/sh", "-c"]
+          command: ["/var/lib/pterodactyl/busybox", "sh", "-c"]
           args:
             - |
               echo "Waiting for Docker socket..."
-              while [ ! -S /var/run/docker.sock ]; do
-                sleep 1
+              while [ ! -e /var/run/docker.sock ]; do
+                /var/lib/pterodactyl/busybox sleep 1
               done
               echo "Docker socket found, starting Wings..."
               exec /usr/bin/wings --debug --config /etc/pterodactyl/config.yml
