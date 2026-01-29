@@ -4,5 +4,6 @@ resources:
   - ./db
   - ./userdata-db
   - ./dragonflydb
+  - ./wings
 #  - ./panel
 #  - ./ctrlpanelgg

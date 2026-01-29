@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wings
+  labels:
+    app.kubernetes.io/name: wings
+spec:
+  serviceName: wings
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wings
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wings
+    spec:
+      containers:
+        # Docker-in-Docker Sidecar
+        - name: dind
+          image: docker:24-dind
+          securityContext:
+            privileged: true
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: "" # Use plain HTTP socket
+          args:
+            - "--storage-driver=overlay2"
+          volumeMounts:
+            - name: docker-graph-storage
+              mountPath: /var/lib/docker
+            - name: docker-socket
+              mountPath: /var/run
+            - name: data
+              mountPath: /var/lib/pterodactyl
+
+        # Pterodactyl Wings
+        - name: wings
+          image: gethec/pterodactyl-wings:latest
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+          env:
+            - name: TZ
+              value: "America/Detroit"
+            - name: WINGS_UID
+              value: "988"
+            - name: WINGS_GID
+              value: "988"
+            - name: WINGS_USERNAME
+              value: "pterodactyl"
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 2022
+              name: sftp
+          volumeMounts:
+            - name: config
+              mountPath: /etc/pterodactyl
+            - name: data
+              mountPath: /var/lib/pterodactyl
+            - name: docker-socket
+              mountPath: /var/run
+
+      volumes:
+        - name: docker-socket
+          emptyDir: {}
+
+  volumeClaimTemplates:
+    - metadata:
+        name: docker-graph-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 32Gi
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 128Gi
