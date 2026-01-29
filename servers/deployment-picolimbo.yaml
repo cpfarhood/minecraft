@@ -23,6 +23,11 @@ spec:
       containers:
         - name: picolimbo
           image: ghcr.io/quozul/picolimbo:latest
+          args:
+            - "--velocity-forwarding-secret"
+            - "${VELOCITY_FWD_SECRET}"
+            - "--forwarding-mode"
+            - "velocity"
           ports:
             - name: minecraft
               containerPort: 25565
