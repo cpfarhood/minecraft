@@ -27,6 +27,8 @@ spec:
           args:
             - "--storage-driver=overlay2"
           volumeMounts:
+            - name: config
+              mountPath: /etc/pterodactyl
             - name: docker-graph-storage
               mountPath: /var/lib/docker
             - name: docker-socket
