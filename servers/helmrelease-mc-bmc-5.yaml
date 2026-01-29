@@ -124,7 +124,7 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-neoforge-bmc5"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "bmc-5.${FQDN}"
+      mc-router.itzg.me/externalServerName: "bmc-5,bmc-5.${FQDN}"
 
     persistence:
       dataDir:

@@ -126,7 +126,7 @@ spec:
 
     serviceAnnotations:
       # For startup of the statefulset via mc-router
-      mc-router.itzg.me/externalServerName: "atm-10.${FQDN}"
+      mc-router.itzg.me/externalServerName: "atm-10,atm-10.${FQDN}"
 
     persistence:
       dataDir:

@@ -25,7 +25,7 @@ spec:
           after: "15m"
         configObject: ConfigMap
         debug:
-            enabled: true
+          enabled: true
     services:
       minecraft:
         annotations:
@@ -49,6 +49,7 @@ spec:
                 path: /spec/template/spec/containers/0/args
                 value:
                   - --in-kube-cluster
+          # needed to get an external IP with cilium
           - target:
               group: ""
               version: v1
