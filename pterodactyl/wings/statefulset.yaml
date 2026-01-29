@@ -36,7 +36,7 @@ spec:
 
         # Pterodactyl Wings
         - name: wings
-          image: gethec/pterodactyl-wings:latest
+          image: ghcr.io/pterodactyl/development/wings:latest
           securityContext:
             privileged: true
             capabilities:
