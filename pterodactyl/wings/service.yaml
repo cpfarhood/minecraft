@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wings
+  labels:
+    app.kubernetes.io/name: wings
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: wings.animaniacs.farh.net
+    service.cilium.io/forwarding-mode: dsr
+spec:
+  clusterIP: None
+  ports:
+    - port: 8080
+      targetPort: http
+      name: http
+    - port: 2022
+      targetPort: sftp
+      name: sftp
+  selector:
+    app.kubernetes.io/name: wings
