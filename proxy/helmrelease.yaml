@@ -15,6 +15,7 @@ spec:
       interval: 1h
 
   values:
+    serviceType: LoadBalancer
     serviceAnnotations:
       service.cilium.io/forwarding-mode: dsr
       lbipam.cilium.io/ips: "71.150.236.210"
