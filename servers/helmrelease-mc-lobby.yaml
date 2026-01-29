@@ -59,9 +59,16 @@ spec:
       failureThreshold: 10
 
     minecraftServer:
-      type: VANILLA
-      eula: "TRUE"
+      type: PAPER
+      onlineMode: false
+      spigot: {}
+      paper: {}
+      velocity:
+        enabled: true
+        onlineMode: true
+        secret: ${VELOCITY_FWD_SECRET}
 
+      eula: "TRUE"
       motd: "Welcome to farh.net Minecraft Lobby!"
       gameMode: survival
       difficulty: easy
