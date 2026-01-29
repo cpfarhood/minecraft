@@ -21,30 +21,31 @@ spec:
         mc-router.itzg.me/externalServerName: "proxy.${FQDN}"
     spec:
       containers:
-      - name: picolimbo
-        image: ghcr.io/quozul/picolimbo:latest
-        ports:
-        - name: minecraft
-          containerPort: 25565
-          protocol: TCP
-        env:
-        - name: EULA
-          value: "true"
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "512Mi"
-          limits:
-            cpu: "1"
-            memory: "1Gi"
-        readinessProbe:
-          tcpSocket:
-            port: 25565
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        livenessProbe:
-          tcpSocket:
-            port: 25565
-          initialDelaySeconds: 30
-          periodSeconds: 10
-
+        - name: picolimbo
+          image: ghcr.io/quozul/picolimbo:latest
+          ports:
+            - name: minecraft
+              containerPort: 25565
+              protocol: TCP
+          env:
+            - name: EULA
+              value: "true"
+            - name: VELOCITY_SECRET
+              value: ${VELOCITY_FWD_SECRET}
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          readinessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 30
+            periodSeconds: 10
