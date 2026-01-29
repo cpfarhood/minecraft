@@ -5,5 +5,5 @@ resources:
   - ./userdata-db
   - ./dragonflydb
   - ./wings
-#  - ./panel
+  - ./panel
 #  - ./ctrlpanelgg
