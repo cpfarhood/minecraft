@@ -9,4 +9,4 @@ spec:
     name: letsencrypt
     kind: ClusterIssuer
   dnsNames:
-    - "*.wings.animaniacs.farh.net"
+    - "wings.animaniacs.farh.net"
