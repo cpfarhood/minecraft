@@ -31,7 +31,7 @@ spec:
         annotations:
           service.cilium.io/forwarding-mode: dsr
           #lbipam.cilium.io/ips: "71.150.236.210"
-          external-dns.alpha.kubernetes.io/hostname: "*.mc.animaniacs.farh.net"
+          external-dns.alpha.kubernetes.io/hostname: "mc.animaniacs.farh.net,*.mc.animaniacs.farh.net"
         type: LoadBalancer
         port: 25565
       extraServiceSpec:
