@@ -118,8 +118,9 @@ spec:
       forceReDownload: false
       removeOldMods: false
 
-    serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
+    # For automatic statefulset startup/shutdown
+    #serviceAnnotations:
+    #  mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
 
     persistence:
       dataDir:
