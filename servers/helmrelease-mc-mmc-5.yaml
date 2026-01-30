@@ -126,7 +126,7 @@ spec:
 
     extraEnv:
       CF_FORCE_SYNCHRONIZE: "true"
-      CF_EXCLUDE_MODS: "930131"
+      CF_EXCLUDE_MODS: "930131,dynamic_resource_bars"
       #REMOVE_MODS: "OverflowingBars,PickUpNotifier,LeavesBeGone,TinyConfig,TradingPost,ResourcePackOverrides,VisualWorkbench"
 
     serviceAnnotations:

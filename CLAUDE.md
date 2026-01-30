@@ -4,58 +4,93 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This repository contains Kubernetes manifests for deploying Minecraft infrastructure using Kustomize. It supports multiple deployment strategies including Shulker/Agones-based clusters and Pterodactyl game server panels.
+Kubernetes manifests for Minecraft hosting infrastructure, managed with Kustomize and deployed to the `minecraft` namespace via Flux CD on a locally attached cluster. Supports multiple deployment strategies (Helm-based servers, Shulker/Agones clustering, Pterodactyl panel) that can be independently enabled via the root `kustomization.yaml`.
+
+Changes are applied by committing and pushing to the repo — Flux automatically reconciles.
 
 ## Commands
 
-Apply manifests:
-```bash
-kubectl apply -k .
-```
-
-Preview manifests before applying:
+Preview rendered manifests locally:
 ```bash
 kubectl kustomize .
 ```
 
-Apply a specific component:
+Force Flux to reconcile immediately (instead of waiting for the interval):
 ```bash
-kubectl apply -k ./shulker
-kubectl apply -k ./pterodactyl
+flux reconcile kustomization minecraft -n minecraft
+```
+
+Check Flux reconciliation status:
+```bash
+flux get kustomizations -n minecraft
+flux get helmreleases -n minecraft
+```
+
+Inspect live resources:
+```bash
+kubectl get pods -n minecraft
+kubectl get helmreleases -n minecraft
 ```
 
 ## Architecture
 
-### Deployment Strategies
+### What's Currently Active
 
-The root `kustomization.yaml` selectively includes different deployment approaches:
+The root `kustomization.yaml` includes:
+- `./pterodactyl` — Database infrastructure only (MariaDB clusters, DragonflyDB); panel/wings are commented out
+- `./router/` — mc-router HelmRelease for hostname-based Minecraft routing via Cilium LBIPAM
+- `./servers/` — Individual Minecraft server HelmReleases using `itzg/minecraft-server` chart v5.0.0
 
-- **shulker/** - Shulker operator with Agones for auto-scaling Minecraft clusters (currently active)
-- **pterodactyl/** - Pterodactyl panel for game server management (currently active)
-- **itzg/** - itzg Helm charts via Flux HelmRelease (inactive)
-- **farhoodliquor/** - Custom fork of itzg charts (inactive)
-- **manual/** - Manually-managed StatefulSets (inactive)
+Inactive (commented out): `./proxy` (Velocity), `./shulker`, `./manual`
 
-### Shulker Components
+### Server HelmRelease Pattern
 
-Uses ShulkerMC CRDs (`shulkermc.io/v1alpha1`):
-- `MinecraftCluster` - Top-level cluster definition
-- `ProxyFleet` - Velocity proxy with LoadBalancer service and external-dns
-- `MinecraftServerFleet` - Paper server fleet with lobby tags
+Each server in `servers/` is a Flux `HelmRelease` (API `helm.toolkit.fluxcd.io/v2beta1`) following a consistent template:
+- **Workload**: StatefulSet with `OnDelete` update strategy
+- **Resources**: ~4 CPU, 10-14Gi memory requested, 12-18Gi limit
+- **Storage**: 64Gi PVC per server
+- **Probes**: Three-tier health checks using `mc-health` — startup (up to 40 min), readiness (2 min), liveness (5 min)
+- **Scheduling**: Tolerates `farh.net/performance=high:NoSchedule` taint
+- **Routing**: Service annotation `mc-router.itzg.me/externalServerName` for mc-router discovery
+- **Availability**: PodDisruptionBudget with `minAvailable: 1`
 
-Environment variables like `${CLUSTERNAME}`, `${PROXYFLEETNAME}`, `${FQDN}` must be substituted before applying.
+When adding a new server, copy an existing HelmRelease, adjust values, and add the file to `servers/kustomization.yaml`.
 
-### Pterodactyl Components
+### Networking Flow
 
-- **db/** - MariaDB cluster (3 replicas, auto-failover) using mariadb-operator CRDs
-- **userdata-db/** - Separate MariaDB instance for user data
-- **dragonflydb/** - DragonflyDB (Redis-compatible) cluster for caching
-- **panel/** - Pterodactyl Panel deployment with PVCs for var, nginx, logs
-- **ctrlpanelgg/** - Alternative control panel (inactive)
+External traffic → Cilium LBIPAM (71.150.236.210) → mc-router → backend servers (hostname-based routing via service annotations). The `${FQDN}` variable controls the public domain used in routing annotations and DNS records.
 
-### Key Operators/CRDs Required
+### Pterodactyl Infrastructure (`pterodactyl/`)
 
-- `shulkermc.io/v1alpha1` - ShulkerMC operator
-- `k8s.mariadb.com/v1alpha1` - MariaDB operator
-- `dragonflydb.io/v1alpha1` - DragonflyDB operator
-- `helm.toolkit.fluxcd.io/v2beta1` - Flux CD (for Helm-based deployments)
+Uses operator CRDs, not raw manifests:
+- `k8s.mariadb.com/v1alpha1` — `MariaDB`, `Database`, `User`, `Grant` resources (3-replica cluster with auto-failover)
+- `dragonflydb.io/v1alpha1` — `Dragonfly` resource (Redis-compatible, 3 replicas)
+
+Each database component has its own subdirectory with a kustomization. Secrets use `stringData` with `${PLACEHOLDER}` substitution and are labeled `k8s.mariadb.com/watch: ""` for operator-managed rotation.
+
+### Webhook (`webhook/`)
+
+A custom Python HTTP server that scales StatefulSets via the K8s API. Validates that target names match `.+-minecraft$`. Includes its own RBAC (ServiceAccount, Role, RoleBinding) scoped to `statefulsets/scale`.
+
+### Shulker/Agones (Inactive)
+
+`shulker/` contains ShulkerMC CRDs (`MinecraftCluster`, `ProxyFleet`, `MinecraftServerFleet`). `agones-operator/` and `shulker-operator/` are standalone Flux HelmReleases. Activation requires uncommenting in root kustomization and renaming the `.disabled` kustomization files.
+
+## Environment Variables
+
+All `${PLACEHOLDER}` values must be substituted before applying. Key categories:
+
+- **Networking**: `${FQDN}`, `${PRIVATE_FQDN}`, various `*_FQDN` for services
+- **Resource names**: `${CLUSTERNAME}`, `${PROXYFLEETNAME}`, `${SERVERFLEETNAME}`
+- **Secrets**: `${PTERODACTYL_DB_ROOTPW}`, `${VELOCITY_FWD_SECRET}`, `${WEBHOOK_AUTH_TOKEN}`, etc.
+- **Ops**: `${SERVER_OPS}` — comma-separated list used across server HelmReleases
+
+## Required Cluster Operators
+
+These must be installed separately before the CRDs in this repo will work:
+- **Flux CD** — reconciles HelmRelease and HelmRepository resources
+- **mariadb-operator** — manages MariaDB CRDs in `pterodactyl/db/` and `pterodactyl/userdata-db/`
+- **DragonflyDB operator** — manages Dragonfly CRD in `pterodactyl/dragonflydb/`
+- **ShulkerMC operator + Agones** — only needed if activating `shulker/`
+- **external-dns** — resolves `external-dns.alpha.kubernetes.io/hostname` annotations to DNS records
+- **Cilium** — provides LBIPAM and DSR forwarding for LoadBalancer services
