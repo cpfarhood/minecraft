@@ -60,12 +60,12 @@ spec:
         #
         [servers]
         # Gameplay (routed by mc-router)
-        rlcraft = "rlcraft.mc.animaniacs.farh.net:25565"
-        bmc-4 = "bmc-4.mc.animaniacs.farh.net:25565"
-        bmc-5 = "bmc-5.mc.animaniacs.farh.net:25565"
-        atm-10 = "atm-10.mc.animaniacs.farh.net:25565"
-        prom-ii = "prom-ii.mc.animaniacs.farh.net:25565"
-        cursed-walking = "cursed-walking.mc.animaniacs.farh.net:25565"
+        rlcraft = "rlcraft.${PRIVATE_FQDN}:25565"
+        bmc-4 = "bmc-4.${PRIVATE_FQDN}:25565"
+        bmc-5 = "bmc-5.${PRIVATE_FQDN}:25565"
+        atm-10 = "atm-10.${PRIVATE_FQDN}:25565"
+        prom-ii = "prom-ii.${PRIVATE_FQDN}:25565"
+        cursed-walking = "cursed-walking.${PRIVATE_FQDN}:25565"
         # Always-on fallback servers (direct)
         lobby = "mc-lobby:25565"
         limbo = "mc-limbo:25565"
@@ -84,12 +84,12 @@ spec:
         # Client hostnames map to the server entries above (which all go to mc-router).
         # --------------------------------------------------
         [forced-hosts]
-        "rlcraft.mc.farh.net" = ["rlcraft"]
-        "bmc-4.mc.farh.net" = ["bmc-4"]
-        "bmc-5.mc.farh.net" = ["bmc-5"]
-        "atm-10.mc.farh.net" = ["atm-10"]
-        "prom-ii.mc.farh.net" = ["prom-ii"]
-        "cursed-walking.mc.farh.net" = ["cursed-walking"]
+        "rlcraft.${FQDN}" = ["rlcraft"]
+        "bmc-4.${FQDN}" = ["bmc-4"]
+        "bmc-5.${FQDN}" = ["bmc-5"]
+        "atm-10.${FQDN}" = ["atm-10"]
+        "prom-ii.${FQDN}" = ["prom-ii"]
+        "cursed-walking.${FQDN}" = ["cursed-walking"]
         #
         # Intentionally NOT listed:
         # - "mc.farh.net"

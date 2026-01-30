@@ -100,7 +100,7 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/cursed-walking-a-modern-zombie-apocalypse"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "cursed-walking,cursed-walking.${FQDN}"
+      mc-router.itzg.me/externalServerName: "cursed-walking,cursed-walking.${PRIVATE_FQDN},cursed-walking.${FQDN}"
 
     persistence:
       dataDir:

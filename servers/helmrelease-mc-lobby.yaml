@@ -122,8 +122,8 @@ spec:
         value: "${VELOCITY_FWD_SECRET}"
 
     # For automatic statefulset startup/shutdown
-    #serviceAnnotations:
-    #  mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "lobby,lobby.${PRIVATE_FQDN},lobby.${FQDN}"
 
     podDisruptionBudget:
       enabled: true

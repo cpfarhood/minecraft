@@ -108,7 +108,7 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/rlcraft"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "rlcraft,rlcraft.${FQDN}"
+      mc-router.itzg.me/externalServerName: "rlcraft,rlcraft.${PRIVATE_FQDN},rlcraft.${FQDN}"
 
     persistence:
       dataDir:
