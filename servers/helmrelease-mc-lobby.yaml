@@ -117,6 +117,10 @@ spec:
       forceReDownload: false
       removeOldMods: false
 
+    extraEnv:
+      - name: VELOCITY_SECRET
+        value: "${VELOCITY_FWD_SECRET}"
+
     # For automatic statefulset startup/shutdown
     #serviceAnnotations:
     #  mc-router.itzg.me/externalServerName: "lobby,${FQDN}"
