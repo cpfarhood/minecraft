@@ -36,7 +36,6 @@ spec:
         cpu: "4"
         memory: "14Gi"
       limits:
-        cpu: "6"
         memory: "18Gi"
 
     startupProbe:

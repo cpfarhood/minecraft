@@ -87,7 +87,7 @@ spec:
 
       # Heap: stay below request/limit; leave headroom for metaspace/native/JIT/direct buffers.
       # With 14Gi request / 18Gi limit, 12–13G is the sweet spot.
-      memory: 13G
+      memory: 14G
 
       # Keep non-heap flags here only
       jvmOpts: >-
