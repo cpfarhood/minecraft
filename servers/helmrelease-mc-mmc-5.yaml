@@ -126,7 +126,7 @@ spec:
 
     extraEnv:
       CF_FORCE_SYNCHRONIZE: "true"
-      CF_EXCLUDE_MODS: "1104882,930131"
+      CF_EXCLUDE_MODS: "930131"
       #REMOVE_MODS: "OverflowingBars,PickUpNotifier,LeavesBeGone,TinyConfig,TradingPost,ResourcePackOverrides,VisualWorkbench"
 
     serviceAnnotations:

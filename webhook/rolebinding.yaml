@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sts-scaler-webhook
+subjects:
+  - kind: ServiceAccount
+    name: sts-scaler-webhook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sts-scaler-webhook
