@@ -1,7 +1,11 @@
+# ATM9 Mod Pack
+# Tuned for 12 players
+# Minecraft 1.20.1 (Forge) -> Java 17
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-mmc-5
+  name: mc-atm-9
   namespace: minecraft
 spec:
   interval: 1h
@@ -18,7 +22,7 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      tag: java21
+      tag: java17
 
     replicaCount: 1
     workloadAsStatefulSet: true
@@ -30,16 +34,15 @@ spec:
         value: "high"
         effect: "NoSchedule"
 
-    # Heavy 1.21 NeoForge pack: CPU headroom matters more than raw RAM once heap is "enough".
-    # Keep limit high enough to avoid throttling; keep requests realistic for scheduling.
+    # CPU headroom prevents throttling during worldgen/login spikes.
     resources:
       requests:
         cpu: "4"
         memory: "14Gi"
       limits:
+        cpu: "8"
         memory: "18Gi"
 
-    # Startup can be long; give it time without flapping.
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -47,7 +50,6 @@ spec:
       periodSeconds: 10
       timeoutSeconds: 5
 
-    # Don’t mark ready until stable, but don’t wait a full minute unnecessarily.
     readinessProbe:
       enabled: true
       command: ["mc-health"]
@@ -56,7 +58,6 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
-    # Avoid unnecessary restarts; modded servers can stall briefly under GC/worldgen.
     livenessProbe:
       enabled: true
       command: ["mc-health"]
@@ -69,34 +70,26 @@ spec:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
-      motd: "Welcome to farh.net Medieval MC 5!"
+      motd: "Welcome to farh.net All the Mods 9!"
       gameMode: survival
       difficulty: easy
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
-      # TPS stability knobs
       viewDistance: 6
       simulationDistance: 4
-
-      # Reduce IO stalls
       syncChunkWrites: false
-
-      # Disable watchdog kills during mod stalls
       maxTickTime: -1
 
-      # Heap: stay below request/limit; leave headroom for metaspace/native/JIT/direct buffers.
-      # With 14Gi request / 18Gi limit, 12–13G is the sweet spot.
+      # Heap below cgroup limit with native headroom
       memory: 13G
 
-      # Keep non-heap flags here only
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
         -XX:+AlwaysActAsServerClassMachine
 
-      # G1 for 12–13G heap on Java 21: keep conservative, reduce “Aikar soup”.
-      # (The itzg image will set -Xms/-Xmx from `memory`.)
+      # Keep GC tuning minimal/predictable for a 12–13G heap
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
@@ -109,20 +102,18 @@ spec:
         -XX:+PerfDisableSharedMem
 
       overrideServerProperties: true
-
-      # Auth behavior: if this is behind Velocity/Bungee, set onlineMode:false and configure proxy forwarding instead.
       onlineMode: true
       enforceSecureProfile: true
 
-      # Optional: stop the server doing expensive status work for pings while it’s cold-starting
-      # (keeps the proxy/mc-router ping path cheaper)
-      enableStatus: true
+      forceReDownload: false
+      removeOldMods: false
+      worldSaveName: world
 
       autoCurseForge:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/medieval-mc-mmc5"
+        pageUrl: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9"
 
     extraEnv:
       # Client-only/render/perf mods; keep them out of server packs
@@ -132,7 +123,7 @@ spec:
         value: "true"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "mmc-5,mmc-5.${FQDN}"
+      mc-router.itzg.me/externalServerName: "atm-9,atm-9.${FQDN}"
 
     persistence:
       dataDir:

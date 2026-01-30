@@ -9,6 +9,7 @@ resources:
   - helmrelease-mc-rlcraft.yaml
   - helmrelease-mc-bmc-4.yaml
   - helmrelease-mc-bmc-5.yaml
+  - helmrelease-mc-atm-9.yaml
   - helmrelease-mc-atm-10.yaml
   - helmrelease-mc-prom-ii.yaml
   - helmrelease-mc-mmc-5.yaml
