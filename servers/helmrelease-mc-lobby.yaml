@@ -18,6 +18,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-lobby"
     image:
       repository: itzg/minecraft-server
       tag: java21

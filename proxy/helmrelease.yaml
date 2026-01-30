@@ -15,6 +15,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-proxy"
     minecraftProxy:
       serviceType: LoadBalancer
       serviceAnnotations:
