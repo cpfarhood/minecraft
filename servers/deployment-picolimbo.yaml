@@ -17,8 +17,6 @@ spec:
       labels:
         app.kubernetes.io/name: minecraft
         app.kubernetes.io/instance: picolimbo
-      annotations:
-        mc-router.itzg.me/externalServerName: "proxy.${FQDN}"
     spec:
       containers:
         - name: picolimbo
