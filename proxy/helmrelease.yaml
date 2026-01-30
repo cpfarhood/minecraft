@@ -46,6 +46,7 @@ spec:
         motd = "farh.net Minecraft"
         show-max-players = 12
         online-mode = true
+        announce-forge = true
         force-key-authentication = true
         prevent-client-proxy-connections = false
         # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
