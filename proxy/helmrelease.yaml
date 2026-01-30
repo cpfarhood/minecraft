@@ -60,12 +60,12 @@ spec:
         #
         [servers]
         # Gameplay (routed by mc-router)
-        rlcraft = "mc-router:25565"
-        bmc-4 = "mc-router:25565"
-        bmc-5 = "mc-router:25565"
-        atm-10 = "mc-router:25565"
-        prom-ii = "mc-router:25565"
-        cursed-walking = "mc-router:25565"
+        rlcraft = "rlcraft.mc.animaniacs.farh.net:25565"
+        bmc-4 = "bmc-4.mc.animaniacs.farh.net:25565"
+        bmc-5 = "bmc-5.mc.animaniacs.farh.net:25565"
+        atm-10 = "atm-10.mc.animaniacs.farh.net:25565"
+        prom-ii = "prom-ii.mc.animaniacs.farh.net:25565"
+        cursed-walking = "cursed-walking.mc.animaniacs.farh.net:25565"
         # Always-on fallback servers (direct)
         lobby = "mc-lobby:25565"
         limbo = "mc-limbo:25565"
