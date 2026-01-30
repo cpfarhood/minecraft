@@ -57,8 +57,8 @@ spec:
               kind: Service
             patch: |
               - op: add
-                  path: /metadata/labels
-                  value: {}
+                path: /metadata/labels
+                value: {}
               - op: add
-                  path: /metadata/labels/zone
-                  value: public
+                path: /metadata/labels/zone
+                value: public
