@@ -152,7 +152,7 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        size: 64Gi
+        Size: 64Gi
 
     podDisruptionBudget:
       enabled: true
