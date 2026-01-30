@@ -126,6 +126,7 @@ spec:
 
     extraEnv:
       CF_FORCE_SYNCHRONIZE: "true"
+      # 930131 = ?, 1188180 = Dynamic RPG Resource Bars (client-only HUD mod, crashes on server)
       CF_EXCLUDE_MODS: "930131,1188180"
       #REMOVE_MODS: "OverflowingBars,PickUpNotifier,LeavesBeGone,TinyConfig,TradingPost,ResourcePackOverrides,VisualWorkbench"
 

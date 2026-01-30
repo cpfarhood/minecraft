@@ -1,3 +1,10 @@
+# Better Minecraft 4 Mod Pack
+# Tuned for 12 players
+# Minecraft 1.20.1 (Forge) -> Java 17
+#
+# Moderate Forge pack with extra mods added via MODS env (Wakes, Valkyrien Skies).
+# VS + KotlinForForge are pulled from Modrinth as direct JAR URLs.
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -31,6 +38,7 @@ spec:
         value: "high"
         effect: "NoSchedule"
 
+    # Moderate pack + extra mods; 12Gi heap with 16Gi limit for native headroom
     resources:
       requests:
         cpu: "4"
@@ -38,6 +46,7 @@ spec:
       limits:
         memory: "16Gi"
 
+    # 180 x 10s = 30 min startup window for mod download + Forge init
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -53,6 +62,8 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
+    # 6 x 30s = 3 min tolerance after 15 min initial delay;
+    # long initial delay accounts for VS physics engine warm-up
     livenessProbe:
       enabled: true
       command: ["mc-health"]
@@ -71,17 +82,22 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
+      # TPS stability: keep chunk + entity cost down for 12 players
       viewDistance: 6
       simulationDistance: 4
+      # Reduce IO stalls during chunk saves
       syncChunkWrites: false
+      # Disable watchdog kills during mod stalls (VS physics can cause long ticks)
       maxTickTime: -1
 
+      # 12G heap inside 16Gi pod leaves ~4Gi for native/metaspace
       memory: 12G
 
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
+      # Full Aikar-style G1 tuning for 12G heap on Forge
       jvmXXOpts: >-
         -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
@@ -116,8 +132,9 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/better-mc-forge-bmc4"
 
-    # Add Wakes + its required deps (+ VS + KotlinForForge required by VS)
-    # MODS supports direct JAR URLs.  [oai_citation:4‡Minecraft Server on Docker](https://docker-minecraft-server.readthedocs.io/en/latest/mods-and-plugins/?utm_source=chatgpt.com)
+    # Extra mods not in the CurseForge pack: Wakes (water effects),
+    # Valkyrien Skies (ship physics) + its deps (Eureka, NiftyShips, KotlinForForge).
+    # MODS env accepts direct JAR URLs from Modrinth CDN.
     extraEnv:
       MODS: |-
         https://cdn.modrinth.com/data/E0SdeAoH/versions/zP45vj8T/wakes-1.20.1-Forge-1.0.8.jar
@@ -126,6 +143,7 @@ spec:
         https://cdn.modrinth.com/data/V5ujR2yw/versions/leF4D8yr/valkyrienskies-120-2.4.9.jar
         https://cdn.modrinth.com/data/ordsPcFz/versions/hmeyC41q/kotlinforforge-4.11.0-all.jar
       CF_FORCE_SYNCHRONIZE: "true"
+      # 851046 = ?, 570017 = Radium Reforged (client-side perf mod)
       CF_EXCLUDE_MODS: "851046,570017"
 
     serviceAnnotations:

@@ -1,3 +1,10 @@
+# RLCraft Mod Pack
+# Tuned for 12 players
+# Minecraft 1.12.2 (Forge) -> Java 8
+#
+# RLCraft is an older 1.12.2 pack; Java 8 is required (Forge 1.12.x does not support newer JVMs).
+# Lighter than modern packs but entity-heavy (Lycanites, Ice and Fire) so TPS is the bottleneck.
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -16,18 +23,23 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
+      # RLCraft = Forge 1.12.2 -> requires Java 8
       tag: java8
 
     replicaCount: 1
     workloadAsStatefulSet: true
+    # OnDelete: pods are not restarted on Helm upgrade; requires manual delete to pick up changes.
+    # Prevents unexpected mid-session restarts.
     strategyType: OnDelete
 
+    # Schedule onto high-performance nodes
     tolerations:
       - key: "farh.net/performance"
         operator: "Equal"
         value: "high"
         effect: "NoSchedule"
 
+    # 1.12.2 packs are lighter than modern ones; 10Gi heap is plenty for 12 players.
     resources:
       requests:
         cpu: "4"
@@ -35,46 +47,62 @@ spec:
       limits:
         memory: "12Gi"
 
+    # Modded startup: mod downloads + Forge init can take a while on a fresh PVC.
+    # 60 x 10s = 10 min window (shorter than modern packs since 1.12.2 loads faster).
     startupProbe:
       enabled: true
       command: ["mc-health"]
       failureThreshold: 60
       periodSeconds: 10
+      timeoutSeconds: 5
 
     readinessProbe:
       enabled: true
       command: ["mc-health"]
+      initialDelaySeconds: 30
       periodSeconds: 10
-      failureThreshold: 6
+      timeoutSeconds: 5
+      failureThreshold: 12
 
+    # Modded servers can stall during GC or entity processing.
+    # 10 x 30s = 5 min tolerance before restart.
     livenessProbe:
       enabled: true
       command: ["mc-health"]
+      initialDelaySeconds: 300
       periodSeconds: 30
-      failureThreshold: 3
+      timeoutSeconds: 5
+      failureThreshold: 10
 
     minecraftServer:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
-      # Player-count target
       maxPlayers: 12
-
-      # Big lever for modded TPS: keep server view-distance <= 8
-      viewDistance: 8
-
-      gameMode: survival
+      motd: "Welcome to farh.net RLCraft!"
       difficulty: easy
+      gameMode: survival
       levelType: DEFAULT
       worldSaveName: world
-      motd: "Welcome to farh.net RLCraft!"
+      ops: ${SERVER_OPS}
 
-      # Heap: keep below pod memory to leave native/metaspace headroom.
-      # 10G heap inside 12Gi pod is the right shape for ~12 players.
+      # TPS stability: keep view distance reasonable for entity-heavy pack
+      viewDistance: 8
+      simulationDistance: 5
+      # Reduce IO stalls during chunk saves
+      syncChunkWrites: false
+      # Disable watchdog kills during mod stalls (Lycanites mob spawns can cause long ticks)
+      maxTickTime: -1
+
+      # Ensure HelmRelease values always override server.properties on disk
+      overrideServerProperties: true
+      onlineMode: true
+
+      # Heap: 10G inside a 12Gi pod leaves ~2Gi for metaspace/native/JIT
       memory: 10G
 
-      # Java 8 GC tuning (G1) to reduce pause spikes on modded servers.
-      # Keep it simple and known-good; avoid exotic flags.
+      # Java 8 G1GC tuning (Aikar flags adapted for 1.12.2).
+      # UseStringDeduplication helps with the large number of duplicate strings in older Forge.
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
@@ -96,10 +124,9 @@ spec:
         -XX:+PerfDisableSharedMem
         -XX:+UseStringDeduplication
 
-      # Keep empty unless you have a specific reason
-      jvmOpts: ""
-
-      ops: ${SERVER_OPS}
+      jvmOpts: >-
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
 
       autoCurseForge:
         apiKey:

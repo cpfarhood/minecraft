@@ -34,6 +34,7 @@ spec:
         value: "high"
         effect: "NoSchedule"
 
+    # Heavy NeoForge pack; 14Gi heap with 18Gi limit for native headroom
     resources:
       requests:
         cpu: "4"
@@ -41,6 +42,7 @@ spec:
       limits:
         memory: "18Gi"
 
+    # 240 x 10s = 40 min startup window for mod download + NeoForge init
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -56,6 +58,7 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
+    # 6 x 30s = 3 min tolerance; modded servers can stall during GC/worldgen
     livenessProbe:
       enabled: true
       command: ["mc-health"]
@@ -74,17 +77,22 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
+      # TPS stability: keep chunk + entity cost down for 12 players
       viewDistance: 6
       simulationDistance: 4
+      # Reduce IO stalls during chunk saves
       syncChunkWrites: false
+      # Disable watchdog kills during mod stalls
       maxTickTime: -1
 
+      # Heap sizing: 14G inside 18Gi pod leaves ~4Gi for metaspace/native/JIT
       memory: 14G
 
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
+      # Full Aikar-style G1 tuning for large heap on NeoForge
       jvmXXOpts: >-
         -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
@@ -120,6 +128,8 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10"
 
     extraEnv:
+      # Client-only render mods (by CurseForge project ID):
+      # 455508=Iris, 581495=Oculus, 1254143=Colorwheel, 574856=Rubidium, 908741=Embeddium
       - name: CF_EXCLUDE_MODS
         value: "455508,581495,1254143,574856,908741"
       - name: CF_FORCE_SYNCHRONIZE

@@ -1,3 +1,9 @@
+# Cursed Walking Mod Pack
+# Tuned for 12 players
+# Minecraft 1.20.1 (Forge) -> Java 17
+#
+# Zombie-apocalypse themed pack. Moderate mod count; entity AI is the main TPS cost.
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -14,9 +20,9 @@ spec:
         namespace: minecraft
       interval: 1h
   values:
-    # If you use 1.18+ / 1.19+ / 1.20+: do NOT use java8
     image:
       repository: itzg/minecraft-server
+      # Cursed Walking = Forge 1.20.1 -> Java 17
       tag: java17
 
     replicaCount: 1
@@ -29,6 +35,7 @@ spec:
         value: "high"
         effect: "NoSchedule"
 
+    # Moderate pack; 10Gi heap is sufficient for 12 players.
     resources:
       requests:
         cpu: "4"
@@ -36,6 +43,7 @@ spec:
       limits:
         memory: "12Gi"
 
+    # 180 x 10s = 30 min startup window for mod download + Forge init
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -51,16 +59,16 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
+    # 6 x 30s = 3 min tolerance; keep generous for entity-heavy stalls
     livenessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 180
+      initialDelaySeconds: 300
       periodSeconds: 30
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 10
 
     minecraftServer:
-      # Use the dedicated server pack, not AUTO_CURSEFORGE manifest install
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
@@ -71,25 +79,36 @@ spec:
       worldSaveName: world
       ops: ${SERVER_OPS}
 
-      # Biggest server-side TPS levers
-      viewDistance: 8
-      simulationDistance: 5
+      # TPS stability: entity-heavy pack benefits from reduced view/sim distance
+      viewDistance: 6
+      simulationDistance: 4
+      # Reduce IO stalls during chunk saves
       syncChunkWrites: false
+      # Disable watchdog kills during mob-heavy stalls
       maxTickTime: -1
 
-      # Heap headroom inside 12Gi pod
+      # Ensure HelmRelease values always override server.properties on disk
+      overrideServerProperties: true
+      onlineMode: true
+      enforceSecureProfile: true
+
+      # 10G heap inside 12Gi pod leaves ~2Gi for native/metaspace
       memory: 10G
 
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
 
+      # Conservative G1 tuning for moderate heap
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
         -XX:MaxGCPauseMillis=200
         -XX:+DisableExplicitGC
         -XX:+AlwaysPreTouch
+        -XX:G1HeapRegionSize=16M
+        -XX:InitiatingHeapOccupancyPercent=20
+        -XX:G1ReservePercent=15
         -XX:+PerfDisableSharedMem
 
       autoCurseForge:

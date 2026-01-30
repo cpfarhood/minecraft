@@ -1,3 +1,10 @@
+# Prominence II (Hasturian Era) Mod Pack
+# Tuned for 12 players
+# Minecraft 1.20.1 (Fabric) -> Java 17
+#
+# RPG/exploration-focused Fabric pack. Fabric packs generally start faster
+# and use less memory than Forge equivalents, but this one is content-heavy.
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -17,6 +24,7 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
+      # Prominence II = Fabric 1.20.1 -> Java 17
       tag: java17
 
     replicaCount: 1
@@ -29,7 +37,7 @@ spec:
         value: "high"
         effect: "NoSchedule"
 
-    # 12-player sizing: avoid CPU throttling + keep memory headroom for native/metaspace/fs-cache
+    # Heavy content pack; 14Gi heap with 18Gi limit for native headroom
     resources:
       requests:
         cpu: "4"
@@ -37,7 +45,7 @@ spec:
       limits:
         memory: "18Gi"
 
-    # Long modded startups + occasional stalls during world gen
+    # 180 x 10s = 30 min startup window
     startupProbe:
       enabled: true
       command: ["mc-health"]
@@ -53,36 +61,41 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 12
 
+    # 10 x 30s = 5 min tolerance before restart
     livenessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 180
+      initialDelaySeconds: 300
       periodSeconds: 30
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 10
 
     minecraftServer:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
-      # Prominence II is Fabric 1.20.1
-      # Keep server chunk + entity cost down for 12 players
-      viewDistance: 6
-      simulationDistance: 4
-      syncChunkWrites: false
-      maxTickTime: -1
-
+      motd: "Welcome to farh.net Prominence II!"
       difficulty: easy
       gameMode: survival
-      motd: "Welcome to farh.net Prominence II!"
       ops: ${SERVER_OPS}
-
       maxPlayers: 12
 
-      # Heap sizing: do not set heap == pod memory; leave ~1–1.5Gi headroom
+      # TPS stability: keep chunk + entity cost down for 12 players
+      viewDistance: 6
+      simulationDistance: 4
+      # Reduce IO stalls during spikes/worldgen
+      syncChunkWrites: false
+      # Disable watchdog kills during mod stalls
+      maxTickTime: -1
+
+      # Heap sizing: 14G inside 18Gi pod leaves ~4Gi for metaspace/native/fs-cache
       memory: 14G
 
-      # GC: baseline G1 tuning widely used for MC; keep flags conservative
+      jvmOpts: >-
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+
+      # Full Aikar-style G1 tuning for large heap
       jvmXXOpts: >-
         -XX:+UnlockExperimentalVMOptions
         -XX:+UseG1GC
@@ -103,14 +116,9 @@ spec:
         -XX:MaxTenuringThreshold=1
         -XX:+PerfDisableSharedMem
 
-      jvmOpts: >-
-        -Djava.awt.headless=true
-        -Dfile.encoding=UTF-8
-
       overrideServerProperties: true
-      allowNether: true
-      pvp: true
       onlineMode: true
+      enforceSecureProfile: true
 
       worldSaveName: world
       forceReDownload: false
