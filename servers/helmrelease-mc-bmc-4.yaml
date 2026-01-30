@@ -127,7 +127,7 @@ spec:
         https://cdn.modrinth.com/data/ordsPcFz/versions/hmeyC41q/kotlinforforge-4.11.0-all.jar
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "bmc-4,bmc-4.${PRIVATE_FQDN},bmc-4.${FQDN}"
+      mc-router.itzg.me/externalServerName: "bmc-4,bmc-4.${FQDN}"
 
     persistence:
       dataDir:

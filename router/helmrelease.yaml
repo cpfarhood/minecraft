@@ -31,8 +31,8 @@ spec:
       minecraft:
         annotations:
           service.cilium.io/forwarding-mode: dsr
-          #lbipam.cilium.io/ips: "71.150.236.210"
-          external-dns.alpha.kubernetes.io/hostname: "mc.animaniacs.farh.net,*.mc.animaniacs.farh.net"
+          lbipam.cilium.io/ips: "71.150.236.210"
+          external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
         type: LoadBalancer
         port: 25565
       extraServiceSpec:
@@ -51,14 +51,14 @@ spec:
                 value:
                   - --in-kube-cluster
           # needed to get an external IP with cilium
-          #- target:
-          #    group: ""
-          #    version: v1
-          #    kind: Service
-          # patch: |
-          #   - op: add
-          #      path: /metadata/labels
-          #      value: {}
-          #   - op: add
-          #      path: /metadata/labels/zone
-          #      value: public
+          - target:
+              group: ""
+              version: v1
+              kind: Service
+           patch: |
+             - op: add
+                path: /metadata/labels
+                value: {}
+             - op: add
+                path: /metadata/labels/zone
+                value: public

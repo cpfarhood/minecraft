@@ -123,7 +123,7 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "prom-ii,prom-ii.${PRIVATE_FQDN},prom-ii.${FQDN}"
+      mc-router.itzg.me/externalServerName: "prom-ii,prom-ii.${FQDN}"
 
     persistence:
       dataDir:
