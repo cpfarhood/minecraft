@@ -5,9 +5,11 @@ metadata:
 data:
   server.toml: |
     bind = "0.0.0.0:25565"
+    welcome_message = "Welcome to farh.net!"
+    action_bar = "Welcome to farh.net!"
     [server_list]
     max_players = 12
-    message_of_the_day = "farh.net Minecraft Server"
+    message_of_the_day = "farh.net Minecraft Servers!"
     [forwarding]
     method = "MODERN"
     secret = "${VELOCITY_FWD_SECRET}"
