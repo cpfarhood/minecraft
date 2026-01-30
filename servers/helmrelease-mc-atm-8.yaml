@@ -1,6 +1,7 @@
 # ATM8 Mod Pack
 # Tuned for 12 players
 # Minecraft 1.19.2 (Forge) -> Java 17
+# Tested 1/29/2026
 
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease

@@ -60,7 +60,7 @@ spec:
     livenessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 300
+      initialDelaySeconds: 900
       periodSeconds: 30
       timeoutSeconds: 5
       failureThreshold: 10
@@ -125,13 +125,9 @@ spec:
         pageUrl: "https://www.curseforge.com/minecraft/modpacks/medieval-mc-mmc5"
 
     extraEnv:
-      # Client-only/render/perf mods; keep them out of server packs
-      - name: REMOVE_MODS
-        value: "ConfiguredDefaults,txnilib"
-      - name: CF_EXCLUDE_MODS
-        value: "iris,oculus,colorwheel,rubidium,embeddium,ConfiguredDefaults,txnilib"
-      - name: CF_FORCE_SYNCHRONIZE
-        value: "true"
+      CF_FORCE_SYNCHRONIZE: "true"
+      CF_EXCLUDE_MODS: "1104882,930131"
+      #REMOVE_MODS: "OverflowingBars,PickUpNotifier,LeavesBeGone,TinyConfig,TradingPost,ResourcePackOverrides,VisualWorkbench"
 
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "mmc-5,mmc-5.${FQDN}"

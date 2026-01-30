@@ -56,7 +56,7 @@ spec:
     livenessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 180
+      initialDelaySeconds: 900
       periodSeconds: 30
       timeoutSeconds: 5
       failureThreshold: 6
@@ -125,6 +125,8 @@ spec:
         https://cdn.modrinth.com/data/EO8aSHxh/versions/gkwkGpv4/eureka-1201-1.6.1.jar
         https://cdn.modrinth.com/data/V5ujR2yw/versions/leF4D8yr/valkyrienskies-120-2.4.9.jar
         https://cdn.modrinth.com/data/ordsPcFz/versions/hmeyC41q/kotlinforforge-4.11.0-all.jar
+      CF_FORCE_SYNCHRONIZE: "true"
+      CF_EXCLUDE_MODS: "851046"
 
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "bmc-4,bmc-4.${FQDN}"
