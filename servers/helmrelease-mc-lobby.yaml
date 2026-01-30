@@ -31,7 +31,6 @@ spec:
         cpu: "1"
         memory: "4Gi"
       limits:
-        cpu: "3"
         memory: "6Gi"
 
     # Probes: startup generous; liveness slow to avoid restart loops during brief stalls.
