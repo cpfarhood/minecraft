@@ -120,7 +120,7 @@ spec:
     extraEnv:
       # Client-only/render/perf mods; keep them off the server
       - name: CF_EXCLUDE_MODS
-        value: "iris,oculus,colorwheel,rubidium,embeddium"
+        value: "455508,581495,1254143,574856,908741"
       - name: CF_FORCE_SYNCHRONIZE
         value: "true"
 
