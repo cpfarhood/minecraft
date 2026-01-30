@@ -1,7 +1,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-famously-optimized
+  name: mc-paper
+  namespace: minecraft
 spec:
   interval: 1h
   chart:
@@ -13,11 +14,11 @@ spec:
         name: itzg
         namespace: minecraft
       interval: 1h
+
   values:
-    # If you use 1.18+ / 1.19+ / 1.20+: do NOT use java8
     image:
       repository: itzg/minecraft-server
-      tag: java17
+      tag: java21
 
     replicaCount: 1
     workloadAsStatefulSet: true
@@ -32,22 +33,21 @@ spec:
     resources:
       requests:
         cpu: "4"
-        memory: "12Gi"
+        memory: "10Gi"
       limits:
-        cpu: "6"
         memory: "12Gi"
 
     startupProbe:
       enabled: true
       command: ["mc-health"]
-      failureThreshold: 180
+      failureThreshold: 240
       periodSeconds: 10
       timeoutSeconds: 5
 
     readinessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 60
+      initialDelaySeconds: 20
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 12
@@ -55,57 +55,60 @@ spec:
     livenessProbe:
       enabled: true
       command: ["mc-health"]
-      initialDelaySeconds: 180
+      initialDelaySeconds: 300
       periodSeconds: 30
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 10
 
     minecraftServer:
-      # Use the dedicated server pack, not AUTO_CURSEFORGE manifest install
-      type: AUTO_CURSEFORGE
+      type: PAPER
       eula: "TRUE"
 
+      # Pin to newest MC; Paper auto-resolves latest build for this version
+      version: "1.21.1"
+
       maxPlayers: 12
-      motd: "Welcome to farh.net Cursed Walking!"
+      motd: "Welcome to farh.net Minecraft!"
       difficulty: easy
       gameMode: survival
       worldSaveName: world
       ops: ${SERVER_OPS}
 
-      # Biggest server-side TPS levers
       viewDistance: 8
       simulationDistance: 5
       syncChunkWrites: false
       maxTickTime: -1
 
-      # Heap headroom inside 12Gi pod
+      # Heap < cgroup limit, leave native/JIT headroom
       memory: 10G
 
       jvmOpts: >-
         -Djava.awt.headless=true
         -Dfile.encoding=UTF-8
+        -XX:+AlwaysActAsServerClassMachine
 
       jvmXXOpts: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
-        -XX:MaxGCPauseMillis=200
+        -XX:MaxGCPauseMillis=150
         -XX:+DisableExplicitGC
         -XX:+AlwaysPreTouch
+        -XX:G1HeapRegionSize=16M
+        -XX:InitiatingHeapOccupancyPercent=20
+        -XX:G1ReservePercent=15
         -XX:+PerfDisableSharedMem
 
-      autoCurseForge:
-        apiKey:
-          existingSecret: "minecraft"
-          secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/fabulously-optimized"
+      overrideServerProperties: true
+      onlineMode: true
+      enforceSecureProfile: true
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "famously-optimized,famously-optimized.${FQDN}"
+      mc-router.itzg.me/externalServerName: "paper,paper.${FQDN}"
 
     persistence:
       dataDir:
         enabled: true
-        size: 64Gi
+        Size: 64Gi
 
     podDisruptionBudget:
       enabled: true

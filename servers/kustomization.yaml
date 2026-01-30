@@ -6,7 +6,7 @@ resources:
   #  - service-picolimbo.yaml
   #  - helmrelease-mc-lobby.yaml
   - helmrelease-mc-cursed-walking.yaml
-  - helmrelease-mc-famously-optimized.yaml
+  - helmrelease-mc-paper.yaml
   - helmrelease-mc-rlcraft.yaml
   - helmrelease-mc-bmc-4.yaml
   - helmrelease-mc-bmc-5.yaml
