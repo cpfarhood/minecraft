@@ -55,10 +55,10 @@ spec:
               group: ""
               version: v1
               kind: Service
-           patch: |
-             - op: add
-                path: /metadata/labels
-                value: {}
-             - op: add
-                path: /metadata/labels/zone
-                value: public
+            patch: |
+              - op: add
+                  path: /metadata/labels
+                  value: {}
+              - op: add
+                  path: /metadata/labels/zone
+                  value: public
