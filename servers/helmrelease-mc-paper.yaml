@@ -116,7 +116,7 @@ spec:
         -XX:+PerfDisableSharedMem
 
       overrideServerProperties: true
-      onlineMode: true
+      onlineMode: false
       enforceSecureProfile: true
 
     serviceAnnotations:
