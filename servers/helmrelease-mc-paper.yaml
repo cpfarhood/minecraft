@@ -78,7 +78,7 @@ spec:
       eula: "TRUE"
 
       # Pin to newest MC; Paper auto-resolves latest build for this version
-      version: "1.21.1"
+      version: "1.21.11"
 
       maxPlayers: 12
       motd: "Welcome to farh.net Minecraft!"
