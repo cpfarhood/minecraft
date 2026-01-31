@@ -21,6 +21,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-atm-9"
     image:
       repository: itzg/minecraft-server
       tag: java17

@@ -60,12 +60,13 @@ spec:
         #
         [servers]
         # Gameplay (routed by mc-router)
-        rlcraft = "rlcraft.${PRIVATE_FQDN}:25565"
-        bmc-4 = "bmc-4.${PRIVATE_FQDN}:25565"
-        bmc-5 = "bmc-5.${PRIVATE_FQDN}:25565"
-        atm-10 = "atm-10.${PRIVATE_FQDN}:25565"
-        prom-ii = "prom-ii.${PRIVATE_FQDN}:25565"
-        cursed-walking = "cursed-walking.${PRIVATE_FQDN}:25565"
+        paper = "mc-paper:25565"
+        rlcraft = "mc-rlcraft:25565"
+        bmc-4 = "mc-bmc:25565"
+        bmc-5 = "mc-bmc-5:25565"
+        atm-10 = "mc-atm-10:25565"
+        prom-ii = "mc-prom-ii:25565"
+        cursed-walking = "mc-cursed-walking:25565"
         # Always-on fallback servers (direct)
         lobby = "mc-lobby:25565"
         limbo = "mc-limbo:25565"
@@ -75,6 +76,7 @@ spec:
         # Used when NO forced-host matches (e.g. mc.farh.net or raw IP)
         # --------------------------------------------------
         try = [
+          "paper",
           "lobby",
           "limbo"
         ]
@@ -84,6 +86,7 @@ spec:
         # Client hostnames map to the server entries above (which all go to mc-router).
         # --------------------------------------------------
         [forced-hosts]
+        "paper.${FQDN}" = ["paper"]
         "rlcraft.${FQDN}" = ["rlcraft"]
         "bmc-4.${FQDN}" = ["bmc-4"]
         "bmc-5.${FQDN}" = ["bmc-5"]

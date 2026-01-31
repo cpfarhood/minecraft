@@ -23,6 +23,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-bmc-4"
     image:
       repository: itzg/minecraft-server
       # BMC4 = Forge 1.20.1 -> Java 17

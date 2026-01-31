@@ -21,6 +21,7 @@ spec:
         namespace: minecraft
       interval: 1h
   values:
+    fullnameOverride: "mc-rlcraft"
     image:
       repository: itzg/minecraft-server
       # RLCraft = Forge 1.12.2 -> requires Java 8

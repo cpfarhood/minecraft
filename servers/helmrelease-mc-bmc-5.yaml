@@ -15,6 +15,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-bmc-5"
     image:
       repository: itzg/minecraft-server
       # BMC5 NeoForge is MC 1.21.x, so Java 21

@@ -23,6 +23,7 @@ spec:
       interval: 1h
 
   values:
+    fullnameOverride: "mc-paper"
     image:
       repository: itzg/minecraft-server
       # Paper 1.21.x -> Java 21
