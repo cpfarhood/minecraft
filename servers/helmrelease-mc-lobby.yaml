@@ -136,8 +136,8 @@ spec:
               name: paper-velocity-config
 
     # For automatic statefulset startup/shutdown
-    serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "lobby,lobby.${PRIVATE_FQDN},lobby.${FQDN}"
+    #serviceAnnotations:
+    #  mc-router.itzg.me/externalServerName: "lobby,lobby.${PRIVATE_FQDN},lobby.${FQDN}"
 
     podDisruptionBudget:
       enabled: true

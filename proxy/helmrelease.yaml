@@ -49,7 +49,8 @@ spec:
         force-key-authentication = true
         prevent-client-proxy-connections = false
         # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
-        player-info-forwarding-mode = "modern"
+        [player-info-forwarding]
+        mode = "modern"
         forwarding-secret-file = "/server/forwarding.secret"
         #
         # --------------------------------------------------
@@ -95,11 +96,6 @@ spec:
         "atm-10.${FQDN}" = ["atm-10"]
         "prom-ii.${FQDN}" = ["prom-ii"]
         "cursed-walking.${FQDN}" = ["cursed-walking"]
-        #
-        # Intentionally NOT listed:
-        # - "mc.farh.net"
-        # - direct IP connects
-        # Those follow `try` -> lobby -> limbo
         #
         # --------------------------------------------------
         # ADVANCED
