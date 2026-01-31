@@ -119,6 +119,13 @@ spec:
     extraEnv:
       - name: VELOCITY_SECRET
         value: "${VELOCITY_FWD_SECRET}"
+      # Explicitly configure modern Paper (1.20.6+) global config for Velocity
+      - name: CFG_PAPER_PROXIES_VELOCITY_ENABLED
+        value: "true"
+      - name: CFG_PAPER_PROXIES_VELOCITY_ONLINE_MODE
+        value: "true"
+      - name: CFG_PAPER_PROXIES_VELOCITY_SECRET
+        value: "${VELOCITY_FWD_SECRET}"
 
     # For automatic statefulset startup/shutdown
     serviceAnnotations:
