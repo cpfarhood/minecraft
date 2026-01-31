@@ -69,12 +69,6 @@ spec:
       spigot: {}
       paper: {}
 
-      # Velocity modern forwarding
-      velocity:
-        enabled: true
-        onlineMode: true
-        secret: ${VELOCITY_FWD_SECRET}
-
       motd: "Welcome to farh.net Minecraft Lobby!"
       gameMode: adventure
       difficulty: peaceful
@@ -116,15 +110,18 @@ spec:
 
       overrideServerProperties: true
 
-    # Explicitly provide the Paper 1.21 generic config with placeholders
-    # so Flux can substitute the secret directly
-    configFiles:
-      "paper-global.yml": |
-        proxies:
-          velocity:
-            enabled: true
-            online-mode: true
-            secret: "${VELOCITY_FWD_SECRET}"
+    extraEnv:
+      SYNC_SKIP_NEWER_IN_DESTINATION: "false"
+
+    extraVolumes:
+      - volumeMounts:
+          - name: paper-config
+            mountPath: /config
+            readOnly: true
+        volumes:
+          - name: paper-config
+            configMap:
+              name: paper-velocity-config
 
     # For automatic statefulset startup/shutdown
     serviceAnnotations:

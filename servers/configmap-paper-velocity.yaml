@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paper-velocity-config
+  namespace: minecraft
+data:
+  paper-global.yml: |
+    proxies:
+      velocity:
+        enabled: true
+        online-mode: true
+        secret: "${VELOCITY_FWD_SECRET}"

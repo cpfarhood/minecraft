@@ -119,18 +119,21 @@ spec:
       onlineMode: false
       enforceSecureProfile: true
 
-      # Explicitly provide the Paper 1.21 generic config with placeholders
-      # so the itzg image can substitute ${VELOCITY_SECRET}
-      configFiles:
-        "paper-global.yml": |
-          proxies:
-            velocity:
-              enabled: true
-              online-mode: true
-              secret: "${VELOCITY_SECRET}"
+    extraEnv:
+      SYNC_SKIP_NEWER_IN_DESTINATION: "false"
+
+    extraVolumes:
+      - volumeMounts:
+          - name: paper-config
+            mountPath: /config
+            readOnly: true
+        volumes:
+          - name: paper-config
+            configMap:
+              name: paper-velocity-config
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "rochester,rochester.${FQDN}"
+      mc-router.itzg.me/externalServerName: "detroit,detroit.${FQDN}"
       mc-router.itzg.me/proxyServerName: "mc-proxy-minecraft-proxy.minecraft.svc.cluster.local:25565"
 
     persistence:

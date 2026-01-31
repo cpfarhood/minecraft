@@ -36,7 +36,9 @@
       "Bash(python3:*)",
       "Bash(for script in start-setupEnvVariables start-setupServerProperties start-utils start-finalExec)",
       "Bash(do echo \"=== $script ===\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:artifacthub.io)"
     ]
   }
 }
