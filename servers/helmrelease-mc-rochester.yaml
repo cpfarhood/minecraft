@@ -127,7 +127,7 @@ spec:
             velocity:
               enabled: true
               online-mode: true
-              secret: "${VELOCITY_FWD_SECRET}"
+      #        secret: "${VELOCITY_FWD_SECRET}"
 
     extraEnv:
       - name: VELOCITY_FORWARDING_SECRET
