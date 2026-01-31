@@ -33,11 +33,13 @@ spec:
     workloadAsStatefulSet: true
     strategyType: OnDelete
 
-    tolerations:
-      - key: "farh.net/performance"
-        operator: "Equal"
-        value: "high"
-        effect: "NoSchedule"
+    # If the server modpacks are tuned for high-end hardware, we can schedule it on
+    # nodes with more compute resources.
+    #tolerations:
+    #  - key: "farh.net/performance"
+    #    operator: "Equal"
+    #    value: "high"
+    #    effect: "NoSchedule"
 
     # Vanilla Paper is lightweight; 10Gi is plenty for 12 players.
     resources:
@@ -87,9 +89,16 @@ spec:
       worldSaveName: world
       ops: ${SERVER_OPS}
 
-      # Vanilla can handle wider view/sim than modded packs
-      viewDistance: 8
-      simulationDistance: 5
+      # High-end Survival Optimization
+      # Wide view distance for exploration; managed simulation distance for mob caps/farms
+      viewDistance: 24
+      simulationDistance: 10
+
+      # Survival features
+      allowFlight: false
+      enableCommandBlock: false
+      spawnProtection: 0
+
       # Reduce IO stalls during chunk saves
       syncChunkWrites: false
       # Disable watchdog; not strictly needed for vanilla but harmless

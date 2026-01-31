@@ -78,9 +78,21 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
-      # Lobby: reduce chunk work + entity sim
-      viewDistance: 6
-      simulationDistance: 4
+      # Ultra-Fast Lobby Optimization
+      # Minimal view/sim distance since it's just a hub
+      viewDistance: 5
+      simulationDistance: 3
+
+      # Total Peace: Disable all mob spawning and PVP
+      spawnAnimals: false
+      spawnMonsters: false
+      spawnNPCs: false
+      pvp: false
+      generateStructures: false
+
+      # Hub convenience
+      allowFlight: true
+      enableCommandBlock: true
 
       # Lower IO jitter; keep on SSD-backed PV
       syncChunkWrites: false
