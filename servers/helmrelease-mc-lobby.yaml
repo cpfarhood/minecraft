@@ -81,6 +81,16 @@ spec:
       ops: ${SERVER_OPS}
       maxPlayers: 12
 
+      # Explicitly provide the Paper 1.21 generic config with placeholders
+      # so the itzg image can substitute ${VELOCITY_SECRET}
+      configFiles:
+        "paper-global.yml": |
+          proxies:
+            velocity:
+              enabled: true
+              online-mode: true
+              secret: "${VELOCITY_SECRET}"
+
       # Lobby: reduce chunk work + entity sim
       viewDistance: 6
       simulationDistance: 4
@@ -118,13 +128,6 @@ spec:
 
     extraEnv:
       - name: VELOCITY_SECRET
-        value: "${VELOCITY_FWD_SECRET}"
-      # Explicitly configure modern Paper (1.20.6+) global config for Velocity
-      - name: CFG_PAPER_PROXIES_VELOCITY_ENABLED
-        value: "true"
-      - name: CFG_PAPER_PROXIES_VELOCITY_ONLINE_MODE
-        value: "true"
-      - name: CFG_PAPER_PROXIES_VELOCITY_SECRET
         value: "${VELOCITY_FWD_SECRET}"
 
     # For automatic statefulset startup/shutdown
