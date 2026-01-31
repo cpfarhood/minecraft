@@ -129,6 +129,10 @@ spec:
               online-mode: true
               secret: "${VELOCITY_SECRET}"
 
+    extraEnv:
+      - name: VELOCITY_SECRET
+        value: "${VELOCITY_FWD_SECRET}"
+
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "rochester,rochester.${FQDN}"
       mc-router.itzg.me/proxyServerName: "mc-proxy-minecraft-proxy.minecraft.svc.cluster.local:25565"
