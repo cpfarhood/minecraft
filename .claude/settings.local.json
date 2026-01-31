@@ -12,7 +12,23 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Limit DragonflyDB to 2 threads to reduce memory requirement\n\nDragonflyDB requires ~256MB per thread. The pod was crash-looping\nbecause it detected 8 threads but only had 512Mi available \\(needs 2Gi\\).\nLimiting to 2 threads allows it to run within 512Mi.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(kubectl delete:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Increase DragonflyDB memory to 640Mi for overhead\n\n512Mi was exactly the requirement for 2 threads but left no room\nfor container overhead, causing startup failure.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(kubectl scale:*)",
+      "WebSearch",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft status -u)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft diff)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft log --oneline -5)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft add:*)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Exclude client-only dynamic_resource_bars mod from mc-mmc-5 server\n\nThe Dynamic RPG Resource Bars mod references client GUI classes at\nconstruction time, crashing the dedicated server. Also updates CLAUDE.md\nto reflect the Flux-based deployment workflow.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft push)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Use CurseForge project ID for dynamic_resource_bars exclusion\n\nCF_EXCLUDE_MODS requires project IDs, not mod slugs. The slug\n''dynamic_resource_bars'' was not found by the CurseForge API.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Use CurseForge project ID for radium exclusion in mc-bmc-4\n\nCF_EXCLUDE_MODS requires project IDs, not slugs. Replaced ''radium''\nwith project ID 570017 \\(Radium Reforged\\).\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Replace CF_EXCLUDE_MODS slugs with project IDs for ATM 8/9/10\n\nCurseForge installer requires numeric project IDs, not slugs.\niris=455508, oculus=581495, colorwheel=1254143, rubidium=574856,\nembeddium=908741.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft diff --stat)",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\ndocs: Add comments to all server HelmReleases explaining config choices\n\nAlso fixes several issues found during review:\n- rlcraft: liveness probe was too aggressive \\(90s tolerance\\), added\n  maxTickTime, syncChunkWrites, overrideServerProperties, timeoutSeconds\n- cursed-walking: added overrideServerProperties, onlineMode,\n  enforceSecureProfile; reduced view/sim distance to match other\n  modded servers; increased liveness tolerance\n- prom-ii: added enforceSecureProfile, increased liveness tolerance,\n  removed redundant defaults \\(allowNether, pvp\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Use uppercase Size for persistence in all HelmReleases\n\nThe itzg Helm chart requires uppercase ''Size'' for PVC sizing.\nFive files had lowercase ''size'' which would be ignored.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }

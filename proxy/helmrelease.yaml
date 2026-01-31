@@ -18,10 +18,9 @@ spec:
     fullnameOverride: "mc-proxy"
     serviceAnnotations:
       service.cilium.io/forwarding-mode: dsr
-      lbipam.cilium.io/ips: "71.150.236.210"
-      external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
+      mc-router.itzg.me/defaultServer: "proxy"
     minecraftProxy:
-      serviceType: LoadBalancer
+      serviceType: ClusterIP
       # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
       type: VELOCITY
       # If type is set to VELOCITY, download and run this version of Velocity
