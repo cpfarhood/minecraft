@@ -1,8 +1,0 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: sts-scaler-webhook
-rules:
-  - apiGroups: ["apps"]
-    resources: ["statefulsets/scale"]
-    verbs: ["get", "patch", "update"]

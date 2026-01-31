@@ -15,6 +15,10 @@ spec:
         namespace: minecraft
       interval: 1h
   values:
+    image:
+      repository: git.farh.net/farhoodliquor/mc-router
+      tag: proxyservername
+      pullPolicy: Always
     fullnameOverride: "mc-router"
     args: ["--in-kube-cluster"]
     minecraftRouter:

@@ -28,7 +28,15 @@
       "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Replace CF_EXCLUDE_MODS slugs with project IDs for ATM 8/9/10\n\nCurseForge installer requires numeric project IDs, not slugs.\niris=455508, oculus=581495, colorwheel=1254143, rubidium=574856,\nembeddium=908741.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft diff --stat)",
       "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\ndocs: Add comments to all server HelmReleases explaining config choices\n\nAlso fixes several issues found during review:\n- rlcraft: liveness probe was too aggressive \\(90s tolerance\\), added\n  maxTickTime, syncChunkWrites, overrideServerProperties, timeoutSeconds\n- cursed-walking: added overrideServerProperties, onlineMode,\n  enforceSecureProfile; reduced view/sim distance to match other\n  modded servers; increased liveness tolerance\n- prom-ii: added enforceSecureProfile, increased liveness tolerance,\n  removed redundant defaults \\(allowNether, pvp\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Use uppercase Size for persistence in all HelmReleases\n\nThe itzg Helm chart requires uppercase ''Size'' for PVC sizing.\nFive files had lowercase ''size'' which would be ignored.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C /Users/cpfarhood/Documents/Repositories/minecraft commit -m \"$\\(cat <<''EOF''\nfix: Use uppercase Size for persistence in all HelmReleases\n\nThe itzg Helm chart requires uppercase ''Size'' for PVC sizing.\nFive files had lowercase ''size'' which would be ignored.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docker-minecraft-server.readthedocs.io)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(for script in start-setupEnvVariables start-setupServerProperties start-utils start-finalExec)",
+      "Bash(do echo \"=== $script ===\")",
+      "Bash(done)"
     ]
   }
 }
