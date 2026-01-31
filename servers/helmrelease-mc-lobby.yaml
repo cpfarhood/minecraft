@@ -78,18 +78,11 @@ spec:
       motd: "Welcome to farh.net Minecraft Lobby!"
       gameMode: adventure
       difficulty: peaceful
+      worldSaveName: world
+      forceReDownload: false
+      removeOldMods: false
       ops: ${SERVER_OPS}
       maxPlayers: 12
-
-      # Explicitly provide the Paper 1.21 generic config with placeholders
-      # so the itzg image can substitute ${VELOCITY_SECRET}
-      configFiles:
-        "paper-global.yml": |
-          proxies:
-            velocity:
-              enabled: true
-              online-mode: true
-              secret: "${VELOCITY_SECRET}"
 
       # Lobby: reduce chunk work + entity sim
       viewDistance: 6
@@ -122,13 +115,16 @@ spec:
         -XX:+PerfDisableSharedMem
 
       overrideServerProperties: true
-      worldSaveName: world
-      forceReDownload: false
-      removeOldMods: false
 
-    extraEnv:
-      - name: VELOCITY_SECRET
-        value: "${VELOCITY_FWD_SECRET}"
+    # Explicitly provide the Paper 1.21 generic config with placeholders
+    # so Flux can substitute the secret directly
+    configFiles:
+      "paper-global.yml": |
+        proxies:
+          velocity:
+            enabled: true
+            online-mode: true
+            secret: "${VELOCITY_FWD_SECRET}"
 
     # For automatic statefulset startup/shutdown
     serviceAnnotations:
