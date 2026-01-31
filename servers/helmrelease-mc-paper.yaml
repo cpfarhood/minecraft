@@ -120,6 +120,7 @@ spec:
 
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "paper,paper.${FQDN}"
+      mc-router.itzg.me/proxyServerName: "mc-proxy-minecraft-proxy.minecraft.svc.cluster.local:25565"
 
     persistence:
       dataDir:
