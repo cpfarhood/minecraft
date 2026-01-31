@@ -82,7 +82,7 @@ spec:
 
       maxPlayers: 12
       motd: "Welcome to farh.net Minecraft!"
-      difficulty: easy
+      difficulty: normal
       gameMode: survival
       worldSaveName: world
       ops: ${SERVER_OPS}
