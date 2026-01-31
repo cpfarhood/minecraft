@@ -8,7 +8,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-paper
+  name: mc-detroit
   namespace: minecraft
 spec:
   interval: 1h
@@ -23,7 +23,7 @@ spec:
       interval: 1h
 
   values:
-    fullnameOverride: "mc-paper"
+    fullnameOverride: "mc-detroit"
     image:
       repository: itzg/minecraft-server
       # Paper 1.21.x -> Java 21
@@ -81,8 +81,8 @@ spec:
       version: "1.21.11"
 
       maxPlayers: 12
-      motd: "Welcome to farh.net Minecraft!"
-      difficulty: normal
+      motd: "Welcome to the D!"
+      difficulty: hard
       gameMode: survival
       worldSaveName: world
       ops: ${SERVER_OPS}
@@ -119,8 +119,18 @@ spec:
       onlineMode: false
       enforceSecureProfile: true
 
+      # Explicitly provide the Paper 1.21 generic config with placeholders
+      # so the itzg image can substitute ${VELOCITY_SECRET}
+      configFiles:
+        "paper-global.yml": |
+          proxies:
+            velocity:
+              enabled: true
+              online-mode: true
+              secret: "${VELOCITY_SECRET}"
+
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "paper,paper.${FQDN}"
+      mc-router.itzg.me/externalServerName: "rochester,rochester.${FQDN}"
       mc-router.itzg.me/proxyServerName: "mc-proxy-minecraft-proxy.minecraft.svc.cluster.local:25565"
 
     persistence:

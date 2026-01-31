@@ -60,7 +60,8 @@ spec:
         #
         [servers]
         # Gameplay (routed by mc-router)
-        paper = "mc-paper:25565"
+        rochester = "mc-rochester:25565"
+        detroit = "mc-detroit:25565"
         rlcraft = "mc-rlcraft:25565"
         bmc-4 = "mc-bmc:25565"
         bmc-5 = "mc-bmc-5:25565"
@@ -76,7 +77,7 @@ spec:
         # Used when NO forced-host matches (e.g. mc.farh.net or raw IP)
         # --------------------------------------------------
         try = [
-          "paper",
+          "rochester",
           "lobby",
           "limbo"
         ]
@@ -86,7 +87,8 @@ spec:
         # Client hostnames map to the server entries above (which all go to mc-router).
         # --------------------------------------------------
         [forced-hosts]
-        "paper.${FQDN}" = ["paper"]
+        "rochester.${FQDN}" = ["rochester"]
+        "detroit.${FQDN}" = ["detroit"]
         "rlcraft.${FQDN}" = ["rlcraft"]
         "bmc-4.${FQDN}" = ["bmc-4"]
         "bmc-5.${FQDN}" = ["bmc-5"]

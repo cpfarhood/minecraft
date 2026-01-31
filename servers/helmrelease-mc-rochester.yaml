@@ -1,0 +1,143 @@
+# Paper (Vanilla) Server
+# Tuned for 12 players
+# Minecraft 1.21.1 (Paper) -> Java 21
+#
+# Lightest server: no mods, just Paper optimizations on top of vanilla.
+# Can afford higher view/sim distance than modded packs.
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-rochester
+  namespace: minecraft
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg
+        namespace: minecraft
+      interval: 1h
+
+  values:
+    fullnameOverride: "mc-rochester"
+    image:
+      repository: itzg/minecraft-server
+      # Paper 1.21.x -> Java 21
+      tag: java21
+
+    replicaCount: 1
+    workloadAsStatefulSet: true
+    strategyType: OnDelete
+
+    tolerations:
+      - key: "farh.net/performance"
+        operator: "Equal"
+        value: "high"
+        effect: "NoSchedule"
+
+    # Vanilla Paper is lightweight; 10Gi is plenty for 12 players.
+    resources:
+      requests:
+        cpu: "4"
+        memory: "10Gi"
+      limits:
+        memory: "12Gi"
+
+    # 240 x 10s = 40 min startup window (generous; Paper starts fast but
+    # first-run world generation can be slow on large worlds)
+    startupProbe:
+      enabled: true
+      command: ["mc-health"]
+      failureThreshold: 240
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    readinessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+
+    # 10 x 30s = 5 min tolerance before restart
+    livenessProbe:
+      enabled: true
+      command: ["mc-health"]
+      initialDelaySeconds: 300
+      periodSeconds: 30
+      timeoutSeconds: 5
+      failureThreshold: 10
+
+    minecraftServer:
+      type: PAPER
+      eula: "TRUE"
+
+      # Pin to newest MC; Paper auto-resolves latest build for this version
+      version: "1.21.11"
+
+      maxPlayers: 12
+      motd: "Welcome to Rochester!"
+      difficulty: normal
+      gameMode: creative
+      worldSaveName: world
+      ops: ${SERVER_OPS}
+
+      # Vanilla can handle wider view/sim than modded packs
+      viewDistance: 8
+      simulationDistance: 5
+      # Reduce IO stalls during chunk saves
+      syncChunkWrites: false
+      # Disable watchdog; not strictly needed for vanilla but harmless
+      maxTickTime: -1
+
+      # Heap < cgroup limit, leave native/JIT headroom
+      memory: 10G
+
+      jvmOpts: >-
+        -Djava.awt.headless=true
+        -Dfile.encoding=UTF-8
+        -XX:+AlwaysActAsServerClassMachine
+
+      # Simpler G1 tuning than modded packs; vanilla doesn't need the full Aikar suite
+      jvmXXOpts: >-
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=150
+        -XX:+DisableExplicitGC
+        -XX:+AlwaysPreTouch
+        -XX:G1HeapRegionSize=16M
+        -XX:InitiatingHeapOccupancyPercent=20
+        -XX:G1ReservePercent=15
+        -XX:+PerfDisableSharedMem
+
+      overrideServerProperties: true
+      onlineMode: false
+      enforceSecureProfile: true
+
+      # Explicitly provide the Paper 1.21 generic config with placeholders
+      # so the itzg image can substitute ${VELOCITY_SECRET}
+      configFiles:
+        "paper-global.yml": |
+          proxies:
+            velocity:
+              enabled: true
+              online-mode: true
+              secret: "${VELOCITY_SECRET}"
+
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "rochester,rochester.${FQDN}"
+      mc-router.itzg.me/proxyServerName: "mc-proxy-minecraft-proxy.minecraft.svc.cluster.local:25565"
+
+    persistence:
+      dataDir:
+        enabled: true
+        Size: 64Gi
+
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
