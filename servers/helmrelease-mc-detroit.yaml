@@ -117,7 +117,7 @@ spec:
 
       overrideServerProperties: true
       onlineMode: false
-      enforceSecureProfile: true
+      enforceSecureProfile: false
 
     extraEnv:
       SYNC_SKIP_NEWER_IN_DESTINATION: "false"

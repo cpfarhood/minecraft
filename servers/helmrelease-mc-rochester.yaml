@@ -117,7 +117,7 @@ spec:
 
       overrideServerProperties: true
       onlineMode: false
-      enforceSecureProfile: true
+      enforceSecureProfile: false
 
     # For automatic statefulset startup/shutdown
     serviceAnnotations:
