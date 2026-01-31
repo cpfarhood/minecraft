@@ -130,7 +130,7 @@ spec:
               secret: "${VELOCITY_FWD_SECRET}"
 
     extraEnv:
-      - name: VELOCITY_SECRET
+      - name: VELOCITY_FORWARDING_SECRET
         value: "${VELOCITY_FWD_SECRET}"
 
     serviceAnnotations:
