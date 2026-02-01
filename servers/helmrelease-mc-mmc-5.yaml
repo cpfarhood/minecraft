@@ -164,9 +164,9 @@ spec:
               - "files.mmc-5.${FQDN}"
               path: /
             tls:
-              - secretName: "mc-mmc-5-tls"
-                hosts:
-                  -  "files.mmc-5.${FQDN}"
+              - hosts:
+                - "files.mmc-5.${FQDN}"
+                secretName: "mc-mmc-5-tls"
     extraEnv:
       CF_FORCE_SYNCHRONIZE: "true"
       # 930131 = ?, 1188180 = Dynamic RPG Resource Bars (client-only HUD mod, crashes on server)
