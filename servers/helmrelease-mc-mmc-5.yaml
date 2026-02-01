@@ -77,7 +77,7 @@ spec:
           - "--database=/data/filebrowser.db"
           - "--address=0.0.0.0"
         ports:
-          - containerPort: 8080
+          - containerPort: 80
         resources:
           requests:
             cpu: "50m"
@@ -149,14 +149,14 @@ spec:
 
       extraPorts:
         - name: filebrowser
-          containerPort: 8080
+          containerPort: 80
           protocol: TCP
           service:
             enabled: true
             embedded: false
             annotations: {}
             type: ClusterIP
-            port: 8080
+            port: 80
           ingress:
             enabled: true
             ingressClassName: traefik-external
