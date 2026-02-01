@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser
+  namespace: minecraft
+  labels:
+    app: filebrowser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      containers:
+        - name: filebrowser
+          image: filebrowser/filebrowser:v2
+          args:
+            - "--root=/srv"
+            - "--database=/db/filebrowser.db"
+            - "--address=0.0.0.0"
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              memory: "128Mi"
+          volumeMounts:
+            - name: data
+              mountPath: /srv
+            - name: db
+              mountPath: /db
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mc-server-data
+        - name: db
+          persistentVolumeClaim:
+            claimName: filebrowser-db
