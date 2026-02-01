@@ -6,16 +6,12 @@ spec:
   rootPasswordSecretKeyRef:
     name: play-db-rootpw
     key: password
-
   replicas: 3
-
   replication:
     enabled: true
     primary:
       autoFailover: true
-
   storage:
     size: 16Gi
-
   primaryService:
     type: ClusterIP
