@@ -23,7 +23,7 @@ spec:
         memory: "512Mi"
         cpu: "100m"
       limits:
-        memory: "1Gi"
+        memory: "1024Mi"
     minecraftProxy:
       serviceType: ClusterIP
       # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
