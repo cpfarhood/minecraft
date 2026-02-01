@@ -129,7 +129,7 @@ spec:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era"
+        pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-rpg"
 
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "prom-ii,prom-ii.${FQDN}"

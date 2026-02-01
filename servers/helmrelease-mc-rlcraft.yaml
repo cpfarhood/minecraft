@@ -133,8 +133,9 @@ spec:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/rlcraft"
-
+        slug: "rlcraft"
+        forceSynchronize: true
+        
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "rlcraft,rlcraft.${PRIVATE_FQDN},rlcraft.${FQDN}"
 
