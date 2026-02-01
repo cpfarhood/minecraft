@@ -49,7 +49,7 @@ spec:
           containerPort: 8804
           protocol: TCP
           service:
-            enabled: false
+            enabled: true
             embedded: false
             annotations: {}
             type: ClusterIP
