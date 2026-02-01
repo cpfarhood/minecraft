@@ -8,7 +8,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-prom-ii
+  name: mc-prominence-2
 spec:
   interval: 1h
   chart:
@@ -22,7 +22,7 @@ spec:
       interval: 1h
 
   values:
-    fullnameOverride: "mc-prom-ii"
+    fullnameOverride: "mc-prominence-2"
     image:
       repository: itzg/minecraft-server
       # Prominence II = Fabric 1.20.1 -> Java 17
@@ -75,7 +75,7 @@ spec:
       type: AUTO_CURSEFORGE
       eula: "TRUE"
 
-      motd: "Welcome to farh.net Prominence II!"
+      motd: "Welcome to farh.net Prominence 2: Hasturian Era!"
       difficulty: easy
       gameMode: survival
       ops: ${SERVER_OPS}
@@ -129,10 +129,10 @@ spec:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/prominence-2-rpg"
+        slug: "prominence-2-hasturian-era"
 
     serviceAnnotations:
-      mc-router.itzg.me/externalServerName: "prom-ii,prom-ii.${FQDN}"
+      mc-router.itzg.me/externalServerName: "prominence-2,prominence-2.${FQDN}"
 
     persistence:
       dataDir:

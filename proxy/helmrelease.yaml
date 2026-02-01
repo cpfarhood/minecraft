@@ -66,7 +66,7 @@ spec:
         bmc-4 = "mc-bmc:25565"
         bmc-5 = "mc-bmc-5:25565"
         atm-10 = "mc-atm-10:25565"
-        prom-ii = "mc-prom-ii:25565"
+        prominence-2 = "mc-prominence-2:25565"
         cursed-walking = "mc-cursed-walking:25565"
         # Always-on fallback servers (direct)
         lobby = "mc-lobby:25565"
@@ -93,7 +93,7 @@ spec:
         "bmc-4.${FQDN}" = ["bmc-4"]
         "bmc-5.${FQDN}" = ["bmc-5"]
         "atm-10.${FQDN}" = ["atm-10"]
-        "prom-ii.${FQDN}" = ["prom-ii"]
+        "prominence-2.${FQDN}" = ["prominence-2"]
         "cursed-walking.${FQDN}" = ["cursed-walking"]
         #
         # --------------------------------------------------

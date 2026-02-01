@@ -15,5 +15,5 @@ resources:
   - helmrelease-mc-atm-8.yaml
   - helmrelease-mc-atm-9.yaml
   - helmrelease-mc-atm-10.yaml
-  - helmrelease-mc-prom-ii.yaml
+  - helmrelease-mc-prominence-2.yaml
   - helmrelease-mc-mmc-5.yaml
