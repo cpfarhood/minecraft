@@ -153,8 +153,7 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: "mc-server-data"
-        subPath: "bmc-4/"
+        Size: 32Gi
 
     podDisruptionBudget:
       enabled: true

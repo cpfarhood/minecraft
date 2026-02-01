@@ -142,8 +142,7 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: "mc-server-data"
-        subPath: "rlcraft/"
+        Size: 32Gi
 
     podDisruptionBudget:
       enabled: true

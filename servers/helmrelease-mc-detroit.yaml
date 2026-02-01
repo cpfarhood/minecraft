@@ -148,8 +148,7 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: "mc-server-data"
-        subPath: "detroit/"
+        Size: 32Gi
 
     podDisruptionBudget:
       enabled: true
