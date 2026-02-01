@@ -79,7 +79,7 @@ spec:
       type: LoadBalancer
       annotations:
         lbipam.cilium.io/ips: "71.150.236.210"
-        io.cilium/lb-ipam-sharing-key: "minecraft"
+        lbipam.cilium.io/sharing-key: "minecraft"
         service.cilium.io/type: LoadBalancer
         service.cilium.io/forwarding-mode: dsr
       labels:
