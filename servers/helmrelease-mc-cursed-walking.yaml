@@ -125,7 +125,7 @@ spec:
       dataDir:
         enabled: true
         existingClaim: "mc-server-data"
-        subPath: "/cursed-walking/"
+        subPath: "cursed-walking/"
 
     podDisruptionBudget:
       enabled: true

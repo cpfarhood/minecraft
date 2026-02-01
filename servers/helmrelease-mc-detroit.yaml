@@ -149,7 +149,7 @@ spec:
       dataDir:
         enabled: true
         existingClaim: "mc-server-data"
-        subPath: "/detroit/"
+        subPath: "detroit/"
 
     podDisruptionBudget:
       enabled: true

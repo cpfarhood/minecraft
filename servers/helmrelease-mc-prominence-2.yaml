@@ -138,7 +138,7 @@ spec:
       dataDir:
         enabled: true
         existingClaim: "mc-server-data"
-        subPath: "/prominence-2/"
+        subPath: "prominence-2/"
 
     podDisruptionBudget:
       enabled: true

@@ -154,7 +154,7 @@ spec:
       dataDir:
         enabled: true
         existingClaim: "mc-server-data"
-        subPath: "/bmc-4/"
+        subPath: "bmc-4/"
 
     podDisruptionBudget:
       enabled: true

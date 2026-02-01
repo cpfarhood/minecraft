@@ -128,7 +128,7 @@ spec:
       dataDir:
         enabled: true
         existingClaim: "mc-server-data"
-        subPath: "/atm-9/"
+        subPath: "atm-9/"
 
     podDisruptionBudget:
       enabled: true
