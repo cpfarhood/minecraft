@@ -161,11 +161,11 @@ spec:
             enabled: true
             ingressClassName: traefik-external
             hosts:
-              - "files.mmc-5.${FQDN}"
-              path: /
+              - name: "files.mmc-5.${FQDN}"
+                path: /
             tls:
               - hosts:
-                - "files.mmc-5.${FQDN}"
+                  - "files.mmc-5.${FQDN}"
                 secretName: "mc-mmc-5-tls"
     extraEnv:
       CF_FORCE_SYNCHRONIZE: "true"
