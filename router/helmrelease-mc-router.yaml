@@ -35,8 +35,8 @@ spec:
       minecraft:
         annotations:
           service.cilium.io/forwarding-mode: dsr
-          lbipam.cilium.io/ips: "71.150.236.210"
-          external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
+          lbipam.cilium.io/ips: "${IP_ADDRESS}"
+          external-dns.alpha.kubernetes.io/hostname: "*.${FQDN}"
         type: LoadBalancer
         port: 25565
       extraServiceSpec:
