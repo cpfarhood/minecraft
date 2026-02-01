@@ -120,14 +120,15 @@ spec:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
         slug: "all-the-mods-9"
-        
+
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "atm-9,atm-9.${FQDN}"
 
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/atm-9/"
 
     podDisruptionBudget:
       enabled: true

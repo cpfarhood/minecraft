@@ -141,7 +141,8 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/atm-10/"
 
     podDisruptionBudget:
       enabled: true
