@@ -6,6 +6,5 @@ resources:
   - ./proxy
   - ./router/
   - ./servers/
-#  - ./manual
 #  - ./shulker
 #  - ./shulker
