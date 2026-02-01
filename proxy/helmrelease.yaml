@@ -38,6 +38,29 @@ spec:
       # This can be set to the contents of your config file (only works with yaml currently)
       velocityForwardingSecret: "${VELOCITY_FWD_SECRET}"
       velocityForwardingSecretFilePath: /server/forwarding.secret
+      extraPorts:
+        - name: plan
+          containerPort: 8804
+          protocol: TCP
+          service:
+            enabled: false
+            embedded: false
+            annotations: {}
+            type: ClusterIP
+            port: 8804
+          ingress:
+            ingressClassName: traefik-external
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt
+              external-dns.alpha.kubernetes.io/hostname: plan.${FQDN}
+            hosts:
+              - name: plan.${FQDN}
+                path: /
+            tls:
+              - secretName: plan-tls
+                hosts:
+                  - plan.${FQDN}
       configFilePath: /server/velocity.toml
       config: |
         config-version = "2.7"
