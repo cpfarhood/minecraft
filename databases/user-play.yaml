@@ -4,7 +4,7 @@ metadata:
   name: play
 spec:
   mariaDbRef:
-    name: play-db
+    name: minecraft-db
   passwordSecretKeyRef:
-    name: play-db-userpw  
+    name: play-db-userpw
     key: password

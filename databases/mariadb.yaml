@@ -1,10 +1,10 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: play-db
+  name: minecraft-db
 spec:
   rootPasswordSecretKeyRef:
-    name: play-db-rootpw
+    name: minecraft-db-rootpw
     key: password
   replicas: 3
   replication:
