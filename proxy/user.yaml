@@ -1,0 +1,10 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: play
+spec:
+  mariaDbRef:
+    name: play-db
+  passwordSecretKeyRef:
+    name: play-db-userpw  
+    key: password

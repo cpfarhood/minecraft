@@ -1,0 +1,13 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: play
+spec:
+  mariaDbRef:
+    name: play-db
+  privileges:
+    - ALL
+  database: play
+  table: "*"
+  username: play
+  host: "%"
