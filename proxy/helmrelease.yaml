@@ -49,8 +49,7 @@ spec:
         force-key-authentication = true
         prevent-client-proxy-connections = false
         # Preserve original client hostname/IP/UUID to downstream (mc-router + backend)
-        [player-info-forwarding]
-        mode = "modern"
+        player-info-forwarding-mode = "modern"
         forwarding-secret-file = "/server/forwarding.secret"
         #
         # --------------------------------------------------
