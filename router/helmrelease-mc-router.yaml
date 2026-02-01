@@ -41,7 +41,7 @@ spec:
         type: LoadBalancer
         port: 25565
       extraServiceSpec:
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
   postRenderers:
     - kustomize:
         patches:

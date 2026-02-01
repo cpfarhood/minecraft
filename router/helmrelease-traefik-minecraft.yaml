@@ -85,7 +85,7 @@ spec:
       labels:
         zone: public
       spec:
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
 
     resources:
       requests:
