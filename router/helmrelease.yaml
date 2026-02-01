@@ -66,3 +66,13 @@ spec:
               - op: add
                 path: /metadata/labels/zone
                 value: public
+          # Add patch permission for StatefulSets (required for scale operations)
+          - target:
+              group: rbac.authorization.k8s.io
+              version: v1
+              kind: ClusterRole
+              name: mc-router
+            patch: |
+              - op: add
+                path: /rules/1/verbs/-
+                value: patch
