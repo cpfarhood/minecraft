@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: filebrowser
   labels:
     app: filebrowser
 spec:
+  serviceName: filebrowser
   replicas: 1
   selector:
     matchLabels:
@@ -49,6 +50,11 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: mc-server-data
-        - name: db
-          persistentVolumeClaim:
-            claimName: filebrowser-db
+  volumeClaimTemplates:
+    - metadata:
+        name: db
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

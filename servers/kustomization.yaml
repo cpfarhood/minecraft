@@ -6,7 +6,7 @@ resources:
   - configmap-picolimbo.yaml
   - deployment-picolimbo.yaml
   - service-picolimbo.yaml
-  - deployment-filebrowser.yaml
+  - statefulset-filebrowser.yaml
   - service-filebrowser.yaml
   - ingress-filebrowser.yaml
   - helmrelease-mc-lobby.yaml
