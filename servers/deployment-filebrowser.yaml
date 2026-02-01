@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: filebrowser
-  namespace: minecraft
   labels:
     app: filebrowser
 spec:
@@ -15,9 +14,19 @@ spec:
       labels:
         app: filebrowser
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /db"]
+          volumeMounts:
+            - name: db
+              mountPath: /db
       containers:
         - name: filebrowser
           image: filebrowser/filebrowser:v2
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           args:
             - "--root=/srv"
             - "--database=/db/filebrowser.db"
