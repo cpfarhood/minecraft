@@ -119,16 +119,8 @@ spec:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
-        pageUrl: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9"
-
-    extraEnv:
-      # Client-only render mods (by CurseForge project ID):
-      # 455508=Iris, 581495=Oculus, 1254143=Colorwheel, 574856=Rubidium, 908741=Embeddium
-      - name: CF_EXCLUDE_MODS
-        value: "455508,581495,1254143,574856,908741"
-      - name: CF_FORCE_SYNCHRONIZE
-        value: "true"
-
+        slug: "all-the-mods-9"
+        
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "atm-9,atm-9.${FQDN}"
 

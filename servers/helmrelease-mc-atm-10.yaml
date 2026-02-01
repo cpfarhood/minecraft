@@ -126,10 +126,9 @@ spec:
         apiKey:
           existingSecret: "minecraft"
           secretKey: CURSEFORGE_API_KEY
+        slug: "all-the-mods-10"
 
     extraEnv:
-      - name: CF_SLUG
-        value: "all-the-mods-10"
       - name: CF_OVERRIDES_EXCLUSIONS
         value: |
           # Not applicable for server side
