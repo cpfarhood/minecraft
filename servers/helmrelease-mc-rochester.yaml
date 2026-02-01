@@ -149,7 +149,8 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/rochester/"
 
     podDisruptionBudget:
       enabled: true

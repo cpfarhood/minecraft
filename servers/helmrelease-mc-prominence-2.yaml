@@ -137,7 +137,8 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/prominence-2/"
 
     podDisruptionBudget:
       enabled: true

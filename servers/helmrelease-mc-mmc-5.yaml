@@ -137,7 +137,8 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/mmc-5/"
 
     podDisruptionBudget:
       enabled: true

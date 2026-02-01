@@ -135,14 +135,15 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         slug: "rlcraft"
         forceSynchronize: true
-        
+
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "rlcraft,rlcraft.${PRIVATE_FQDN},rlcraft.${FQDN}"
 
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/rlcraft/"
 
     podDisruptionBudget:
       enabled: true

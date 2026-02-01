@@ -124,7 +124,8 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        Size: 64Gi
+        existingClaim: "mc-server-data"
+        subPath: "/cursed-walking/"
 
     podDisruptionBudget:
       enabled: true
