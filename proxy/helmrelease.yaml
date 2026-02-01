@@ -14,7 +14,7 @@ spec:
         namespace: minecraft
       interval: 1h
   values:
-    fullnameOverride: "mc-proxy"
+    #fullnameOverride: "mc-proxy"
     serviceAnnotations:
       service.cilium.io/forwarding-mode: dsr
       mc-router.itzg.me/defaultServer: "proxy"
