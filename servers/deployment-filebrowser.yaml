@@ -17,7 +17,7 @@ spec:
       initContainers:
         - name: fix-permissions
           image: busybox
-          command: ["sh", "-c", "chown -R 1000:1000 /db"]
+          command: ["sh", "-c", "chown -R 1000:2000 /db"]
           volumeMounts:
             - name: db
               mountPath: /db
@@ -26,7 +26,7 @@ spec:
           image: filebrowser/filebrowser:v2
           securityContext:
             runAsUser: 1000
-            runAsGroup: 1000
+            runAsGroup: 2000
           args:
             - "--root=/srv"
             - "--database=/db/filebrowser.db"
@@ -38,6 +38,7 @@ spec:
               cpu: "50m"
               memory: "64Mi"
             limits:
+              cpu: "200m"
               memory: "128Mi"
           volumeMounts:
             - name: data
