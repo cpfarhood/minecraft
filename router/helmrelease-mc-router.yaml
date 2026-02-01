@@ -36,6 +36,7 @@ spec:
         annotations:
           service.cilium.io/forwarding-mode: dsr
           lbipam.cilium.io/ips: "71.150.236.210"
+          io.cilium/lb-ipam-sharing-key: "minecraft"
           external-dns.alpha.kubernetes.io/hostname: "mc.farh.net,*.mc.farh.net"
         type: LoadBalancer
         port: 25565
