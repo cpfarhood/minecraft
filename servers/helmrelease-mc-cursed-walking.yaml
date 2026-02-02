@@ -4,7 +4,7 @@
 #
 # Zombie-apocalypse themed pack. Moderate mod count; entity AI is the main TPS cost.
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-cursed-walking

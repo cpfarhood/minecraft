@@ -3,7 +3,7 @@
 # Minecraft 1.20.1 (Forge) -> Java 17
 # Tested 1/29/2026
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-atm-9

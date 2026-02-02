@@ -45,7 +45,7 @@ Inactive (commented out): `./proxy` (Velocity), `./shulker`, `./manual`
 
 ### Server HelmRelease Pattern
 
-Each server in `servers/` is a Flux `HelmRelease` (API `helm.toolkit.fluxcd.io/v2beta1`) following a consistent template:
+Each server in `servers/` is a Flux `HelmRelease` (API `helm.toolkit.fluxcd.io/v2`) following a consistent template:
 - **Workload**: StatefulSet with `OnDelete` update strategy
 - **Resources**: ~4 CPU, 10-14Gi memory requested, 12-18Gi limit
 - **Storage**: 64Gi PVC per server

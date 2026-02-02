@@ -3,7 +3,7 @@
 # NeoForge on Minecraft 1.21/1.21.1 -> Java 21
 # Tested 1/29/2026
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-atm-10

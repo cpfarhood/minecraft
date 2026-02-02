@@ -5,7 +5,7 @@
 # Moderate Forge pack with extra mods added via MODS env (Wakes, Valkyrien Skies).
 # VS + KotlinForForge are pulled from Modrinth as direct JAR URLs.
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-bmc-4

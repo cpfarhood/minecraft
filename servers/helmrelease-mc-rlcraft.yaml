@@ -5,7 +5,7 @@
 # RLCraft is an older 1.12.2 pack; Java 8 is required (Forge 1.12.x does not support newer JVMs).
 # Lighter than modern packs but entity-heavy (Lycanites, Ice and Fire) so TPS is the bottleneck.
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-rlcraft

@@ -5,7 +5,7 @@
 # RPG/exploration-focused Fabric pack. Fabric packs generally start faster
 # and use less memory than Forge equivalents, but this one is content-heavy.
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mc-prominence-2
