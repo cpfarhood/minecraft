@@ -6,9 +6,6 @@ resources:
   - configmap-picolimbo.yaml
   - deployment-picolimbo.yaml
   - service-picolimbo.yaml
-  - statefulset-filebrowser.yaml
-  - service-filebrowser.yaml
-  - ingress-filebrowser.yaml
   - helmrelease-mc-lobby.yaml
   - helmrelease-mc-cursed-walking.yaml
   - helmrelease-mc-detroit.yaml

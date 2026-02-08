@@ -38,7 +38,18 @@
       "Bash(do echo \"=== $script ===\")",
       "Bash(done)",
       "Bash(gh api:*)",
-      "WebFetch(domain:artifacthub.io)"
+      "WebFetch(domain:artifacthub.io)",
+      "Bash(flux get helmreleases:*)",
+      "Bash(ls:*)",
+      "Bash(flux reconcile kustomization:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rm:*)",
+      "Bash(git push:*)",
+      "mcp__gitea__git_farh_net___create_pull_request"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "gitea"
+  ]
 }
